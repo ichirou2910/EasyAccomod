@@ -1,0 +1,20 @@
+.card {
+	margin: 0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+	border-radius: 6px;
+	padding: 1rem;
+	overflow: hidden;
+	color: var(--primary-text);
+}
+
+.card--light {
+	background-color: var(--light-primary-color);
+}
+
+.card--lighter {
+	background-color: var(--lighter-primary-color);
+}
+
+.card--active {
+	background-color: var(--accent-color);
+}

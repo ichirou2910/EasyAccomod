@@ -1,0 +1,10 @@
+.dropdown-drawer {
+	left: 0;
+	top: 0;
+	z-index: 100;
+	height: 5rem;
+	width: 100%;
+	position: fixed;
+	background-color: #232323;
+	box-shadow: 2px 2px rgba(0, 0, 0, 0.26);
+}

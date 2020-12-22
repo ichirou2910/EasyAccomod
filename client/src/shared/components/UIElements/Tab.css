@@ -1,0 +1,28 @@
+.tab-menu__label {
+	margin: 0;
+	font-size: 110%;
+}
+
+.tab-menu > button {
+	cursor: pointer;
+	padding: 8px 16px;
+	border: 0;
+	border-top: 2px solid transparent;
+	border-radius: 0;
+	background: none;
+	outline: none;
+	font: inherit;
+	color: white;
+}
+
+.tab-menu > button.focus {
+	/* border-top: 2px solid #007bef; */
+	background-color: var(--dark-primary-color);
+	color: white;
+	pointer-events: none;
+}
+
+.tab-menu > button:hover {
+	color: var(--lighter-secondary-color);
+	/* border-top: 2px solid var(--dark-primary-color); */
+}

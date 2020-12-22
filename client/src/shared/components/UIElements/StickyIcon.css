@@ -1,0 +1,43 @@
+.sticky-icon {
+	position: fixed;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	top: calc(4rem + 10px);
+	right: 0px;
+	width: 50px;
+	height: 50px;
+	padding: 10px;
+	background-color: #fee202;
+	border-top-left-radius: 25px;
+	border-bottom-left-radius: 25px;
+	border: 2px solid rgba(0, 0, 0, 0.7);
+	border-right: none;
+	transition: width 200ms;
+	z-index: 15;
+}
+
+.sticky-icon:hover {
+	width: 140px;
+	font-size: 16px;
+	line-height: 15px;
+}
+
+.sticky-icon img {
+	height: 100%;
+	width: auto;
+	margin-right: 5px;
+}
+.sticky-icon p {
+	opacity: 0;
+	margin-right: 5px;
+	transition: opacity 1000ms;
+}
+
+.sticky-icon:hover p {
+	opacity: 1;
+}
+
+.sticky-icon a {
+	color: black;
+}

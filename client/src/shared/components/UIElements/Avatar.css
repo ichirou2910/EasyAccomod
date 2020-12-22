@@ -1,0 +1,28 @@
+.avatar {
+	margin: 0 auto;
+	z-index: 10;
+	border-radius: 50%;
+}
+
+.avatar img {
+	border-radius: 50%;
+	width: 100%;
+	height: 100%;
+}
+
+.avatar--small {
+	width: 3rem;
+	height: 3rem;
+}
+
+.avatar--medium {
+	width: 4rem;
+	height: 4rem;
+}
+
+.avatar--large {
+	height: 40vw;
+	width: 40vw;
+	max-height: 12rem;
+	max-width: 12rem;
+}

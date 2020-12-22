@@ -1,0 +1,37 @@
+.image-upload {
+	margin-top: 2rem;
+	background-color: var(--lighter-primary-color);
+	padding: 0.5rem;
+	box-shadow: 0 2.5px 6px rgba(0, 0, 0, 0.5);
+}
+
+.image-upload.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.image-upload__preview {
+	height: 13rem;
+	border: 1px solid var(--accent-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+.image-upload__preview--square {
+	width: 13rem;
+}
+
+.image-upload__preview--wide {
+	width: 100%;
+}
+
+.image-upload__preview img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}

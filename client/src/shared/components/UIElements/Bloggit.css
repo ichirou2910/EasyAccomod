@@ -1,0 +1,18 @@
+.bloggit {
+	position: fixed;
+	width: 60px;
+	height: 60px;
+	bottom: 40px;
+	right: 10px;
+	border-radius: 50%;
+	text-align: center;
+	background-color: var(--lighter-secondary-color);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.7);
+	z-index: 15;
+}
+
+.bloggit img {
+	width: 30px;
+	height: 30px;
+	margin-top: 15px;
+}

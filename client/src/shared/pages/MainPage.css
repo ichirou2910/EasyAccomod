@@ -1,0 +1,11 @@
+.main-page {
+	margin-top: 4rem;
+}
+
+@media (max-width: 768px) {
+	.main-page__feeds {
+		flex-direction: column;
+		justify-content: space-around;
+		margin: 1rem;
+	}
+}
