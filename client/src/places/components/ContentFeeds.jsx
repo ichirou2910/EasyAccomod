@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BlogList from './BlogList';
+import PlaceList from './PlaceList';
 import ActivityList from './ActivityList';
 
 import './ContentFeeds.css';
@@ -8,7 +8,7 @@ import './ContentFeeds.css';
 const ContentFeeds = (props) => {
 	return (
 		<div className="content-feeds">
-			<BlogList blogs={props.blogs} />
+			<PlaceList places={props.places} />
 			<ActivityList activities={props.activities} />
 		</div>
 	);

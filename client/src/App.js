@@ -38,13 +38,13 @@ const App = () => {
 				<Route path="/user/:userName">
 					<UserPage />
 				</Route>
-				<Route path="/places/create" exact>
+				<Route path="/place/create" exact>
 					<NewPlace />
 				</Route>
-				<Route path="/places/:placeId/edit" exact>
+				<Route path="/place/:placeId/edit" exact>
 					<EditPlace />
 				</Route>
-				<Route path="/places/:placeId">
+				<Route path="/place/:placeId">
 					<PlacePage />
 				</Route>
 				<Redirect to="/" />

@@ -35,6 +35,9 @@
 	--divider-color: #bdbdbd;
 	--primary-bg-color: #18171c;
 	--secondary-bg-color: #ecf0f1;
+
+	--base-width: 80vw;
+	--base-width-sm: 100vw;
 }
 
 * {
@@ -61,11 +64,11 @@ code {
 
 a {
 	text-decoration: none;
-	color: var(--accent-color);
+	color: var(--primary-text);
 }
 
 a:visited {
-	color: var(--accent-color);
+	color: var(--primary-text);
 }
 
 .slide-in-top-enter {
@@ -106,14 +109,16 @@ a:visited {
 }
 
 .base-view {
-	width: 80%;
+	width: var(--base-width);
 	margin-left: auto;
 	margin-right: auto;
 }
 
 @media (max-width: 768px) {
 	.base-view {
-		width: 90%;
+		width: var(--base-width-sm);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
 	}
 }
 
@@ -127,7 +132,7 @@ a:visited {
 
 @media (min-width: 1024px) {
 	.base-view {
-		width: 80%;
+		width: var(--base-width);
 		max-width: 1024px;
 	}
 }

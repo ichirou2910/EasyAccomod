@@ -11,11 +11,11 @@ const Navbar = (props) => {
 					<Link to="/">
 						<img
 							src={`${process.env.REACT_APP_HOST_URL}/uploads/images/logo.png`}
-							alt="Bloggit Logo"
+							alt="EA Logo"
 						/>
 					</Link>
 				</li>
-				<form action="" class="navbar__search">
+				<form action="" className="navbar__search">
 					<input type="search" name="search" placeholder="&#x1F50D;" required />
 				</form>
 			</ul>
@@ -29,10 +29,22 @@ const NavItem = (props) => {
 
 	return (
 		<li className="navbar__item">
-			<a href="#" className="navbar__icon-btn" onClick={() => setOpen(!open)}>
-				{props.icon}
-			</a>
-			{open && props.children}
+			{props.to ? (
+				<a href={props.to} className="navbar__icon-btn">
+					{props.icon}
+				</a>
+			) : (
+				<>
+					<a
+						href="#"
+						className="navbar__icon-btn"
+						onClick={() => setOpen(!open)}
+					>
+						{props.icon}
+					</a>
+					{open && props.children}
+				</>
+			)}
 		</li>
 	);
 };

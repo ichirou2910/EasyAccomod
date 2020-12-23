@@ -1,12 +1,12 @@
-.blog-item:not(:last-child) {
+.place-item:not(:last-child) {
 	margin-bottom: 1.5rem;
 }
 
-.blog-item a {
+.place-item a {
 	text-decoration: none;
 }
 
-.blog-item__card {
+.place-item__card {
 	display: flex;
 	flex-direction: row;
 	align-items: stretch;
@@ -14,19 +14,19 @@
 	font-weight: 300;
 }
 
-.blog-item__image {
+.place-item__image {
 	display: flex;
 	width: 30%;
 	max-width: 300px;
 }
 
-.blog-item__image a img {
+.place-item__image a img {
 	height: 100%;
 	width: 100%;
 	object-fit: cover;
 }
 
-.blog-item__info {
+.place-item__info {
 	width: 70%;
 	margin-left: 0.5rem;
 	padding-left: 1rem;
@@ -35,7 +35,7 @@
 	flex-grow: 1;
 }
 
-.blog-item__info h2 {
+.place-item__info h2 {
 	margin-top: 0;
 	font-weight: 500;
 	color: var(--secondary-text);
@@ -45,40 +45,40 @@
 	width: 90%; */
 }
 
-.blog-item__info h2 a {
+.place-item__info h2 a {
 	color: var(--secondary-text);
 }
 
-.blog-item__info p {
+.place-item__info p {
 	margin-top: 0;
 	margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
-	.blog-item__card {
+	.place-item__card {
 		flex-direction: column;
 	}
-	.blog-item__image {
+	.place-item__image {
 		width: 100%;
 		max-width: 100%;
 	}
 
-	.blog-item__info {
+	.place-item__info {
 		width: 100%;
 		margin: 0;
 		padding: 0;
 	}
 
-	.blog-item__info h2 {
+	.place-item__info h2 {
 		margin-top: 0.5rem;
 	}
 }
 
 @media (max-width: 625px) {
-	.blog-item:not(:last-child) {
+	.place-item:not(:last-child) {
 		margin-bottom: 1rem;
 	}
-	.blog-item__info h2 {
+	.place-item__info h2 {
 		font-size: 110%;
 		margin-bottom: 0;
 	}

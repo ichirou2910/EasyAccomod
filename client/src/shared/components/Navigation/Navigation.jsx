@@ -21,7 +21,7 @@ const Navigation = () => {
 			<Navbar>
 				{auth.isLoggedIn && (
 					<>
-						<NavItem icon={<PlusIcon />} />
+						<NavItem icon={<PlusIcon />} to="/place/create" />
 						<NavItem icon={<ChatIcon />} />
 						<NavItem icon={<BellIcon />} />
 					</>
@@ -35,7 +35,12 @@ const Navigation = () => {
 						)}
 						{auth.isLoggedIn && (
 							<>
-								<DropdownItem icon={<UserIcon />}>My Profile</DropdownItem>
+								<DropdownItem
+									icon={<UserIcon />}
+									to={`/user/${auth.loginInfo.name}`}
+								>
+									My Profile
+								</DropdownItem>
 								<DropdownItem icon={<CogIcon />}>Settings</DropdownItem>
 								<DropdownItem icon={<LogoutIcon />} action={auth.logout}>
 									Logout

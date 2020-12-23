@@ -1,5 +1,6 @@
 .navbar {
 	height: var(--nav-height);
+	width: 100vw;
 	background-color: var(--bg);
 	padding: 0 1rem;
 	border-bottom: var(--border);
@@ -110,6 +111,7 @@
 	padding: 0.5rem;
 	overflow: hidden;
 	transition: height var(--speed) ease;
+	z-index: 100;
 }
 
 .navbar__menu-item {
@@ -127,4 +129,10 @@
 
 .navbar__icon-right {
 	margin-left: auto;
+}
+
+@media (max-width: 625px) {
+	.navbar__search {
+		display: none;
+	}
 }

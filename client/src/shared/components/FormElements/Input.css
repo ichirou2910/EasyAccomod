@@ -1,9 +1,11 @@
 .form-control input,
-.form-control textarea {
+.form-control textarea,
+.form-control select {
 	color: var(--primary-text);
 	display: block;
 	/* box-shadow: 0 2.5px 6px rgba(0, 0, 0, 0.5); */
 	padding: 0.5rem;
+	margin-bottom: 1rem;
 }
 
 .form-control label {
@@ -26,12 +28,33 @@
 	border-top-left-radius: 0;
 	background: var(--lighter-primary-color);
 	padding: 0.15rem 0.25rem;
-	margin-bottom: 1rem;
+}
+
+.form-control select {
+	outline: none;
+	height: 3rem;
+	font: inherit;
+	border: 2px solid var(--dark-primary-color);
+	border-top-left-radius: 0;
+	background: var(--lighter-primary-color);
+	padding: 0.15rem 0.25rem;
+}
+
+.form-control > select {
+	width: 100%;
+}
+
+.form-control__select {
+	display: flex;
+}
+
+.form-control__select input {
+	margin-right: 4px;
 }
 
 .form-control textarea {
 	width: 100%;
-	height: 70vh;
+	/* height: 70vh; */
 	resize: none;
 	outline: none;
 	border: none;

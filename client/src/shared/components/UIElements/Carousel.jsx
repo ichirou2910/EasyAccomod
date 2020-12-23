@@ -2,26 +2,32 @@ import React, { useState, useEffect, cloneElement } from 'react';
 
 import './Carousel.css';
 
-const Carousel = (props) => {
+const Carousel = ({ carouselItems }) => {
 	const [active, setActive] = useState(0);
-	let scrollInterval = null;
+	const length = carouselItems.length;
 
 	useEffect(() => {
-		scrollInterval = setTimeout(() => {
-			const { carouselItems } = props;
-			setActive((active + 1) % carouselItems.length);
-		}, 2000);
-	}, [scrollInterval]);
+		setTimeout(() => {
+			setActive((active + 1) % length);
+		}, 5000);
+	}, [active, length]);
 
-	const { carouselItems, ...rest } = props;
 	return (
 		<div className="carousel">
 			{carouselItems.map((item, index) => {
-				const activeStyle = active === index ? 'carousel__item--active' : '';
-				return cloneElement(item, {
-					...rest,
-					className: 'carousel__item' + activeStyle,
-				});
+				return (
+					<div
+						key={index}
+						className={`carousel__item ${
+							active === index ? 'carousel__item--active' : ''
+						}`}
+					>
+						<a style={{ backgroundImage: `url(${item})` }}></a>
+						<div className="carousel__item--overlay">
+							<img src={item} alt={`Item ${index + 1}`} />
+						</div>
+					</div>
+				);
 			})}
 		</div>
 	);

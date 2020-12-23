@@ -35,3 +35,23 @@
   - /user/user-id/edit: Edit User
   - /places/create: Create Place
   - /places/place-id/edit: Edit Place
+  
+## Attributes
+- title
+- address
+- nearby
+- roomtype
+- price
+- pricetype
+- period
+- area
+- shared
+- bathroom
+- kitchen
+- ac
+- balcony
+- ew
+- extras
+- time
+- timetype
+- images

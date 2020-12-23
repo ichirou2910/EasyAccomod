@@ -109,31 +109,56 @@ const Input = (props) => {
 		}
 	};
 
-	const element =
-		props.element === 'input' ? (
-			<input
-				id={props.id}
-				type={props.type}
-				placeholder={props.placeholder}
-				onChange={changeHandler}
-				onBlur={props.onBlur || touchHandler}
-				value={inputState.value}
-				style={props.style}
-				spellCheck={false}
-				disabled={props.disabled}
-			/>
-		) : (
-			<textarea
-				id={props.id}
-				rows={props.rows || 5}
-				onChange={changeHandler}
-				onBlur={props.onBlur || touchHandler}
-				value={inputState.value}
-				style={props.style}
-				spellCheck={false}
-				onPaste={props.onPaste || pasteHandler}
-			/>
-		);
+	let element;
+	switch (props.element) {
+		case 'input':
+			element = (
+				<input
+					id={props.id}
+					type={props.type}
+					placeholder={props.placeholder}
+					onChange={changeHandler}
+					onBlur={props.onBlur || touchHandler}
+					value={inputState.value}
+					style={props.style}
+					spellCheck={false}
+					disabled={props.disabled}
+				/>
+			);
+			break;
+		case 'textarea':
+			element = (
+				<textarea
+					id={props.id}
+					rows={props.rows || 5}
+					onChange={changeHandler}
+					onBlur={props.onBlur || touchHandler}
+					value={inputState.value}
+					style={props.style}
+					spellCheck={false}
+					onPaste={props.onPaste || pasteHandler}
+				/>
+			);
+			break;
+		case 'select':
+			element = (
+				<select
+					id={props.id}
+					onChange={changeHandler}
+					value={inputState.value}
+					style={props.style}
+				>
+					{props.options.map((item, index) => {
+						return (
+							<option key={index} value={item.opt}>
+								{item.label}
+							</option>
+						);
+					})}
+				</select>
+			);
+			break;
+	}
 
 	return (
 		<div

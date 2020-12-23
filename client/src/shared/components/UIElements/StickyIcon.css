@@ -29,6 +29,7 @@
 	margin-right: 5px;
 }
 .sticky-icon p {
+	color: black;
 	opacity: 0;
 	margin-right: 5px;
 	transition: opacity 1000ms;
