@@ -1,0 +1,36 @@
+# dependencies
+/node_modules
+
+# production
+/build
+
+# public
+/public
+
+# testing
+/coverage
+
+# env
+.env
+
+# folders
+/uploads/images/*
+!/uploads/images/edit-profile.png
+!/uploads/images/edit-blog.png
+!/uploads/images/create-blog.png
+!/uploads/images/default-avatar.png
+!/uploads/images/default-cover.png
+!/uploads/images/landing-wallpaper.png
+!/uploads/images/blog-no-image.png
+!/uploads/images/logo.png
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
