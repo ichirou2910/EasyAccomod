@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const db = require('./helpers/db');
 const Chat = db.Chat;
+const Notice = db.Notice;
 
 const express = require('express');
 const socket = require('socket.io');
@@ -91,6 +92,19 @@ io.on('connection', (socket) => {
 		chat.save();
 
 		io.sockets.emit('toClient', data);
+	});
+
+	socket.on('notification', (data) => {
+		let noti = new Notice({
+			user_id_sender: data.admin_id,
+			user_id_receiver: data.owner_id,
+			description: data.content,
+			date: Date.now()
+		});
+
+		noti.save();
+
+		io.sockets.emit('notiClient', data);
 	});
 
 });
