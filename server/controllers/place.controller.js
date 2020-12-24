@@ -57,34 +57,42 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-	if (req.params.user_id !== req.userData.user_id) {
+	if (
+		req.body.user_id !== req.userData.user_id ||
+		req.body.user_type !== 'Owner'
+	) {
 		res.status(401).json({ message: 'Authorization failed' });
 		return;
 	}
 
-	var extendDate = new Date();
+	let extendDate = new Date();
 	extendDate.setDate(extendDate.getDate() + 7);
 
 	const place = new Place({
-		user_id: req.params.user_id,
+		user_id: req.body.user_id,
 		title: req.body.title,
+		time: parseInt(req.body.time),
+		timeType: req.body.timeType,
 		address: req.body.address,
-		type: req.body.type,
-		price: req.body.price,
-		priceType: req.body.priceType,
 		nearby: req.body.nearby,
 		roomType: req.body.roomType,
-		roomNum: req.body.roomNum,
-		area: req.body.area,
-		shared: req.body.shared,
+		roomNum: parseInt(req.body.roomNum),
+		price: parseInt(req.body.price),
+		priceType: req.body.priceType,
+		period: req.body.period,
+		area: parseInt(req.body.area),
+		shared: parseInt(req.body.shared),
 		bath: req.body.bath,
 		kitchen: req.body.kitchen,
 		ac: req.body.ac,
 		balcony: req.body.balcony,
 		elec_water: req.body.elec_water,
-		others: req.body.others,
-		contact: req.body.contact,
-		picture: req.file.path,
+		extras: req.body.extras,
+		owner: req.body.owner,
+		avatar: req.body.avatar,
+		phone: req.body.phone,
+		email: req.body.email,
+		image: req.file.path, // Temp image
 		rateSum: 0,
 		rateCount: 0,
 		date: Date.now(),

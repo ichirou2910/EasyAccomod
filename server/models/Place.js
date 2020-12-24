@@ -9,8 +9,12 @@ const PlaceSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	status: {
-		type: Boolean,
+	time: {
+		type: Number,
+		required: true,
+	},
+	timeType: {
+		type: String,
 		required: true,
 	},
 	address: {
@@ -41,12 +45,16 @@ const PlaceSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	period: {
+		type: String,
+		required: true,
+	},
 	area: {
 		type: Number,
 		required: true,
 	},
 	shared: {
-		type: Boolean,
+		type: Number,
 		required: true,
 	},
 	bath: {
@@ -69,15 +77,31 @@ const PlaceSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	others: {
+	extras: {
 		type: String,
 		required: false,
 	},
 	images: {
 		type: Array,
+		required: false,
+	},
+	image: {
+		type: String,
 		required: true,
 	},
-	contact: {
+	owner: {
+		type: String,
+		required: true,
+	},
+	avatar: {
+		type: String,
+		required: true,
+	},
+	phone: {
+		type: String,
+		required: true,
+	},
+	email: {
 		type: String,
 		required: true,
 	},
@@ -89,13 +113,17 @@ const PlaceSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	status: {
+		type: Boolean,
+		required: true,
+	},
 	rateSum: {
 		type: Number,
-		required: true,
+		required: false,
 	},
 	rateCount: {
 		type: Number,
-		required: true,
+		required: false,
 	},
 	date: {
 		type: Date,

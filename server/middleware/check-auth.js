@@ -13,10 +13,10 @@ module.exports = (req, res, next) => {
 			}
 		}
 		const decodedToken = jwt.verify(token, config);
-		req.userData = { 
+		req.userData = {
 			email: decodedToken.email,
 			user_type: decodedToken.user_type,
-			user_id: decodedToken.user_id
+			user_id: decodedToken.user_id,
 		};
 		next();
 	} catch (err) {

@@ -10,13 +10,9 @@ router.get('/user/:user', placeController.getByUser);
 
 router.use(checkAuth);
 
-router.post(
-	'/create/:user_id',
-	fileUpload.single('cover'),
-	placeController.create
-);
-router.post('/:place_id', placeController.delete);
-router.post('/:place_id', fileUpload.single('cover'), placeController.update);
+router.post('/create', fileUpload.single('image'), placeController.create);
+router.delete('/:place_id', placeController.delete);
+router.post('/:place_id', fileUpload.single('image'), placeController.update);
 router.post('/extend/:place_id', placeController.extend);
 router.post('/like/:place_id', placeController.like);
 
