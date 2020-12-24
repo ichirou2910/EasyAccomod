@@ -116,7 +116,43 @@ const confirm = async (req, res, next) => {
 	res.status(200).json(place);
 };
 
+const getUnapprovedUser = async (req, res, next) => {
+	let users;
+	try {
+		users = await User.find({ status: false });
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	if(req.userData.user_type !== "Admin") {
+		res.status(401).json({ message: 'You are not authorized to use this' });
+		return;
+	}
+
+	res.status(200).json(users);
+}
+
+const getUnapprovedPlaces = async (req, res, next) => {
+	let places;
+	try {
+		places = await Place.find({ status: false });
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	if(req.userData.user_type !== "Admin") {
+		res.status(401).json({ message: 'You are not authorized to use this' });
+		return;
+	}
+
+	res.status(200).json(places);
+}
+
 exports.permit_account = permit_account;
 exports.permit_update = permit_update;
 exports.confirm = confirm;
 exports.confirmExtend = confirmExtend;
+exports.getUnapprovedUser = getUnapprovedUser;
+exports.getUnapprovedPlaces = getUnapprovedPlaces;
