@@ -16,7 +16,12 @@ const Navbar = (props) => {
 					</Link>
 				</li>
 				<form action="" className="navbar__search">
-					<input type="search" name="search" placeholder="&#x1F50D;" required />
+					<input
+						type="search"
+						name="search"
+						placeholder="Search by Location"
+						required
+					/>
 				</form>
 			</ul>
 			<ul className="navbar__nav">{props.children}</ul>
@@ -35,11 +40,7 @@ const NavItem = (props) => {
 				</a>
 			) : (
 				<>
-					<a
-						href="#"
-						className="navbar__icon-btn"
-						onClick={() => setOpen(!open)}
-					>
+					<a className="navbar__icon-btn" onClick={() => setOpen(!open)}>
 						{props.icon}
 					</a>
 					{open && props.children}

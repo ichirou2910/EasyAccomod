@@ -45,9 +45,6 @@
 
 .navbar__search input {
 	color: var(--text-color);
-	/* display: block; */
-	box-shadow: 0 2.5px 6px rgba(0, 0, 0, 0.5);
-	/* padding: 0.5rem; */
 	height: calc(var(--nav-height) * 0.5);
 	outline: none;
 	font: inherit;
