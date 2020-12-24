@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ChatSchema = new mongoose.Schema({
-    user_id: {
+    owner_id: {
         type: String,
         required: true,
     },

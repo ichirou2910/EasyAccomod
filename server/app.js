@@ -1,10 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const db = require('./helpers/db');
+const Chat = db.Chat;
 
 const express = require('express');
+const socket = require('socket.io');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-require('dotenv').config();
+require('dotenv').config()
 
 const app = express();
 
@@ -41,4 +44,53 @@ app.use((error, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.log(`Server starts on port ${PORT}`));
+var server = app.listen(PORT, console.log(`Server starts on port ${PORT}`));
+
+var io = socket(server);
+
+io.on('connection', (socket) => {
+
+	console.log("connect to a socket");
+	// Object data in details
+	/*
+		data : {
+			user_type: String,
+			sender_id: String,
+			recv_id: String,
+			message: String,
+		}
+	*/
+
+	// How it works
+	/*
+		Getting data
+		- Admin is also a client, who send data to server through socket
+		- Add a listener 'fromClient' to hear admin's data
+		- When on 'fromClient', server will send the data to all clients
+		- Only one client with the corresponding user_id will display the data
+
+		Displaying data
+		- Display 1 chat room (admin - 1 owner) through owner_id => getById
+		- Whenever the client listens to an event, getById will be emitted
+	*/
+	// Send back data
+	socket.on('fromClient', (data) => {
+
+		let owner;
+
+		if(data.user_type !== "Admin") {
+			owner = data.sender_id;
+		} else owner = data.recv_id;
+
+		let chat = new Chat({
+			user_type: data.user_type,
+			owner_id: owner,
+			content: data.message
+		});
+
+		chat.save();
+
+		io.sockets.emit('toClient', data);
+	});
+
+});
