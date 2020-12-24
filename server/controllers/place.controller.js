@@ -5,7 +5,7 @@ const Place = db.Place;
 const getAll = async (req, res, next) => {
 	let places;
 	try {
-		places = await Place.find().sort({ date: -1 });
+		places = await Place.find({ status: true }).sort({ date: -1 });
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -17,7 +17,9 @@ const getAll = async (req, res, next) => {
 const getByUser = async (req, res, next) => {
 	let places;
 	try {
-		places = await Place.find({ user: req.params.user }).sort({ date: -1 });
+		places = await Place.find({ user_id: req.params.user_id }).sort({
+			date: -1,
+		});
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -39,7 +41,7 @@ const getById = async (req, res, next) => {
 		return next(err);
 	}
 
-	if (!place) {
+	if (!place || !place.status) {
 		res.status(404).json({ message: 'Place not found' });
 		return;
 	}
@@ -57,11 +59,11 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-	if (
-		req.body.user_id !== req.userData.user_id ||
-		req.body.user_type !== 'Owner'
-	) {
-		res.status(401).json({ message: 'Authorization failed' });
+	if (req.body.user_id !== req.userData.user_id) {
+		res.status(401).json({ message: 'Authorization failed (ID)' });
+		return;
+	} else if (req.userData.user_type !== 'Owner') {
+		res.status(401).json({ message: 'Authorization failed (Type)' });
 		return;
 	}
 
@@ -74,6 +76,9 @@ const create = async (req, res, next) => {
 		time: parseInt(req.body.time),
 		timeType: req.body.timeType,
 		address: req.body.address,
+		ward: req.body.ward,
+		district: req.body.district,
+		city: req.body.city,
 		nearby: req.body.nearby,
 		roomType: req.body.roomType,
 		roomNum: parseInt(req.body.roomNum),
@@ -82,10 +87,10 @@ const create = async (req, res, next) => {
 		period: req.body.period,
 		area: parseInt(req.body.area),
 		shared: parseInt(req.body.shared),
-		bath: req.body.bath,
-		kitchen: req.body.kitchen,
-		ac: req.body.ac,
-		balcony: req.body.balcony,
+		bath: parseInt(req.body.bath),
+		kitchen: parseInt(req.body.kitchen),
+		ac: parseInt(req.body.ac),
+		balcony: parseInt(req.body.balcony),
 		elec_water: req.body.elec_water,
 		extras: req.body.extras,
 		owner: req.body.owner,
