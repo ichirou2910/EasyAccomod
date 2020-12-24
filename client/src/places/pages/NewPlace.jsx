@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import { Redirect } from 'react-router-dom';
 import {
 	VALIDATOR_MAXLENGTH,
-	VALIDATOR_MINLENGTH,
 	VALIDATOR_REQUIRE,
 } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
@@ -38,6 +37,10 @@ const NewPlace = () => {
 				isValid: false,
 			},
 			roomtype: {
+				value: null,
+				isValid: false,
+			},
+			roomnum: {
 				value: null,
 				isValid: false,
 			},
@@ -93,7 +96,7 @@ const NewPlace = () => {
 				value: null,
 				isValid: false,
 			},
-			cover: {
+			image: {
 				value: null,
 				isValid: false,
 			},
@@ -112,44 +115,45 @@ const NewPlace = () => {
 		// 	timeZone: 'Asia/Ho_Chi_Minh',
 		// });
 
-		// // Create new Blog
-		// try {
-		// 	const formData = new FormData();
-		// 	formData.append('user', auth.loginInfo.name);
-		// 	formData.append('title', formState.inputs.title.value);
-		// 	formData.append('content', formState.inputs.content.value);
-		// 	formData.append('cover', formState.inputs.cover.value);
-		// 	formData.append('date', _date);
-		// 	formData.append('displayDate', _display);
+		// Create new Blog
+		try {
+			const formData = new FormData();
+			formData.append('user_id', auth.loginInfo.userId);
+			formData.append('title', formState.inputs.title.value);
+			formData.append('time', formState.inputs.time.value);
+			formData.append('timeType', formState.inputs.timetype.value);
+			formData.append('address', formState.inputs.address.value);
+			formData.append('nearby', formState.inputs.nearby.value);
+			formData.append('roomType', formState.inputs.roomtype.value);
+			formData.append('roomNum', formState.inputs.roomnum.value);
+			formData.append('price', formState.inputs.price.value);
+			formData.append('priceType', formState.inputs.pricetype.value);
+			formData.append('period', formState.inputs.period.value);
+			formData.append('area', formState.inputs.area.value);
+			formData.append('shared', formState.inputs.shared.value);
+			formData.append('bath', formState.inputs.bathroom.value);
+			formData.append('kitchen', formState.inputs.kitchen.value);
+			formData.append('ac', formState.inputs.ac.value);
+			formData.append('balcony', formState.inputs.balcony.value);
+			formData.append('elec_water', formState.inputs.ew.value);
+			formData.append('extras', formState.inputs.extras.value);
+			formData.append('owner', auth.loginInfo.realname);
+			formData.append('avatar', auth.loginInfo.avatar);
+			formData.append('phone', auth.loginInfo.phone);
+			formData.append('email', auth.loginInfo.email);
+			formData.append('image', formState.inputs.image.value);
 
-		// 	sendRequest(
-		// 		`${process.env.REACT_APP_API_URL}/blog/create`,
-		// 		'POST',
-		// 		formData,
-		// 		{
-		// 			Authorization: 'Bearer ' + auth.token,
-		// 		}
-		// 	)
-		// 		.then((res) => {
-		// 			return sendRequest(
-		// 				`${process.env.REACT_APP_API_URL}/activity/create`,
-		// 				'POST',
-		// 				JSON.stringify({
-		// 					user: auth.loginInfo.name,
-		// 					blogId: res._id,
-		// 					type: 'post',
-		// 					date: _date,
-		// 				}),
-		// 				{
-		// 					'Content-Type': 'application/json',
-		// 					Authorization: 'Bearer ' + auth.token,
-		// 				}
-		// 			);
-		// 		})
-		// 		.then(() => setEdited(true));
-		// } catch (err) {
-		// 	console.log(err);
-		// }
+			sendRequest(
+				`${process.env.REACT_APP_API_URL}/place/create/${auth.loginInfo.userId}`,
+				'POST',
+				formData,
+				{
+					Authorization: 'Bearer ' + auth.token,
+				}
+			).then(() => setEdited(true));
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	if (edited) {
@@ -224,6 +228,14 @@ const NewPlace = () => {
 						element="input"
 						type="text"
 						label="Room Type"
+						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+						onInput={inputHandler}
+					/>
+					<Input
+						id="roomnum"
+						element="input"
+						type="number"
+						label="Number of Room"
 						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
 						onInput={inputHandler}
 					/>
@@ -341,7 +353,7 @@ const NewPlace = () => {
 					/>
 				</div>
 				<ImageUpload
-					id="cover"
+					id="image"
 					description="CHOOSE COVER"
 					onInput={inputHandler}
 				/>

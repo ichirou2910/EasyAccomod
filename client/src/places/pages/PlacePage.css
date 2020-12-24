@@ -6,26 +6,18 @@
 
 .place-page h2,
 .place-page h3 {
-	font-weight: 300;
+	/* font-weight: 300; */
 	font-size: 1.5rem;
-}
-
-.place-page__content-section {
-	font-size: 1.3rem;
-	font-weight: 300;
-	color: var(--primary-text);
 }
 
 .place-page__header {
 	width: 100%;
 	margin: 1rem auto;
-	/* background-color: rgba(0, 0, 0, 0.5); */
 	color: var(--primary-text);
-	/* box-shadow: 0 0 6px #ac1b7388; */
 }
 
 .place-page__header h2 {
-	font-size: 2.5rem;
+	font-size: 2.25rem;
 	margin: 0;
 	font-weight: 300;
 	line-height: 1.2;
@@ -34,6 +26,29 @@
 .place-page__header p {
 	font-size: 1.25rem;
 	font-weight: 300;
+	margin: 0.25rem 0;
+}
+
+.place-page__header span {
+	font-size: 0.9rem;
+}
+
+.place-page__header p:last-child span {
+	font-size: 1.25rem;
+	vertical-align: middle;
+}
+.place-page__header p:last-child span:last-child {
+	margin-left: 2rem;
+}
+
+.place-page__content-section {
+	font-weight: 300;
+	line-height: 1.5;
+	color: var(--primary-text);
+}
+
+.place-page__content-section h2 {
+	margin: 0.8rem 0;
 }
 
 .place-page__basic-info {
@@ -41,16 +56,19 @@
 }
 
 .place-page__basic-info p {
-	font-size: 1.5rem;
+	font-size: 1.25rem;
+	line-height: 1.2;
 	font-weight: 300;
 }
 
 .place-page__basic-info div {
-	margin-right: 25px;
+	margin-right: 35px;
 }
 
 .place-page__contact {
 	display: flex;
+	font-weight: bold;
+	font-size: 1.1rem;
 	justify-content: flex-start;
 }
 
@@ -68,7 +86,7 @@
 
 @media (max-width: 768px) {
 	.place-page__header h2 {
-		font-size: 3rem;
+		font-size: 2rem;
 		margin: 1.25rem 0;
 	}
 
@@ -91,7 +109,7 @@
 	}
 
 	.place-page__header h2 {
-		font-size: 2rem;
+		font-size: 1.5rem;
 		margin: 1rem 0;
 	}
 
@@ -101,6 +119,10 @@
 
 	.place-page__content-section {
 		font-size: 1rem;
+	}
+
+	.place-page__basic-info div {
+		margin-right: 20px;
 	}
 
 	/* .place-page p {

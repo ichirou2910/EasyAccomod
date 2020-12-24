@@ -4,7 +4,7 @@ import './Carousel.css';
 
 const Carousel = ({ carouselItems }) => {
 	const [active, setActive] = useState(0);
-	const length = carouselItems.length;
+	const length = carouselItems ? carouselItems.length : 0;
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -14,21 +14,22 @@ const Carousel = ({ carouselItems }) => {
 
 	return (
 		<div className="carousel">
-			{carouselItems.map((item, index) => {
-				return (
-					<div
-						key={index}
-						className={`carousel__item ${
-							active === index ? 'carousel__item--active' : ''
-						}`}
-					>
-						<a style={{ backgroundImage: `url(${item})` }}></a>
-						<div className="carousel__item--overlay">
-							<img src={item} alt={`Item ${index + 1}`} />
+			{length &&
+				carouselItems.map((item, index) => {
+					return (
+						<div
+							key={index}
+							className={`carousel__item ${
+								active === index ? 'carousel__item--active' : ''
+							}`}
+						>
+							<a style={{ backgroundImage: `url(${item})` }}></a>
+							<div className="carousel__item--overlay">
+								<img src={item} alt={`Item ${index + 1}`} />
+							</div>
 						</div>
-					</div>
-				);
-			})}
+					);
+				})}
 		</div>
 	);
 };

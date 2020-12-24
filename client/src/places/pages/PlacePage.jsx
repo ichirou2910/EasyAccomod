@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
+// import { socket } from '../../App';
+
+import { FaEye, FaHeart } from 'react-icons/fa';
 
 import PlaceMenu from '../components/PlaceMenu';
 import Button from '../../shared/components/FormElements/Button';
@@ -13,43 +16,74 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 import './PlacePage.css';
 
-const samplePlace = {
-	title: 'Room for rent at Thinh Quang Ward, near Mipec Tower',
-	owner: 'Ichirou Keita',
-	avatar:
-		'https://blog.ichiroukeita.tk/uploads/images/51f373d2-8546-48d0-8227-1b77036d5f82.png',
-	phone: '0123456789',
-	email: 'ichiroukeita@acco.com',
-	address: 'Thinh Quang Ward, Dong Da District',
-	nearby: 'BIDV bank, a lot of cafes, markets',
-	roomtype: 'mini',
-	roomnum: 2,
-	price: '100',
-	pricetype: 'K',
-	period: 'mo',
-	area: 40,
-	shared: 1,
-	bathroom: 'Working',
-	kitchen: 'Working',
-	ac: 'Working',
-	balcony: 'Yes but kinda small',
-	ew: 'Elec: 1.900 VND/kWh, Water: 10.000 VND/m3',
-	extras: 'Free GF <(")',
-	images: [
-		'https://home.aloyeal.com/wp-content/uploads/2019/06/ph%C3%B2ng-tr%E1%BB%8D-m%C6%A1-%C6%B0%E1%BB%9Bc-1170x0-c-center.jpg',
-		'https://news.landber.com/uploads/images/tim-thue-nha-tro-duoi-1-trieu-tai-ha-noi-danh-cho-sinh-vien-1.jpg',
-		'https://news.mogi.vn/wp-content/uploads/2019/10/cho-thue-phong-tro-ha-noi-anh-bia.jpg',
-	],
-	rating: 3,
-};
+// const samplePlace = {
+// 	title: 'Room for rent at Thinh Quang Ward, near Mipec Tower',
+// 	owner: 'Ichirou Keita',
+// 	avatar:
+// 		'https://blog.ichiroukeita.tk/uploads/images/51f373d2-8546-48d0-8227-1b77036d5f82.png',
+// 	phone: '0123456789',
+// 	email: 'ichiroukeita@acco.com',
+// 	address: 'Thinh Quang Ward, Dong Da District',
+// 	nearby: 'BIDV bank, a lot of cafes, markets',
+// 	roomtype: 'Mini Apartment',
+// 	roomnum: 2,
+// 	price: '100',
+// 	pricetype: 'K',
+// 	period: 'mo',
+// 	area: 40,
+// 	shared: 1,
+// 	bathroom: 'Working',
+// 	kitchen: 'Working',
+// 	ac: 'Working',
+// 	balcony: 'Yes but kinda small',
+// 	ew: 'Elec: 1.900 VND/kWh, Water: 10.000 VND/m3',
+// 	extras: 'Free GF <(")',
+// 	images: [
+// 		'https://home.aloyeal.com/wp-content/uploads/2019/06/ph%C3%B2ng-tr%E1%BB%8D-m%C6%A1-%C6%B0%E1%BB%9Bc-1170x0-c-center.jpg',
+// 		'https://news.landber.com/uploads/images/tim-thue-nha-tro-duoi-1-trieu-tai-ha-noi-danh-cho-sinh-vien-1.jpg',
+// 		'https://news.mogi.vn/wp-content/uploads/2019/10/cho-thue-phong-tro-ha-noi-anh-bia.jpg',
+// 	],
+// 	favorited: false,
+// };
 
 const PlacePage = () => {
-	const [place, setPlace] = useState(samplePlace);
+	const [place, setPlace] = useState({});
+
+	const [favorited, setFavorited] = useState(place.favorited);
+	const [favorites, setFavorites] = useState(0);
+	const [views, setViews] = useState(0);
 
 	const { isLoading, error, sendRequest } = useHttpClient();
 
 	const auth = useContext(AuthContext);
 	const placeId = useParams().placeId;
+
+	// useEffect(() => {
+	// 	socket.emit('init_data');
+	// 	socket.on('get_data', (data) => {
+	// 		setViews(data.views);
+	// 		setFavorites(data.likes);
+	// 	});
+	// 	socket.on('change_data', () => {
+	// 		socket.emit('init_data');
+	// 	});
+	// 	socket.emit('inc_view');
+
+	// 	return () => {
+	// 		socket.off('get_data');
+	// 		socket.off('change_data');
+	// 	};
+	// }, []);
+
+	const incFavorites = () => {
+		// socket.emit('inc_like');
+		setFavorited(!favorited);
+	};
+
+	const decFavorites = () => {
+		// socket.emit('dec_like');
+		setFavorited(!favorited);
+	};
 
 	const callHandler = () => {
 		let dummyNumber = document.createElement('input');
@@ -61,19 +95,19 @@ const PlacePage = () => {
 		alert('Phone number copied!');
 	};
 
-	// useEffect(() => {
-	// 	const fetchInfo = async () => {
-	// 		try {
-	// 			const placeData = await sendRequest(
-	// 				`${process.env.REACT_APP_API_URL}/place/${placeId}`
-	// 			);
-	// 			setPlace(placeData);
-	// 		} catch (err) {
-	// 			console.log(err);
-	// 		}
-	// 	};
-	// 	fetchInfo();
-	// }, [sendRequest, placeId]);
+	useEffect(() => {
+		const fetchInfo = async () => {
+			try {
+				const placeData = await sendRequest(
+					`${process.env.REACT_APP_API_URL}/place/${placeId}`
+				);
+				setPlace(placeData);
+			} catch (err) {
+				console.log(err);
+			}
+		};
+		fetchInfo();
+	}, [sendRequest, placeId]);
 
 	return (
 		<>
@@ -91,19 +125,37 @@ const PlacePage = () => {
 					auth.loginInfo.name === place.user && (
 						<StickyIcon
 							src={`${process.env.REACT_APP_HOST_URL}/uploads/images/edit-place.png`}
-							alt="edit profile icon"
+							alt="edit place icon"
 							to={`/place/${place._id}/edit`}
 							text="Edit Place"
 						/>
 					)}
 				{!isLoading && place && (
 					<>
-						<PlaceMenu />
-						<Carousel carouselItems={place.images} />
+						<PlaceMenu
+							favorited={favorited}
+							incFav={incFavorites}
+							decFav={decFavorites}
+						/>
+						{/* <Carousel carouselItems={place.images} /> */}
 						<div className="place-page__content-section base-view">
 							<div className="place-page__header">
 								<h2>{place.title}</h2>
 								<p>{place.address}</p>
+								<p>Near {place.nearby}</p>
+								<span>
+									<em>{place.roomType}</em>
+								</span>
+								<p>
+									<span style={{ color: '#2d6a64' }}>
+										<FaEye />{' '}
+									</span>
+									{views}
+									<span style={{ color: '#dc3545' }}>
+										<FaHeart />{' '}
+									</span>
+									{favorites}
+								</p>
 							</div>
 							<hr />
 							<div className="place-page__basic-info">
@@ -111,7 +163,7 @@ const PlacePage = () => {
 									<p>Price</p>
 									<p>
 										<strong>
-											{`${place.price}${place.pricetype}/${place.period}`}
+											{`${place.price}${place.priceType}/${place.period}`}
 										</strong>
 									</p>
 								</div>
@@ -124,7 +176,7 @@ const PlacePage = () => {
 								<div className="place-page--multi-line">
 									<p>Rooms</p>
 									<p>
-										<strong>{place.roomnum}</strong>
+										<strong>{place.roomNum}</strong>
 									</p>
 								</div>
 								<div className="place-page--multi-line">
@@ -150,7 +202,7 @@ const PlacePage = () => {
 										<span>
 											<strong>Bathroom: </strong>
 										</span>
-										{place.bathroom}
+										{place.bath}
 									</li>
 									<li>
 										<span>
@@ -183,7 +235,7 @@ const PlacePage = () => {
 										<span>
 											<strong>Elec/Water: </strong>
 										</span>
-										{place.ew}
+										{place.elec_water}
 									</li>
 								</ul>
 							</div>
@@ -194,7 +246,7 @@ const PlacePage = () => {
 							<div className="place-page__contact">
 								<Avatar
 									medium
-									image={place.avatar}
+									image={`${process.env.REACT_APP_HOST_URL}/${place.avatar}`}
 									alt={`${place.owner}'s avatar`}
 								/>
 								<div className="place-page__info">
