@@ -26,7 +26,7 @@ const Auth = () => {
 
 	const [formState, inputHandler, setFormData] = useForm(
 		{
-			username: {
+			email: {
 				value: '',
 				isValid: false,
 			},
@@ -48,7 +48,7 @@ const Auth = () => {
 					`${process.env.REACT_APP_API_URL}/user/authenticate`,
 					'POST',
 					JSON.stringify({
-						name: formState.inputs.username.value,
+						email: formState.inputs.email.value,
 						password: formState.inputs.password.value,
 					}),
 					{
@@ -71,13 +71,14 @@ const Auth = () => {
 					`${process.env.REACT_APP_API_URL}/user/register`,
 					'POST',
 					JSON.stringify({
-						name: formState.inputs.username.value,
+						username: formState.inputs.username.value,
 						password: formState.inputs.password.value,
 						realname: formState.inputs.realname.value,
 						identifier: formState.inputs.identifier.value,
 						address: formState.inputs.address.value,
 						phone: formState.inputs.phone.value,
 						email: formState.inputs.email.value,
+						user_type: userMode,
 					}),
 					{
 						'Content-Type': 'application/json',
@@ -99,11 +100,11 @@ const Auth = () => {
 				{
 					...formState.inputs,
 					confirm: undefined,
+					username: undefined,
 					realname: undefined,
 					identifier: undefined,
 					address: undefined,
 					phone: undefined,
-					email: undefined,
 				},
 				formState.inputs.username.isValid && formState.inputs.password.isValid
 			);
@@ -114,6 +115,10 @@ const Auth = () => {
 				{
 					...formState.inputs,
 					confirm: {
+						value: '',
+						isValid: false,
+					},
+					username: {
 						value: '',
 						isValid: false,
 					},
@@ -130,10 +135,6 @@ const Auth = () => {
 						isValid: false,
 					},
 					phone: {
-						value: '',
-						isValid: false,
-					},
-					email: {
 						value: '',
 						isValid: false,
 					},
@@ -158,9 +159,9 @@ const Auth = () => {
 						<>
 							<Input
 								element="input"
-								id="username"
-								type="text"
-								label="Username"
+								id="email"
+								type="email"
+								label="Email"
 								validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(3)]}
 								errorText="Username must be more than 3 characters"
 								onInput={inputHandler}
@@ -210,6 +211,14 @@ const Auth = () => {
 							/>
 							<Input
 								element="input"
+								id="username"
+								type="text"
+								label="Username"
+								validators={[VALIDATOR_REQUIRE()]}
+								onInput={inputHandler}
+							/>
+							<Input
+								element="input"
 								id="realname"
 								type="text"
 								label="Real Name"
@@ -238,14 +247,6 @@ const Auth = () => {
 								id="phone"
 								type="text"
 								label="Phone No."
-								validators={[VALIDATOR_REQUIRE()]}
-								onInput={inputHandler}
-							/>
-							<Input
-								element="input"
-								id="email"
-								type="email"
-								label="Email"
 								validators={[VALIDATOR_REQUIRE()]}
 								onInput={inputHandler}
 							/>

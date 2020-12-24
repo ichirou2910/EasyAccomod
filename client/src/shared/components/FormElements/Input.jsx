@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect, useContext } from 'react';
 import { validate } from '../../util/validators';
+import { booleanValue } from '../../util/utils';
 import { AuthContext } from '../../context/auth-context';
 
 import './Input.css';
@@ -34,7 +35,7 @@ const inputReducer = (state, action) => {
 
 const Input = (props) => {
 	const [inputState, dispatch] = useReducer(inputReducer, {
-		value: props.initialValue || '',
+		value: props.initialValue === 0 ? 0 : props.initialValue || '',
 		isTouched: false,
 		isValid: props.initialValid || false,
 	});
@@ -61,7 +62,10 @@ const Input = (props) => {
 	const changeHandler = (event) => {
 		dispatch({
 			type: 'CHANGE',
-			value: event.target.value,
+			value:
+				event.target.type === 'checkbox'
+					? booleanValue(event.target.checked)
+					: event.target.value,
 			validators: props.validators,
 		});
 	};
@@ -158,11 +162,23 @@ const Input = (props) => {
 				</select>
 			);
 			break;
+		case 'checkbox':
+			element = (
+				<input
+					type="checkbox"
+					name={props.label}
+					id={props.id}
+					onChange={changeHandler}
+				/>
+			);
+			break;
 	}
 
 	return (
 		<div
 			className={`form-control ${
+				props.element === 'checkbox' && 'form-control__checkbox'
+			} ${
 				!inputState.isValid && inputState.isTouched && 'form-control--invalid'
 			}`}
 		>

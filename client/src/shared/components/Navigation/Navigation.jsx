@@ -37,7 +37,7 @@ const Navigation = () => {
 							<>
 								<DropdownItem
 									icon={<UserIcon />}
-									to={`/user/${auth.loginInfo.name}`}
+									to={`/user/${auth.loginInfo.userId}`}
 								>
 									My Profile
 								</DropdownItem>

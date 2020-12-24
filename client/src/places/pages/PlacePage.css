@@ -10,6 +10,19 @@
 	font-size: 1.5rem;
 }
 
+.place-page__modal-content {
+	padding: 0;
+}
+
+.place-page__modal-actions {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.place-page__modal-actions button {
+	margin-left: 0.5rem;
+}
+
 .place-page__header {
 	width: 100%;
 	margin: 1rem auto;
@@ -51,17 +64,17 @@
 	margin: 0.8rem 0;
 }
 
-.place-page__basic-info {
+.place-page__stats {
 	display: flex;
 }
 
-.place-page__basic-info p {
+.place-page__stats p {
 	font-size: 1.25rem;
 	line-height: 1.2;
 	font-weight: 300;
 }
 
-.place-page__basic-info div {
+.place-page__stats div {
 	margin-right: 35px;
 }
 

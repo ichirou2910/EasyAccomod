@@ -10,23 +10,23 @@ const PlaceItem = (props) => {
 		<li className="place-item">
 			<Card className="place-item__card card--lighter">
 				<div className="place-item__image">
-					<Link to={`/place/${props.id}`}>
+					<Link to={`/place/${props.place._id}`}>
 						<img
-							src={`${process.env.REACT_APP_HOST_URL}/${props.cover}`}
-							alt={props.title}
+							src={`${process.env.REACT_APP_HOST_URL}/${props.place.image}`}
+							alt={props.place.title}
 						/>
 					</Link>
 				</div>
 				<div className="place-item__info">
 					<h2>
-						<Link to={`/place/${props.id}`}>{props.title}</Link>
+						<Link to={`/place/${props.place._id}`}>{props.place.title}</Link>
 					</h2>
+					<p>{props.place.address}</p>
 					<p>
-						<Link to={`/user/${props.user}`}>
-							<em>{props.user}</em>
-						</Link>
+						{props.place.price}
+						{props.place.priceType}/{props.place.period} - {props.place.area} m2
+						- {props.place.roomNum} RMs
 					</p>
-					<p>{props.date}</p>
 				</div>
 			</Card>
 		</li>

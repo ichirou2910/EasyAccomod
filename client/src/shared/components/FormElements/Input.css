@@ -30,6 +30,20 @@
 	padding: 0.15rem 0.25rem;
 }
 
+.form-control__checkbox {
+	display: flex;
+	justify-content: flex-start;
+	flex-flow: row;
+	margin-bottom: 1rem;
+}
+
+.form-control input[type='checkbox'] {
+	height: 34px;
+	margin: 0 1rem;
+	width: 34px;
+	flex-shrink: 1;
+}
+
 .form-control select {
 	outline: none;
 	height: 3rem;

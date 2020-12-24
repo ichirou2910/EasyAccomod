@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Helmet } from 'react-helmet';
 import { Redirect, useParams } from 'react-router-dom';
-import {
-	VALIDATOR_MINLENGTH,
-	VALIDATOR_REQUIRE,
-} from '../../shared/util/validators';
+import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 
 import Button from '../../shared/components/FormElements/Button';
 import Input from '../../shared/components/FormElements/Input';
-import Editor from '../../shared/components/FormElements/Editor';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
@@ -203,15 +199,6 @@ const EditBlog = () => {
 								initialValid={true}
 							/>
 						</div>
-						<Editor
-							id="content"
-							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(5)]}
-							errorText="Please enter valid content (at least 5 characters)."
-							onInput={inputHandler}
-							editValue={blog.content}
-							editValid={true}
-							previewValue={formState.inputs.content.value}
-						/>
 						<ImageUpload
 							id="cover"
 							onInput={inputHandler}

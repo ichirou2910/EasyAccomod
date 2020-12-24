@@ -1,5 +1,7 @@
 .main-page {
 	margin-top: 4rem;
+	display: flex;
+	justify-content: center;
 }
 
 @media (max-width: 768px) {

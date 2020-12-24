@@ -5,12 +5,14 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 // import { socket } from '../../App';
 
-import { FaEye, FaHeart } from 'react-icons/fa';
+import { FaEye, FaHeart, FaPhone, FaEnvelope } from 'react-icons/fa';
 
 import PlaceMenu from '../components/PlaceMenu';
+import PlaceReport from '../components/PlaceReport';
 import Button from '../../shared/components/FormElements/Button';
 import Avatar from '../../shared/components/UIElements/Avatar';
 import Carousel from '../../shared/components/UIElements/Carousel';
+import Modal from '../../shared/components/UIElements/Modal';
 import StickyIcon from '../../shared/components/UIElements/StickyIcon';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
@@ -48,6 +50,7 @@ import './PlacePage.css';
 
 const PlacePage = () => {
 	const [place, setPlace] = useState({});
+	const [showReport, setShowReport] = useState(false);
 
 	const [favorited, setFavorited] = useState(place.favorited);
 	const [favorites, setFavorites] = useState(0);
@@ -95,6 +98,12 @@ const PlacePage = () => {
 		alert('Phone number copied!');
 	};
 
+	const openReportHandler = () => setShowReport(true);
+
+	const closeReportHandler = () => setShowReport(false);
+
+	const sendReportHandler = () => {};
+
 	useEffect(() => {
 		const fetchInfo = async () => {
 			try {
@@ -132,17 +141,28 @@ const PlacePage = () => {
 					)}
 				{!isLoading && place && (
 					<>
+						<Modal
+							show={showReport}
+							onCancel={closeReportHandler}
+							contentClass="place-page__modal-content"
+							footerClass="place-page__modal-actions"
+						>
+							<PlaceReport placeId={place._id} />
+						</Modal>
 						<PlaceMenu
 							favorited={favorited}
 							incFav={incFavorites}
 							decFav={decFavorites}
+							report={openReportHandler}
 						/>
 						{/* <Carousel carouselItems={place.images} /> */}
 						<div className="place-page__content-section base-view">
 							<div className="place-page__header">
 								<h2>{place.title}</h2>
-								<p>{place.address}</p>
-								<p>Near {place.nearby}</p>
+								{/* <p>{place.address}</p> */}
+								<p>
+									{place.ward}, {place.district}, {place.city}
+								</p>
 								<span>
 									<em>{place.roomType}</em>
 								</span>
@@ -158,7 +178,7 @@ const PlacePage = () => {
 								</p>
 							</div>
 							<hr />
-							<div className="place-page__basic-info">
+							<div className="place-page__stats">
 								<div className="place-page--multi-line">
 									<p>Price</p>
 									<p>
@@ -193,6 +213,26 @@ const PlacePage = () => {
 								</div>
 							</div>
 							<hr />
+							<div className="place-page__basic-info">
+								<h2>
+									<strong>Room Info</strong>
+								</h2>
+								<ul>
+									<li>
+										<span>
+											<strong>Address: </strong>
+											{place.address}
+										</span>
+									</li>
+									<li>
+										<span>
+											<strong>Near: </strong>
+										</span>
+										{place.nearby}
+									</li>
+								</ul>
+							</div>
+							<hr />
 							<div className="place-page__facilities">
 								<h2>
 									<strong>Room Facilities</strong>
@@ -202,25 +242,25 @@ const PlacePage = () => {
 										<span>
 											<strong>Bathroom: </strong>
 										</span>
-										{place.bath}
+										{place.bath ? 'Yes' : 'No'}
 									</li>
 									<li>
 										<span>
 											<strong>Kitchen: </strong>
 										</span>
-										{place.kitchen}
+										{place.kitchen ? 'Yes' : 'No'}
 									</li>
 									<li>
 										<span>
 											<strong>Air-conditioner: </strong>
 										</span>
-										{place.ac}
+										{place.ac ? 'Yes' : 'No'}
 									</li>
 									<li>
 										<span>
 											<strong>Balcony: </strong>
 										</span>
-										{place.balcony}
+										{place.balcony ? 'Yes' : 'No'}
 									</li>
 								</ul>
 								{place.extras && <p>{place.extras}</p>}
@@ -252,11 +292,24 @@ const PlacePage = () => {
 								<div className="place-page__info">
 									<p>{place.owner}</p>
 									<div>
-										<Button onClick={callHandler}>Call</Button>
 										<Button
-											href={`mailto:${place.email}?subject=${place.title}`}
+											onClick={callHandler}
+											style={{
+												backgroundColor: '#28a745',
+												borderColor: '#28a745',
+											}}
 										>
-											Mail
+											<FaPhone />
+										</Button>
+										<Button
+											newtab
+											href={`mailto:${place.email}?subject=${place.title}`}
+											style={{
+												backgroundColor: '#dc3545',
+												borderColor: '#dc3545',
+											}}
+										>
+											<FaEnvelope />
 										</Button>
 									</div>
 								</div>

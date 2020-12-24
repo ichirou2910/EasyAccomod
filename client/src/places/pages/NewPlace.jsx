@@ -32,6 +32,18 @@ const NewPlace = () => {
 				value: '',
 				isValid: false,
 			},
+			ward: {
+				value: '',
+				isValid: false,
+			},
+			district: {
+				value: '',
+				isValid: false,
+			},
+			city: {
+				value: '',
+				isValid: false,
+			},
 			nearby: {
 				value: '',
 				isValid: false,
@@ -66,19 +78,19 @@ const NewPlace = () => {
 			},
 			bathroom: {
 				value: null,
-				isValid: false,
+				isValid: true,
 			},
 			kitchen: {
 				value: null,
-				isValid: false,
+				isValid: true,
 			},
 			ac: {
 				value: null,
-				isValid: false,
+				isValid: true,
 			},
 			balcony: {
 				value: null,
-				isValid: false,
+				isValid: true,
 			},
 			ew: {
 				value: null,
@@ -116,44 +128,47 @@ const NewPlace = () => {
 		// });
 
 		// Create new Blog
-		try {
-			const formData = new FormData();
-			formData.append('user_id', auth.loginInfo.userId);
-			formData.append('title', formState.inputs.title.value);
-			formData.append('time', formState.inputs.time.value);
-			formData.append('timeType', formState.inputs.timetype.value);
-			formData.append('address', formState.inputs.address.value);
-			formData.append('nearby', formState.inputs.nearby.value);
-			formData.append('roomType', formState.inputs.roomtype.value);
-			formData.append('roomNum', formState.inputs.roomnum.value);
-			formData.append('price', formState.inputs.price.value);
-			formData.append('priceType', formState.inputs.pricetype.value);
-			formData.append('period', formState.inputs.period.value);
-			formData.append('area', formState.inputs.area.value);
-			formData.append('shared', formState.inputs.shared.value);
-			formData.append('bath', formState.inputs.bathroom.value);
-			formData.append('kitchen', formState.inputs.kitchen.value);
-			formData.append('ac', formState.inputs.ac.value);
-			formData.append('balcony', formState.inputs.balcony.value);
-			formData.append('elec_water', formState.inputs.ew.value);
-			formData.append('extras', formState.inputs.extras.value);
-			formData.append('owner', auth.loginInfo.realname);
-			formData.append('avatar', auth.loginInfo.avatar);
-			formData.append('phone', auth.loginInfo.phone);
-			formData.append('email', auth.loginInfo.email);
-			formData.append('image', formState.inputs.image.value);
+		// try {
+		// 	const formData = new FormData();
+		// 	formData.append('user_id', auth.loginInfo.userId);
+		// 	formData.append('title', formState.inputs.title.value);
+		// 	formData.append('time', formState.inputs.time.value);
+		// 	formData.append('timeType', formState.inputs.timetype.value);
+		// 	formData.append('address', formState.inputs.address.value);
+		// 	formData.append('ward', formState.inputs.ward.value);
+		// 	formData.append('district', formState.inputs.district.value);
+		// 	formData.append('city', formState.inputs.city.value);
+		// 	formData.append('nearby', formState.inputs.nearby.value);
+		// 	formData.append('roomType', formState.inputs.roomtype.value);
+		// 	formData.append('roomNum', formState.inputs.roomnum.value);
+		// 	formData.append('price', formState.inputs.price.value);
+		// 	formData.append('priceType', formState.inputs.pricetype.value);
+		// 	formData.append('period', formState.inputs.period.value);
+		// 	formData.append('area', formState.inputs.area.value);
+		// 	formData.append('shared', formState.inputs.shared.value);
+		// 	formData.append('bath', formState.inputs.bathroom.value);
+		// 	formData.append('kitchen', formState.inputs.kitchen.value);
+		// 	formData.append('ac', formState.inputs.ac.value);
+		// 	formData.append('balcony', formState.inputs.balcony.value);
+		// 	formData.append('elec_water', formState.inputs.ew.value);
+		// 	formData.append('extras', formState.inputs.extras.value);
+		// 	formData.append('owner', auth.loginInfo.realname);
+		// 	formData.append('avatar', auth.loginInfo.avatar);
+		// 	formData.append('phone', auth.loginInfo.phone);
+		// 	formData.append('email', auth.loginInfo.email);
+		// 	formData.append('image', formState.inputs.image.value);
 
-			sendRequest(
-				`${process.env.REACT_APP_API_URL}/place/create/${auth.loginInfo.userId}`,
-				'POST',
-				formData,
-				{
-					Authorization: 'Bearer ' + auth.token,
-				}
-			).then(() => setEdited(true));
-		} catch (err) {
-			console.log(err);
-		}
+		// 	sendRequest(
+		// 		`${process.env.REACT_APP_API_URL}/place/create`,
+		// 		'POST',
+		// 		formData,
+		// 		{
+		// 			Authorization: 'Bearer ' + auth.token,
+		// 		}
+		// 	).then(() => setEdited(true));
+		// } catch (err) {
+		// 	console.log(err);
+		// }
 	};
 
 	if (edited) {
@@ -212,6 +227,30 @@ const NewPlace = () => {
 						element="input"
 						type="text"
 						label="Address"
+						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+						onInput={inputHandler}
+					/>
+					<Input
+						id="ward"
+						element="input"
+						type="text"
+						label="Ward/Commune"
+						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+						onInput={inputHandler}
+					/>
+					<Input
+						id="district"
+						element="input"
+						type="text"
+						label="District/Urban"
+						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+						onInput={inputHandler}
+					/>
+					<Input
+						id="city"
+						element="input"
+						type="text"
+						label="Province/City"
 						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
 						onInput={inputHandler}
 					/>
@@ -306,35 +345,39 @@ const NewPlace = () => {
 					<hr />
 					<Input
 						id="bathroom"
-						element="input"
-						type="text"
+						element="checkbox"
 						label="Bathroom"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+						validators={[]}
 						onInput={inputHandler}
+						initialValue={0}
+						initialValid={true}
 					/>
 					<Input
 						id="kitchen"
-						element="input"
-						type="text"
+						element="checkbox"
 						label="Kitchen"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+						validators={[]}
 						onInput={inputHandler}
+						initialValue={0}
+						initialValid={true}
 					/>
 					<Input
 						id="ac"
-						element="input"
-						type="text"
+						element="checkbox"
 						label="Air-conditioner"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+						validators={[]}
 						onInput={inputHandler}
+						initialValue={0}
+						initialValid={true}
 					/>
 					<Input
 						id="balcony"
-						element="input"
-						type="text"
+						element="checkbox"
 						label="Balcony"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+						validators={[]}
 						onInput={inputHandler}
+						initialValue={0}
+						initialValid={true}
 					/>
 					<Input
 						id="ew" // Elec + Water

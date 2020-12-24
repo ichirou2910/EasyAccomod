@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
+// import socketIOClient from 'socket.io-client';
 
 import Navigation from './shared/components/Navigation/Navigation';
 import MainPage from './shared/pages/MainPage';
@@ -21,8 +22,14 @@ const UserPage = React.lazy(() => import('./user/pages/UserPage'));
 const EditUser = React.lazy(() => import('./user/pages/EditUser'));
 const PlacePage = React.lazy(() => import('./places/pages/PlacePage'));
 
+// const ENDPOINT = 'http://localhost:5000/';
+
+// let socket;
+
 const App = () => {
 	const { token, login, logout, loginInfo, setInfo } = useAuth();
+
+	// socket = socketIOClient(ENDPOINT);
 
 	let routes;
 
@@ -99,4 +106,5 @@ const App = () => {
 	);
 };
 
+// export { App, socket };
 export default App;

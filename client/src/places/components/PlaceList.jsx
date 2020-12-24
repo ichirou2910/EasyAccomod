@@ -34,14 +34,11 @@ const PlaceList = (props) => {
 
 	return (
 		<div className="place-list">
-			<div className="place-list__header">
-				<h2>Latest Places</h2>
-			</div>
 			{!props.places || props.places.length === 0 ? (
 				<p className="place-list__empty">No place written yet</p>
 			) : (
 				<>
-					<div className="activity-list__navi">
+					<div className="place-list__navi">
 						<Button onClick={pageDec}>
 							<FaChevronLeft />
 						</Button>
@@ -54,15 +51,7 @@ const PlaceList = (props) => {
 					</div>
 					<ul className="place-list__content">
 						{places.map((place, index) => (
-							<PlaceItem
-								key={index}
-								id={place._id}
-								user={place.user}
-								title={place.title}
-								cover={place.cover}
-								content={place.content}
-								date={place.displayDate}
-							/>
+							<PlaceItem key={index} place={place} />
 						))}
 					</ul>
 				</>

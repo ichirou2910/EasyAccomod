@@ -3,33 +3,22 @@ import { Helmet } from 'react-helmet';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import Carousel from '../../shared/components/UIElements/Carousel';
+import PlaceList from '../../places/components/PlaceList';
 
 import './MainPage.css';
 
 const MainPage = () => {
-	const [blogList, setBlogList] = useState();
-	const [actList, setActList] = useState();
+	const [placeList, setPlaceList] = useState();
 
 	const { isLoading, error, sendRequest } = useHttpClient();
 
 	useEffect(() => {
 		const fetchInfo = async () => {
 			try {
-				const blogData = await sendRequest(
-					`${process.env.REACT_APP_API_URL}/blog/`
+				const placeData = await sendRequest(
+					`${process.env.REACT_APP_API_URL}/place/`
 				);
-				setBlogList(blogData);
-			} catch (err) {
-				console.log(err);
-			}
-
-			try {
-				const actData = await sendRequest(
-					`${process.env.REACT_APP_API_URL}/activity/`
-				);
-
-				setActList(actData);
+				setPlaceList(placeData);
 			} catch (err) {
 				console.log(err);
 			}
@@ -47,7 +36,7 @@ const MainPage = () => {
 				{error && <p>{error}</p>}
 				{!isLoading && (
 					<>
-						<h3>Main Page</h3>
+						<PlaceList places={placeList} />
 					</>
 				)}
 			</div>
