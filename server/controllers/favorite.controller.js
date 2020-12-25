@@ -2,7 +2,7 @@ const fs = require('fs');
 const db = require('../helpers/db');
 const Favorite = db.Favorite;
 
-const getByUser = async (req, res, next) => {
+const getById = async (req, res, next) => {
 	let favorites;
 	try {
 		favorites = await Favorite.find({ user_id: req.params.user_id });
@@ -17,6 +17,23 @@ const getByUser = async (req, res, next) => {
 	}
 
 	res.json(favorites);
+};
+
+const add = async (req, res, next) => {
+	const favorite = new Favorite({
+			user_id: req.params.user_id,
+			post_id: req.params.post_id,
+			likes: req.params.likes,
+	});
+
+	try {
+			await favorite.save();
+	} catch (err) {
+			res.status(500).json({ message: 'Add to favorite failed'});
+			return next(err);
+	}
+
+	res.status(201).json(favorite);
 };
 
 const _delete = async (req, res, next) => {
@@ -37,5 +54,6 @@ const _delete = async (req, res, next) => {
 	res.status(201).json({});
 };
 
-exports.getByUser = getByUser;
+exports.getById = getById;
+exports.add = add;
 exports.delete = _delete;
