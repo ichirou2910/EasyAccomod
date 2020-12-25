@@ -3,20 +3,20 @@ const db = require('../helpers/db');
 const Favorite = db.Favorite;
 
 const getByUser = async (req, res, next) => {
-	let favorite;
+	let favorites;
 	try {
-		favorite = await Favorite.findById(req.params.user_id);
+		favorites = await Favorite.find({ user_id: req.params.user_id });
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
 	}
 
-	if (!favorite) {
-		res.status(404).json({ message: 'You do not have any favorites' });
+	if (!favorites) {
+		res.status(404).json({ message: 'Favorites not found' });
 		return;
 	}
 
-	res.json(favorite);
+	res.json(favorites);
 };
 
 const _delete = async (req, res, next) => {

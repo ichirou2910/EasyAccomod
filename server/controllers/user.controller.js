@@ -102,7 +102,8 @@ const login = async (req, res, next) => {
 		);
 		res.status(201).json({
 			user: {
-				userId: user.id,
+				user_id: user.id,
+				user_type: user.user_type,
 				email: user.email,
 				realname: user.realname,
 				avatar: user.avatar,
@@ -116,6 +117,12 @@ const login = async (req, res, next) => {
 };
 
 const getAll = async (_req, res, next) => {
+	// This route is admin-only
+	if (req.userData.user_type !== 'Admin') {
+		res.status(401).json({ message: 'Authorization failed' });
+		return;
+	}
+
 	let users;
 	try {
 		users = await User.find({}, '-password');
@@ -128,9 +135,19 @@ const getAll = async (_req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
+	// Admin can view all users
+	if (req.userData.user_type !== 'Admin') {
+		// But others can view their own only
+		if (req.userData.user_id !== req.params.user_id) {
+			res.status(401).json({ message: 'Authorization failed' });
+			return;
+		}
+	}
+
 	let user;
 	try {
 		user = await User.findById(req.params.user_id).select('-password');
+		// user = await User.find({ _id: req.params.user_id }).select('-password');
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -180,9 +197,17 @@ const avatarByName = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
+	// Prevent other people update your profile
+	if (req.params.user_id !== req.userData.user_id) {
+		res
+			.status(401)
+			.json({ message: 'You are not allowed to modify this user' });
+		return;
+	}
+
 	let user;
 	try {
-		user = await User.findOne({ email: req.params.email });
+		user = await User.findById(req.params.user_id);
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -194,7 +219,7 @@ const update = async (req, res, next) => {
 	}
 
 	// Prevent other people update your profile
-	if (user.email !== req.userData.email) {
+	if (user.user_id !== req.userData.user_id) {
 		res
 			.status(401)
 			.json({ message: 'You are not allowed to modify this user' });
@@ -202,7 +227,7 @@ const update = async (req, res, next) => {
 	}
 
 	// Check if it's the Owner and has the permit
-	if (user.user_type.equals('Owner')) {
+	if (user.user_type === 'Owner') {
 		if (!user.update_permit) {
 			res
 				.status(401)

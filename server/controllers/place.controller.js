@@ -3,7 +3,7 @@ const db = require('../helpers/db');
 const Place = db.Place;
 
 const getAll = async (req, res, next) => {
-	let filter;
+	let filter = {};
 
 	if (req.userData.user_type === 'Owner') {
 		filter = { user_id: req.userData.user_id };
@@ -16,54 +16,59 @@ const getAll = async (req, res, next) => {
 	let areaFilter = 99999999;
 	let priceFilter = 99999999999;
 
-	if (req.body.ward) {
-		filter['ward'] = req.body.ward;
+	console.log(parseInt(req.query.area));
+
+	if (req.query.ward) {
+		filter['ward'] = req.query.ward;
 	}
-	if (req.body.district) {
-		filter['district'] = req.body.district;
+	if (req.query.district) {
+		filter['district'] = req.query.district;
 	}
-	if (req.body.city) {
-		filter['city'] = req.body.city;
+	if (req.query.city) {
+		filter['city'] = req.query.city;
 	}
-	if (req.body.roomNum) {
-		filter['roomNum'] = req.body.roomNum;
+	if (req.query.roomNum) {
+		filter['roomNum'] = req.query.roomNum;
 	}
-	if (req.body.roomType) {
-		filter['roomType'] = req.body.roomType;
+	if (req.query.roomType) {
+		filter['roomType'] = req.query.roomType;
 	}
-	if (req.body.period) {
-		filter['period'] = req.body.period;
+	if (req.query.shared) {
+		filter['shared'] = req.query.shared;
 	}
-	if (req.body.shared) {
-		filter['shared'] = req.body.shared;
+	if (parseInt(req.query.bathroom)) {
+		filter['bathroom'] = req.query.bathroom;
 	}
-	if (req.body.bathroom) {
-		filter['bathroom'] = req.body.bathroom;
+	if (parseInt(req.query.kitchen)) {
+		filter['kitchen'] = req.query.kitchen;
 	}
-	if (req.body.kitchen) {
-		filter['kitchen'] = req.body.kitchen;
+	if (parseInt(req.query.ac)) {
+		filter['ac'] = req.query.ac;
 	}
-	if (req.body.ac) {
-		filter['ac'] = req.body.ac;
-	}
-	if (req.body.balcony) {
-		filter['balcony'] = req.body.balcony;
+	if (parseInt(req.query.balcony)) {
+		filter['balcony'] = req.query.balcony;
 	}
 
-	if (req.body.area) {
-		areaFilter = req.body.area;
+	if (parseInt(req.query.area)) {
+		areaFilter = parseInt(req.query.area);
 	}
 
-	if (req.body.price && req.body.priceType) {
-		let type;
-		if (req.body.priceType === 'K') type = 1000;
-		if (req.body.priceType === 'M') type = 1000000;
-		if (req.body.priceType === 'B') type = 1000000000;
+	if (req.query.price && req.query.priceType && req.query.period) {
+		let unit;
+		if (req.query.priceType === 'K') unit = 1000;
+		if (req.query.priceType === 'M') unit = 1000000;
+		if (req.query.priceType === 'B') unit = 1000000000;
 
-		priceFilter = type * req.body.price;
+		let time;
+		if (req.query.priceType === 'mo') time = 30;
+		if (req.query.priceType === 'qt') time = 90;
+		if (req.query.priceType === 'yr') time = 360;
+
+		priceFilter = (unit * req.query.price) / time;
+		filter['period'] = req.query.period;
 	}
 
-	console.log(filter);
+	console.log(areaFilter);
 
 	let places;
 	try {
