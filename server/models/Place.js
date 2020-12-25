@@ -21,6 +21,10 @@ const PlaceSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	nearby: {
+		type: String,
+		required: false,
+	},
 	ward: {
 		type: String,
 		required: true,
@@ -32,10 +36,6 @@ const PlaceSchema = new mongoose.Schema({
 	city: {
 		type: String,
 		required: true,
-	},
-	nearby: {
-		type: String,
-		required: false,
 	},
 	roomType: {
 		type: String,
@@ -74,11 +74,11 @@ const PlaceSchema = new mongoose.Schema({
 		required: true,
 	},
 	bath: {
-		type: Number,
+		type: String,
 		required: true,
 	},
 	kitchen: {
-		type: Number,
+		type: String,
 		required: true,
 	},
 	ac: {
@@ -100,10 +100,6 @@ const PlaceSchema = new mongoose.Schema({
 	images: {
 		type: Array,
 		required: false,
-	},
-	image: {
-		type: String,
-		required: true,
 	},
 	owner: {
 		type: String,

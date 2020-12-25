@@ -16,8 +16,6 @@ const getAll = async (req, res, next) => {
 	let areaFilter = 99999999;
 	let priceFilter = 99999999999;
 
-	console.log(parseInt(req.query.area));
-
 	if (req.query.ward) {
 		filter['ward'] = req.query.ward;
 	}
@@ -67,8 +65,6 @@ const getAll = async (req, res, next) => {
 		priceFilter = (unit * req.query.price) / time;
 		filter['period'] = req.query.period;
 	}
-
-	console.log(areaFilter);
 
 	let places;
 	try {
@@ -191,8 +187,8 @@ const create = async (req, res, next) => {
 		period: req.body.period,
 		area: parseInt(req.body.area),
 		shared: parseInt(req.body.shared),
-		bath: parseInt(req.body.bath),
-		kitchen: parseInt(req.body.kitchen),
+		bath: req.body.bath,
+		kitchen: req.body.kitchen,
 		ac: parseInt(req.body.ac),
 		balcony: parseInt(req.body.balcony),
 		elec_water: req.body.elec_water,
@@ -201,7 +197,7 @@ const create = async (req, res, next) => {
 		avatar: req.body.avatar,
 		phone: req.body.phone,
 		email: req.body.email,
-		image: 'nowhere', //req.file.path, // Temp image
+		images: [], //req.file.path, // Temp image
 		rateSum: 0,
 		rateCount: 0,
 		date: Date.now(),
@@ -214,10 +210,17 @@ const create = async (req, res, next) => {
 		likes: 0,
 	});
 
+	req.files.map((item) => {
+		place.images = [...place.images, item.path];
+	});
+
+	console.log(place);
+
 	try {
 		await place.save();
 	} catch (err) {
 		res.status(500).json({ message: 'Place creating failed' });
+		console.log(err);
 		return next(err);
 	}
 
