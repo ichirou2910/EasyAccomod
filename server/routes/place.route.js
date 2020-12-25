@@ -14,5 +14,6 @@ router.delete('/:place_id', placeController.delete);
 router.post('/:place_id', fileUpload.array('images'), placeController.update);
 router.post('/extend/:place_id', placeController.extend);
 router.post('/like/:place_id', placeController.like);
+router.get('/stat/:place_id', placeController.getStatistics);
 
 module.exports = router;
