@@ -6,6 +6,6 @@ const checkAuth = require('../middleware/check-auth');
 
 router.use(checkAuth);
 
-router.get('/user_id', chatController.getByOwnerID);
+router.get('/:user_id', chatController.getByOwnerID);
 
 module.exports = router;
