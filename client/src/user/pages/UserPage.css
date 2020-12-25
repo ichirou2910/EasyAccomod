@@ -39,6 +39,9 @@
 	.user-page__info p {
 		width: 90%;
 	}
+	.user-page__info li span {
+		width: 7rem;
+	}
 }
 
 @media (max-width: 320px) {

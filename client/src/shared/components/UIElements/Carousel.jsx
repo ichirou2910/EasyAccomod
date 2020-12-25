@@ -1,4 +1,4 @@
-import React, { useState, useEffect, cloneElement } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './Carousel.css';
 
@@ -6,10 +6,18 @@ const Carousel = ({ carouselItems }) => {
 	const [active, setActive] = useState(0);
 	const length = carouselItems ? carouselItems.length : 0;
 
+	let timer;
+
 	useEffect(() => {
-		setTimeout(() => {
+		timer = setTimeout(() => {
 			setActive((active + 1) % length);
 		}, 5000);
+		return () => {
+			if (timer) {
+				clearTimeout(timer);
+				timer = 0;
+			}
+		};
 	}, [active, length]);
 
 	return (

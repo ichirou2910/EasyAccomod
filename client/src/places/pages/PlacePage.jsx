@@ -5,10 +5,19 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 // import { socket } from '../../App';
 
-import { FaEye, FaHeart, FaPhone, FaEnvelope } from 'react-icons/fa';
+import {
+	FaEye,
+	FaHeart,
+	FaPhone,
+	FaEnvelope,
+	FaCheck,
+	FaTimes,
+	FaChartBar,
+} from 'react-icons/fa';
 
 import PlaceMenu from '../components/PlaceMenu';
 import PlaceReport from '../components/PlaceReport';
+import PlaceStats from '../components/PlaceStats';
 import Button from '../../shared/components/FormElements/Button';
 import Avatar from '../../shared/components/UIElements/Avatar';
 import Carousel from '../../shared/components/UIElements/Carousel';
@@ -18,43 +27,19 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 import './PlacePage.css';
 
-// const samplePlace = {
-// 	title: 'Room for rent at Thinh Quang Ward, near Mipec Tower',
-// 	owner: 'Ichirou Keita',
-// 	avatar:
-// 		'https://blog.ichiroukeita.tk/uploads/images/51f373d2-8546-48d0-8227-1b77036d5f82.png',
-// 	phone: '0123456789',
-// 	email: 'ichiroukeita@acco.com',
-// 	address: 'Thinh Quang Ward, Dong Da District',
-// 	nearby: 'BIDV bank, a lot of cafes, markets',
-// 	roomtype: 'Mini Apartment',
-// 	roomnum: 2,
-// 	price: '100',
-// 	pricetype: 'K',
-// 	period: 'mo',
-// 	area: 40,
-// 	shared: 1,
-// 	bathroom: 'Working',
-// 	kitchen: 'Working',
-// 	ac: 'Working',
-// 	balcony: 'Yes but kinda small',
-// 	ew: 'Elec: 1.900 VND/kWh, Water: 10.000 VND/m3',
-// 	extras: 'Free GF <(")',
-// 	images: [
-// 		'https://home.aloyeal.com/wp-content/uploads/2019/06/ph%C3%B2ng-tr%E1%BB%8D-m%C6%A1-%C6%B0%E1%BB%9Bc-1170x0-c-center.jpg',
-// 		'https://news.landber.com/uploads/images/tim-thue-nha-tro-duoi-1-trieu-tai-ha-noi-danh-cho-sinh-vien-1.jpg',
-// 		'https://news.mogi.vn/wp-content/uploads/2019/10/cho-thue-phong-tro-ha-noi-anh-bia.jpg',
-// 	],
-// 	favorited: false,
-// };
+const reportModal = {
+	position: 'fixed',
+	bottom: 'calc(var(--nav-height) * 0.8 + 15px)',
+};
 
 const PlacePage = () => {
 	const [place, setPlace] = useState({});
 	const [showReport, setShowReport] = useState(false);
+	const [showStats, setShowStats] = useState(false);
+	const [showRenew, setShowRenew] = useState(false);
 
 	const [favorited, setFavorited] = useState(place.favorited);
 	const [favorites, setFavorites] = useState(0);
-	const [views, setViews] = useState(0);
 
 	const { isLoading, error, sendRequest } = useHttpClient();
 
@@ -98,10 +83,6 @@ const PlacePage = () => {
 		alert('Phone number copied!');
 	};
 
-	const openReportHandler = () => setShowReport(true);
-
-	const closeReportHandler = () => setShowReport(false);
-
 	const sendReportHandler = () => {};
 
 	useEffect(() => {
@@ -136,7 +117,8 @@ const PlacePage = () => {
 				{!isLoading &&
 					auth.isLoggedIn &&
 					place &&
-					auth.loginInfo.name === place.user && (
+					auth.loginInfo.name === place.user &&
+					!place.status && (
 						<StickyIcon
 							src={`${process.env.REACT_APP_HOST_URL}/uploads/images/edit-place.png`}
 							alt="edit place icon"
@@ -148,21 +130,58 @@ const PlacePage = () => {
 					<>
 						<Modal
 							show={showReport}
-							onCancel={closeReportHandler}
+							onCancel={() => setShowReport(false)}
 							contentClass="place-page__modal-content"
 							footerClass="place-page__modal-actions"
 						>
 							<PlaceReport placeId={place._id} />
 						</Modal>
-						<PlaceMenu
-							favorited={favorited}
-							incFav={incFavorites}
-							decFav={decFavorites}
-							report={openReportHandler}
-						/>
+						{auth.loginInfo.user_type === 'Owner' &&
+							auth.loginInfo.user_id === place.user_id && (
+								<Modal
+									style={reportModal}
+									show={showStats}
+									onCancel={() => setShowStats(false)}
+									contentClass="place-page__modal-content"
+									footerClass="place-page__modal-actions"
+								>
+									<PlaceStats views={place.views} frame={place.timeFrame} />
+								</Modal>
+							)}
+						{auth.loginInfo.user_type === 'Renter' && (
+							<PlaceMenu
+								favorited={favorited}
+								incFav={incFavorites}
+								decFav={decFavorites}
+								report={() => setShowReport(true)}
+							/>
+						)}
 						<Carousel carouselItems={place.images} />
 						<div className="place-page__content-section base-view">
 							<div className="place-page__header">
+								{place.status ? (
+									<span
+										style={{
+											color: '#28a745',
+											cursor: 'pointer',
+										}}
+										onClick={() => setShowRenew(true)}
+									>
+										<FaCheck />{' '}
+										<em>
+											<strong>Verified</strong>, available for{' '}
+											<strong>{place.timeRemain} day(s)</strong> left
+										</em>
+									</span>
+								) : (
+									<span
+										style={{
+											color: '#dc3545',
+										}}
+									>
+										<FaTimes /> <em>Not verified</em>
+									</span>
+								)}
 								<h2>{place.title}</h2>
 								{/* <p>{place.address}</p> */}
 								<p>
@@ -172,14 +191,17 @@ const PlacePage = () => {
 									<em>{place.roomType}</em>
 								</span>
 								<p>
-									<span style={{ color: '#2d6a64' }}>
+									<span
+										style={{ color: '#2d6a64', cursor: 'pointer' }}
+										onClick={() => setShowStats(true)}
+									>
 										<FaEye />{' '}
 									</span>
-									{views}
+									{place.views}
 									<span style={{ color: '#dc3545' }}>
 										<FaHeart />{' '}
 									</span>
-									{favorites}
+									{place.likes}
 								</p>
 							</div>
 							<hr />
@@ -247,13 +269,13 @@ const PlacePage = () => {
 										<span>
 											<strong>Bathroom: </strong>
 										</span>
-										{place.bath ? 'Yes' : 'No'}
+										{place.bath}
 									</li>
 									<li>
 										<span>
 											<strong>Kitchen: </strong>
 										</span>
-										{place.kitchen ? 'Yes' : 'No'}
+										{place.kitchen}
 									</li>
 									<li>
 										<span>

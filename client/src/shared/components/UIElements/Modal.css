@@ -3,8 +3,8 @@
 	position: fixed;
 	bottom: calc(80px + var(--nav-height) * 0.3);
 	/* bottom: 80px; */
-	right: calc(var(--nav-height) * 0.8 + 15px);
-	/* width: 80%; */
+	right: 0;
+	width: 100%;
 	border: 3px solid var(--lighter-secondary-color);
 	border-radius: 8px;
 	overflow: hidden;
@@ -56,5 +56,6 @@
 @media (min-width: 768px) {
 	.modal {
 		width: 30rem;
+		right: calc(var(--nav-height) * 0.8 + 15px);
 	}
 }

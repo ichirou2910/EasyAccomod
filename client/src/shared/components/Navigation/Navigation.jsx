@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 
 import { AuthContext } from '../../context/auth-context';
 import { Navbar, NavItem, DropdownMenu, DropdownItem } from './Navbar';
+import Chat from '../Utilities/Chat';
+import Notification from '../Utilities/Notification';
 // import DropdownMenu from './DropdownMenu';
 
 import { ReactComponent as PlusIcon } from '../../../icons/plus.svg';
@@ -26,10 +28,14 @@ const Navigation = () => {
 						{auth.loginInfo.user_type === 'Owner' && (
 							<>
 								<NavItem icon={<PlusIcon />} to="/place/create" />
-								<NavItem icon={<ChatIcon />} />
+								<NavItem icon={<ChatIcon />}>
+									<Chat />
+								</NavItem>
+								<NavItem icon={<BellIcon />}>
+									<Notification />
+								</NavItem>
 							</>
 						)}
-						<NavItem icon={<BellIcon />} />
 						{auth.loginInfo.user_type === 'Renter' && (
 							<NavItem icon={<SearchIcon />} to="/search" />
 						)}

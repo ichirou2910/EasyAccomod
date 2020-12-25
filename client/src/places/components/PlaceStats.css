@@ -1,0 +1,18 @@
+.place-stats__list {
+	height: 20rem;
+}
+
+.place-stats__list {
+	overflow-y: scroll;
+}
+
+.place-stats__list ul {
+	list-style-type: none;
+	padding: 0 1rem;
+}
+
+.place-stats__list li {
+	font-size: 1.1rem;
+	padding: 0.25rem;
+	margin-bottom: 0.25rem;
+}
