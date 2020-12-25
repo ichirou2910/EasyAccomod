@@ -10,6 +10,10 @@ const getByOwnerID = async (req, res, next) => {
 		return next(err);
 	}
 
+	if(chats.owner_id !== req.userData.user_id) {
+        res.status(401).json({ message: 'You are not authorized to use this' });
+    }
+
 	res.json(chats);
 }
 

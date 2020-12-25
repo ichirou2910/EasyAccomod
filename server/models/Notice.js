@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const NoticeSchema = new mongoose.Schema({
-    user_id_sender: {
+    send_id: {
         type: String,
         required: true,
     },
-    user_id_receiver: {
+    recv_id: {
         type: String,
         required: true,
     },
