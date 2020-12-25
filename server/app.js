@@ -53,17 +53,19 @@ io.on('connection', (socket) => {
 	*/
 	// Send back data
 	socket.on('fromClient', (data) => {
-		let owner;
-		if (data.user_type !== 'Admin') {
-			owner = data.sender_id;
-		} else owner = data.recv_id;
-		let chat = new Chat({
+		let recv = new Chat({
 			user_type: data.user_type,
-			owner_id: owner,
-			content: data.message,
+			owner_id: data.owner_id,
+			content: data.content,
 		});
-		chat.save();
-		io.sockets.emit('toClient', data);
+		let send = new Chat({
+			user_type: 'Admin',
+			owner_id: data.owner_id,
+			content: data.content,
+		});
+		recv.save();
+		send.save();
+		socket.emit('toClient', send);
 	});
 	// How notification works
 	/*
