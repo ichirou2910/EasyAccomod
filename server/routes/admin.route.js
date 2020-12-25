@@ -5,11 +5,13 @@ const checkAuth = require('../middleware/check-auth');
 
 router.use(checkAuth);
 
-router.get('/get_unapporved_place/', adminController.getUnapprovedPlaces);
-router.get('/get_unapporved_user/', adminController.getUnapprovedUser);
-router.post('/grant_update/', adminController.permit_update);
-router.post('/grant_account/', adminController.permit_account);
-router.post('/confirm_extend/', adminController.confirmExtend);
-router.post('/confirm/', adminController.confirm);
+router.get('/get_unapporved_place', adminController.getUnapprovedPlaces);
+router.get('/get_unapporved_user', adminController.getUnapprovedUser);
+router.get('/reports', adminController.getAll);
+router.post('/grant_update', adminController.permit_update);
+router.post('/grant_account', adminController.permit_account);
+router.post('/confirm_extend', adminController.confirmExtend);
+router.post('/confirm', adminController.confirm);
+router.delete('/:place_id', adminController._delete);
 
 module.exports = router;

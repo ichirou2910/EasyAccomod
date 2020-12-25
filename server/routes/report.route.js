@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const reportController = require('../controllers/report.controller');
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/reports', reportController.getAll_admin);
-router.get('/reports/:user', reportController.getAll);
+router.use(checkAuth);
+
+router.get('/reports/:user', reportController.getByUser);
+router.get('/reports/:report_id', reportController.getById);
 router.post('/reports/create/:user_id', reportController.create);
 router.delete('/report/:place_id', reportController.delete);
 

@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
 			message: String,
 		}
 	*/
-	// How it works
+	// How chat works
 	/*
 		Getting data
 		- Admin is also a client, who send data to server through socket
@@ -65,10 +65,21 @@ io.on('connection', (socket) => {
 		chat.save();
 		io.sockets.emit('toClient', data);
 	});
+	// How notification works
+	/*
+		Owner
+		- When Admin confirm, will emit an event called 'notification'
+		- Server will catch that, save notification data and emit 'notiClient'
+		- The Owners will listen to 'notiClient', fetch api getByRecvId to display all notifications according to that Owner's id
+		Admin
+		- When Owner finished updating place(Only for rented field), will emit an event called 'notification'
+		- Server will catch that, save notification data and emit 'notiClient'
+		- The Admin will listen to 'notiClient', fetch api getByRecvId to display all notifications according to that Admin's id
+	*/
 	socket.on('notification', (data) => {
 		let noti = new Notice({
-			user_id_sender: data.admin_id,
-			user_id_receiver: data.owner_id,
+			send_id: data.send_id,
+			recv_id: data.recv_id,
 			description: data.content,
 			date: Date.now(),
 		});
@@ -84,23 +95,24 @@ app.use(express.static(path.join('public')));
 app.use('/api/user', require('./routes/user.route'));
 app.use('/api/place', require('./routes/place.route'));
 app.use('/api/favorite', require('./routes/favorite.route'));
-// app.use('/api/notice', require('./routes/notice.route'));
+app.use('/api/notice', require('./routes/notice.route'));
 // app.use('/api/report', require('./routes/reports.route'));
-// app.use('/api/chat', require('./routes/chat.route'));
+app.use('/api/chat', require('./routes/chat.route'));
+app.use('/api/admin', require('./routes/admin.route'));
 
 // app.use((req, res, next) => {
 // 	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 // });
 
-app.use((error, req, res, next) => {
-	if (req.file) {
-		fs.unlink(req.file.path, (err) => {
-			console.log(err);
-		});
-	}
-	res.status(error.code || 500);
-	res.json({ message: error.message || 'An error occured!' });
-});
+// app.use((error, req, res, next) => {
+// 	if (req.file) {
+// 		fs.unlink(req.file.path, (err) => {
+// 			console.log(err);
+// 		});
+// 	}
+// 	res.status(error.code || 500);
+// 	res.json({ message: error.message || 'An error occured!' });
+// });
 
 const PORT = process.env.PORT || 5000;
 

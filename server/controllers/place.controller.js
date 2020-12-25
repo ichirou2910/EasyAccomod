@@ -369,7 +369,7 @@ const extend = async (req, res, next) => {
 	// Get the current place
 	let place;
 	try {
-		place = await place.findById(req.params.place_id);
+		place = await Place.findById(req.params.place_id);
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -385,10 +385,12 @@ const extend = async (req, res, next) => {
 	// Get current date
 	var pricePerDay = 20000;
 	var date = place.extend_date;
-	var extendTo = req.body.extend_date;
+	var extendTo = Date.parse(req.body.extend_date);
 
-	var diff = (date.getTime() - extendTo.getTime()) / (1000 * 3600 * 24);
+	var diff = Math.round((date - extendTo) / (1000 * 3600 * 24));
 	var price = diff * pricePerDay;
+
+	console.log(diff);
 
 	// Update payment and extended date
 	place.backup_extend = extendTo;

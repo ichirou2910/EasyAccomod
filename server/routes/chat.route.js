@@ -8,3 +8,4 @@ router.use(checkAuth);
 
 router.get('/user_id', chatController.getByOwnerID);
 
+module.exports = router;

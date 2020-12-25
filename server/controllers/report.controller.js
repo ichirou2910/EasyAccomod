@@ -1,39 +1,38 @@
-const fs = require('fs');
 const db = require('../helpers/db');
 const Report = db.Report;
 
-const getAll_admin = async (req, res, next) => {
+const getByUser = async (req, res, next) => {
 	let reports;
 	try {
-		reports = await reports.find();
+		reports = await Report.findById(req.params.user_id);
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
 	}
 
 	if (!reports) {
-		res.json({ message: 'No report yet' });
+		res.status(404).json({ message: 'No report yet' });
 		return;
 	}
 
-	res.json(reports);
+	res.status(201).json(reports);
 };
 
-const getAll = async (req, res, next) => {
-	let reports;
+const getById = async (req, res, next) => {
+	let report;
 	try {
-		reports = await reports.findById(req.params.user_id);
+		report = await Report.findById(req.params.report_id);
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
 	}
 
-	if (!reports) {
-		res.json({ message: 'No report yet' });
+	if (!report) {
+		res.status(404).json({ message: 'No report yet' });
 		return;
 	}
 
-	res.json(reports);
+	res.status(201).json(report);
 };
 
 const create = async (req, res, next) => {
@@ -60,17 +59,22 @@ const create = async (req, res, next) => {
 const _delete = async (req, res, next) => {
 	let report;
 	try {
-		report = await report.findById(req.params.report_id);
+		report = await Report.findById(req.params.report_id);
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
+	}
+
+	if ( (report.user_id !== req.userData.user_id) || (req.userData.user_type !== "Admin") ) {
+		res.status(401).json({ message: 'You are not allowed to delete this' });
+		return;
 	}
 
 	await report.deleteOne(report);
 	res.status(201).json({});
 };
 
-exports.getAll_admin = getAll_admin;
-exports.getAll = getAll;
+exports.getByUser = getByUser;
+exports.getById = getById;
 exports.create = create;
 exports.delete = _delete;
