@@ -52,18 +52,20 @@ io.on('connection', (socket) => {
 		- Whenever the client listens to an event, getById will be emitted
 	*/
 	// Send back data
-	socket.on('fromClient', (data) => {
-		let owner;
-		if (data.user_type !== 'Admin') {
-			owner = data.sender_id;
-		} else owner = data.recv_id;
-		let chat = new Chat({
+	socket.on('fromClient', async (data) => {
+		let recv = new Chat({
 			user_type: data.user_type,
-			owner_id: owner,
-			content: data.message,
+			owner_id: data.owner_id,
+			content: data.content,
 		});
-		chat.save();
-		io.sockets.emit('toClient', data);
+		let send = new Chat({
+			user_type: 'Admin',
+			owner_id: data.owner_id,
+			content: data.content,
+		});
+		await recv.save();
+		await send.save();
+		socket.emit('toClient', [recv, send]);
 	});
 	// How notification works
 	/*
@@ -78,13 +80,12 @@ io.on('connection', (socket) => {
 	*/
 	socket.on('notification', (data) => {
 		let noti = new Notice({
-			send_id: data.send_id,
-			recv_id: data.recv_id,
-			description: data.content,
+			user_id: data.user_id,
+			description: data.description,
 			date: Date.now(),
 		});
 		noti.save();
-		io.sockets.emit('notiClient', data);
+		socket.emit('notiClient', data);
 	});
 });
 
