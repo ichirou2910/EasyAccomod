@@ -3,20 +3,76 @@ const db = require('../helpers/db');
 const Place = db.Place;
 
 const getAll = async (req, res, next) => {
+	let filter;
+
 	if (req.userData.user_type === 'Owner') {
-		res.status(401).json({ message: 'Authorization failed' });
-		return;
+		filter = { user_id: req.userData.user_id };
 	}
+
+	if (req.userData.user_type === 'Renter') {
+		filter['status'] = true;
+	}
+
+	let areaFilter = 99999999;
+	let priceFilter = 99999999999;
+
+	if (req.body.ward) {
+		filter['ward'] = req.body.ward;
+	}
+	if (req.body.district) {
+		filter['district'] = req.body.district;
+	}
+	if (req.body.city) {
+		filter['city'] = req.body.city;
+	}
+	if (req.body.roomNum) {
+		filter['roomNum'] = req.body.roomNum;
+	}
+	if (req.body.roomType) {
+		filter['roomType'] = req.body.roomType;
+	}
+	if (req.body.period) {
+		filter['period'] = req.body.period;
+	}
+	if (req.body.shared) {
+		filter['shared'] = req.body.shared;
+	}
+	if (req.body.bathroom) {
+		filter['bathroom'] = req.body.bathroom;
+	}
+	if (req.body.kitchen) {
+		filter['kitchen'] = req.body.kitchen;
+	}
+	if (req.body.ac) {
+		filter['ac'] = req.body.ac;
+	}
+	if (req.body.balcony) {
+		filter['balcony'] = req.body.balcony;
+	}
+
+	if (req.body.area) {
+		areaFilter = req.body.area;
+	}
+
+	if (req.body.price && req.body.priceType) {
+		let type;
+		if (req.body.priceType === 'K') type = 1000;
+		if (req.body.priceType === 'M') type = 1000000;
+		if (req.body.priceType === 'B') type = 1000000000;
+
+		priceFilter = type * req.body.price;
+	}
+
+	console.log(filter);
 
 	let places;
 	try {
-		if (req.userData.user_type === 'Renter') {
-			places = await Place.find({ status: true }).sort({ date: -1 });
-		} else if (req.userData.user_type === 'Admin') {
-			places = await Place.find().sort({ date: -1 });
-		} else {
-			console.log('none of the above types');
-		}
+		places = await Place.find(filter)
+			.where('area')
+			.lte(areaFilter)
+			.where('realPrice')
+			.lte(priceFilter)
+			.sort({ date: -1 });
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -105,6 +161,13 @@ const create = async (req, res, next) => {
 	let extendDate = new Date();
 	extendDate.setDate(extendDate.getDate() + 7);
 
+	let priceType = 0;
+	if (req.body.priceType === 'K') priceType = 1000;
+	if (req.body.priceType === 'M') priceType = 1000000;
+	if (req.body.priceType === 'B') priceType = 1000000000;
+
+	totalPrice = req.body.price * priceType;
+
 	const place = new Place({
 		user_id: req.body.user_id,
 		title: req.body.title,
@@ -119,6 +182,7 @@ const create = async (req, res, next) => {
 		roomNum: parseInt(req.body.roomNum),
 		price: parseInt(req.body.price),
 		priceType: req.body.priceType,
+		realPrice: totalPrice,
 		period: req.body.period,
 		area: parseInt(req.body.area),
 		shared: parseInt(req.body.shared),
@@ -132,7 +196,7 @@ const create = async (req, res, next) => {
 		avatar: req.body.avatar,
 		phone: req.body.phone,
 		email: req.body.email,
-		image: req.file.path, // Temp image
+		image: 'nowhere', //req.file.path, // Temp image
 		rateSum: 0,
 		rateCount: 0,
 		date: Date.now(),
