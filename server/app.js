@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
 		- Whenever the client listens to an event, getById will be emitted
 	*/
 	// Send back data
-	socket.on('fromClient', (data) => {
+	socket.on('fromClient', async (data) => {
 		let recv = new Chat({
 			user_type: data.user_type,
 			owner_id: data.owner_id,
@@ -63,9 +63,9 @@ io.on('connection', (socket) => {
 			owner_id: data.owner_id,
 			content: data.content,
 		});
-		recv.save();
-		send.save();
-		socket.emit('toClient', send);
+		await recv.save();
+		await send.save();
+		socket.emit('toClient', [recv, send]);
 	});
 	// How notification works
 	/*
@@ -81,11 +81,11 @@ io.on('connection', (socket) => {
 	socket.on('notification', (data) => {
 		let noti = new Notice({
 			user_id: data.user_id,
-			description: data.content,
+			description: data.description,
 			date: Date.now(),
 		});
 		noti.save();
-		io.sockets.emit('notiClient', data);
+		socket.emit('notiClient', data);
 	});
 });
 
