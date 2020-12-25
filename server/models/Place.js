@@ -141,22 +141,18 @@ const PlaceSchema = new mongoose.Schema({
 		type: Date,
 		required: true,
 	},
-	extend_date: {
-		type: Date,
-		required: true,
-	},
-	pay_to_extend: {
+	timeRemain: {
 		type: Number,
 		required: true,
 	},
-	backup_extend: {
-		type: Date,
+	backupTimeRemain: {
+		type: Number,
 		required: false,
 	},
 	timeFrame: {
 		type: Array,
 		required: true,
-	}
+	},
 });
 
 const Place = mongoose.model('Place', PlaceSchema);

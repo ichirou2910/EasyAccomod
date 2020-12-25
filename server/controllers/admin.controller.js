@@ -74,9 +74,8 @@ const confirmExtend = async (req, res, next) => {
 		return;
 	}
 
-	place.extend_date = place.backup_extend;
-	place.backup_extend = Date.now();
-	place.pay_to_extend = 0;
+	place.timeRemain = place.backupTimeRemain;
+	place.backupTimeRemain = 0;
 
 	try {
 		await place.save();
@@ -119,12 +118,12 @@ const confirm = async (req, res, next) => {
 
 const getUnapprovedUser = async (req, res, next) => {
 	let users;
-	
+
 	let filter = {
-		status: false
+		status: false,
 	};
 
-	if(req.userData.user_type !== "Admin") {
+	if (req.userData.user_type !== 'Admin') {
 		res.status(401).json({ message: 'You are not authorized to use this' });
 		return;
 	}
@@ -167,7 +166,7 @@ const getUnapprovedPlaces = async (req, res, next) => {
 		return next(err);
 	}
 
-	if(req.userData.user_type !== "Admin") {
+	if (req.userData.user_type !== 'Admin') {
 		res.status(401).json({ message: 'You are not authorized to use this' });
 		return;
 	}
@@ -184,10 +183,8 @@ const getAll = async (req, res, next) => {
 		return next(err);
 	}
 
-	if (req.userData.user_type !== "Admin") {
-		res
-			.status(401)
-			.json({ message: 'You are not Admin' });
+	if (req.userData.user_type !== 'Admin') {
+		res.status(401).json({ message: 'You are not Admin' });
 		return;
 	}
 
@@ -208,10 +205,8 @@ const _delete = async (req, res, next) => {
 		return next(err);
 	}
 
-	if (req.userData.user_type !== "Admin") {
-		res
-			.status(401)
-			.json({ message: 'You are not Admin' });
+	if (req.userData.user_type !== 'Admin') {
+		res.status(401).json({ message: 'You are not Admin' });
 		return;
 	}
 

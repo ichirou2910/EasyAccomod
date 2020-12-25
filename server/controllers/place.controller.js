@@ -166,7 +166,6 @@ const create = async (req, res, next) => {
 	}
 
 	let extendDate = new Date();
-	extendDate.setDate(extendDate.getDate() + 7);
 
 	let priceType = 0;
 	if (req.body.priceType === 'K') priceType = 1000;
@@ -178,8 +177,8 @@ const create = async (req, res, next) => {
 	let frame = new Array(24);
 
 	for (i = 0; i < frame.length; ++i) {
-        frame[i] = 0;
-    }
+		frame[i] = 0;
+	}
 
 	const place = new Place({
 		user_id: req.body.user_id,
@@ -215,17 +214,16 @@ const create = async (req, res, next) => {
 		date: Date.now(),
 		status: false,
 		rented: false,
-		extend_date: extendDate,
-		backup_extend: Date.now(),
-		pay_to_extend: 0,
+		timeRemain: 7,
+		backupTimeRemain: Date.now(),
 		views: 0,
 		likes: 0,
-		timeFrame: frame
+		timeFrame: frame,
 	});
 
-	// req.files.map((item) => {
-	// 	place.images = [...place.images, item.path];
-	// });
+	req.files.map((item) => {
+		place.images = [...place.images, item.path];
+	});
 
 	console.log(place);
 
@@ -395,19 +393,15 @@ const extend = async (req, res, next) => {
 		return;
 	}
 
-	// Get current date
-	var pricePerDay = 20000;
 	var date = place.extend_date;
 	var extendTo = Date.parse(req.body.extend_date);
 
 	var diff = Math.round((date - extendTo) / (1000 * 3600 * 24));
-	var price = diff * pricePerDay;
 
 	console.log(diff);
 
 	// Update payment and extended date
-	place.backup_extend = extendTo;
-	place.pay_to_extend += price;
+	place.backupTimeRemain = diff;
 
 	try {
 		await place.save();
@@ -448,7 +442,9 @@ const getStatistics = async (req, res, next) => {
 	}
 
 	if (req.userData.user_id !== place.user_id) {
-		res.status(401).json({ message: 'You are not allowed to get statistics of this post' });
+		res
+			.status(401)
+			.json({ message: 'You are not allowed to get statistics of this post' });
 		return;
 	}
 
@@ -459,15 +455,15 @@ const getStatistics = async (req, res, next) => {
 	var maxArray = [];
 	var frame = place.timeFrame;
 
-	for(var i = 0; i < frame.length; i++) {
-		if(max <= frame[i]) {
+	for (var i = 0; i < frame.length; i++) {
+		if (max <= frame[i]) {
 			max = frame[i];
 			maxIndex = i;
 		}
 	}
 
-	for(var i = 0; i < frame.length; i++) {
-		if(frame[i] == max) {
+	for (var i = 0; i < frame.length; i++) {
+		if (frame[i] == max) {
 			maxArray.push(i);
 		}
 	}
@@ -480,7 +476,7 @@ const getStatistics = async (req, res, next) => {
 	console.log(stat);
 
 	res.status(200).json(stat);
-}
+};
 
 exports.getAll = getAll;
 exports.getByUser = getByUser;
