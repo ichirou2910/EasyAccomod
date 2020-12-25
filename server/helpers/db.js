@@ -21,4 +21,5 @@ module.exports = {
 	Place: require('../models/Place'),
 	Report: require('../models/Report'),
 	Chat: require('../models/Chat'),
+	Comment: require('../models/Comment'),
 };
