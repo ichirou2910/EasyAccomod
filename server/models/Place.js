@@ -57,6 +57,10 @@ const PlaceSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	realPrice: {
+		type: Number,
+		required: true,
+	},
 	period: {
 		type: String,
 		required: true,
