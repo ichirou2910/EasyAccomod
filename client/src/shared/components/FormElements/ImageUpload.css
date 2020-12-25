@@ -5,21 +5,36 @@
 	box-shadow: 0 2.5px 6px rgba(0, 0, 0, 0.5);
 }
 
+.image-upload__preview {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+}
+
+.image-upload__preview-item {
+	border: 3px solid var(--dark-primary-color);
+	height: 13rem;
+	width: 13rem;
+	margin: 0.5rem;
+	border-radius: 4px;
+}
+
+.image-upload__preview-item:first-child {
+	margin-left: 0;
+}
+
+.image-upload__preview img {
+	height: 13rem;
+	width: 13rem;
+}
+
 .image-upload.center {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-}
-
-.image-upload__preview {
-	height: 13rem;
-	border: 1px solid var(--accent-color);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	margin-bottom: 1rem;
 }
 
 .image-upload__preview--square {

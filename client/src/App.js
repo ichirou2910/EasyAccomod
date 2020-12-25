@@ -71,9 +71,6 @@ const App = () => {
 				</Switch>
 			) : (
 				<Switch>
-					<Route path="/search">
-						<SearchPage />
-					</Route>
 					<Route path="/place/create">
 						<NewPlace />
 					</Route>

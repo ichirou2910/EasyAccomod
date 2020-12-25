@@ -1,5 +1,5 @@
 .main-page {
-	margin-top: 4rem;
+	margin-top: calc(var(--nav-height) + 1rem);
 	display: flex;
 	justify-content: center;
 }

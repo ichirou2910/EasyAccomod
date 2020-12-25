@@ -23,9 +23,16 @@ const Carousel = ({ carouselItems }) => {
 								active === index ? 'carousel__item--active' : ''
 							}`}
 						>
-							<a style={{ backgroundImage: `url(${item})` }}></a>
+							<a
+								style={{
+									backgroundImage: `url(${process.env.REACT_APP_HOST_URL}/${item})`,
+								}}
+							></a>
 							<div className="carousel__item--overlay">
-								<img src={item} alt={`Item ${index + 1}`} />
+								<img
+									src={`${process.env.REACT_APP_HOST_URL}/${item}`}
+									alt={`Item ${index + 1}`}
+								/>
 							</div>
 						</div>
 					);

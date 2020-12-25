@@ -48,11 +48,11 @@ const NewPlace = () => {
 				value: '',
 				isValid: false,
 			},
-			roomtype: {
+			roomType: {
 				value: null,
 				isValid: false,
 			},
-			roomnum: {
+			roomNum: {
 				value: null,
 				isValid: false,
 			},
@@ -60,7 +60,7 @@ const NewPlace = () => {
 				value: null,
 				isValid: false,
 			},
-			pricetype: {
+			priceType: {
 				value: null,
 				isValid: false,
 			},
@@ -76,7 +76,7 @@ const NewPlace = () => {
 				value: null,
 				isValid: false,
 			},
-			bathroom: {
+			bath: {
 				value: null,
 				isValid: true,
 			},
@@ -104,11 +104,11 @@ const NewPlace = () => {
 				value: null,
 				isValid: false,
 			},
-			timetype: {
+			timeType: {
 				value: null,
 				isValid: false,
 			},
-			image: {
+			images: {
 				value: null,
 				isValid: false,
 			},
@@ -127,20 +127,20 @@ const NewPlace = () => {
 			formData.append('user_id', auth.loginInfo.user_id);
 			formData.append('title', formState.inputs.title.value);
 			formData.append('time', formState.inputs.time.value);
-			formData.append('timeType', formState.inputs.timetype.value);
+			formData.append('timeType', formState.inputs.timeType.value);
 			formData.append('address', formState.inputs.address.value);
 			formData.append('ward', formState.inputs.ward.value);
 			formData.append('district', formState.inputs.district.value);
 			formData.append('city', formState.inputs.city.value);
 			formData.append('nearby', formState.inputs.nearby.value);
-			formData.append('roomType', formState.inputs.roomtype.value);
-			formData.append('roomNum', formState.inputs.roomnum.value);
+			formData.append('roomType', formState.inputs.roomType.value);
+			formData.append('roomNum', formState.inputs.roomNum.value);
 			formData.append('price', formState.inputs.price.value);
-			formData.append('priceType', formState.inputs.pricetype.value);
+			formData.append('priceType', formState.inputs.priceType.value);
 			formData.append('period', formState.inputs.period.value);
 			formData.append('area', formState.inputs.area.value);
 			formData.append('shared', formState.inputs.shared.value);
-			formData.append('bath', formState.inputs.bathroom.value);
+			formData.append('bath', formState.inputs.bath.value);
 			formData.append('kitchen', formState.inputs.kitchen.value);
 			formData.append('ac', formState.inputs.ac.value);
 			formData.append('balcony', formState.inputs.balcony.value);
@@ -150,7 +150,10 @@ const NewPlace = () => {
 			formData.append('avatar', auth.loginInfo.avatar);
 			formData.append('phone', auth.loginInfo.phone);
 			formData.append('email', auth.loginInfo.email);
-			formData.append('image', formState.inputs.image.value);
+
+			formState.inputs.images.value.map((item) => {
+				formData.append('images', item);
+			});
 
 			sendRequest(
 				`${process.env.REACT_APP_API_URL}/place/create`,
@@ -198,7 +201,7 @@ const NewPlace = () => {
 							onInput={inputHandler}
 						/>
 						<Input
-							id="timetype"
+							id="timeType"
 							element="select"
 							options={[
 								{ opt: 'week', label: 'Week(s)' },
@@ -258,7 +261,7 @@ const NewPlace = () => {
 					/>
 					<div className="place-form__pair">
 						<Input
-							id="roomnum"
+							id="roomNum"
 							element="input"
 							type="number"
 							label="Number of Room"
@@ -266,7 +269,7 @@ const NewPlace = () => {
 							onInput={inputHandler}
 						/>
 						<Input
-							id="roomtype"
+							id="roomType"
 							element="select"
 							options={[
 								{ opt: 'Lodging', label: 'Lodging' },
@@ -276,6 +279,8 @@ const NewPlace = () => {
 							]}
 							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
 							onInput={inputHandler}
+							initialValue={'Lodging'}
+							initialValid={true}
 						/>
 					</div>
 					<div className="place-form__pair">
@@ -286,9 +291,10 @@ const NewPlace = () => {
 							label="Pricing (VND)"
 							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
 							onInput={inputHandler}
+							initialValid={true}
 						/>
 						<Input
-							id="pricetype"
+							id="priceType"
 							element="select"
 							options={[
 								{ opt: 'K', label: '.000' },
@@ -344,21 +350,30 @@ const NewPlace = () => {
 					<h3>Room Facilities</h3>
 					<hr />
 					<Input
-						id="bathroom"
-						element="checkbox"
+						id="bath"
+						element="select"
 						label="Bathroom"
 						validators={[]}
 						onInput={inputHandler}
-						initialValue={0}
+						options={[
+							{ opt: 'shared', label: 'Shared' },
+							{ opt: 'closed', label: 'Closed' },
+						]}
+						initialValue={'shared'}
 						initialValid={true}
 					/>
 					<Input
 						id="kitchen"
-						element="checkbox"
+						element="select"
 						label="Kitchen"
 						validators={[]}
 						onInput={inputHandler}
-						initialValue={0}
+						options={[
+							{ opt: 'shared', label: 'Shared' },
+							{ opt: 'person', label: 'Personal' },
+							{ opt: 'None', label: 'No cooking' },
+						]}
+						initialValue={'shared'}
 						initialValid={true}
 					/>
 					<Input
@@ -393,11 +408,12 @@ const NewPlace = () => {
 						label="Extras"
 						validators={[VALIDATOR_MAXLENGTH(64)]}
 						onInput={inputHandler}
+						initialValid={true}
 					/>
 				</div>
 				<ImageUpload
-					id="image"
-					description="CHOOSE COVER"
+					id="images"
+					description="SELECT IMAGES"
 					onInput={inputHandler}
 				/>
 				<div className="place-form__submit">

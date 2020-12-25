@@ -12,7 +12,7 @@ const PlaceItem = (props) => {
 				<div className="place-item__image">
 					<Link to={`/place/${props.place._id}`}>
 						<img
-							src={`${process.env.REACT_APP_HOST_URL}/${props.place.image}`}
+							src={`${process.env.REACT_APP_HOST_URL}/${props.place.images[0]}`}
 							alt={props.place.title}
 						/>
 					</Link>

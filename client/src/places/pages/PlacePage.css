@@ -1,5 +1,5 @@
 .place-page {
-	margin-top: 4rem;
+	margin-top: calc(var(--nav-height) + 1rem);
 	margin-bottom: 4rem;
 	background-color: var(--primary-bg-color);
 }

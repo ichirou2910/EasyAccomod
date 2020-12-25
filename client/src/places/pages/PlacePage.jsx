@@ -160,7 +160,7 @@ const PlacePage = () => {
 							decFav={decFavorites}
 							report={openReportHandler}
 						/>
-						{/* <Carousel carouselItems={place.images} /> */}
+						<Carousel carouselItems={place.images} />
 						<div className="place-page__content-section base-view">
 							<div className="place-page__header">
 								<h2>{place.title}</h2>

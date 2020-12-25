@@ -1,5 +1,5 @@
 .user-page {
-	margin-top: 4rem;
+	margin-top: calc(var(--nav-height) + 1rem);
 	color: var(--primary-text);
 }
 

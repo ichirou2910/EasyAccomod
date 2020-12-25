@@ -283,21 +283,30 @@ const SearchPage = () => {
 								<h3>Room Facilities</h3>
 								<hr />
 								<Input
-									id="bathroom"
-									element="checkbox"
+									id="bath"
+									element="select"
 									label="Bathroom"
 									validators={[]}
 									onInput={inputHandler}
-									initialValue={0}
+									options={[
+										{ opt: 'shared', label: 'Shared' },
+										{ opt: 'closed', label: 'Closed' },
+									]}
+									initialValue={'shared'}
 									initialValid={true}
 								/>
 								<Input
 									id="kitchen"
-									element="checkbox"
+									element="select"
 									label="Kitchen"
 									validators={[]}
 									onInput={inputHandler}
-									initialValue={0}
+									options={[
+										{ opt: 'shared', label: 'Shared' },
+										{ opt: 'person', label: 'Personal' },
+										{ opt: 'None', label: 'No cooking' },
+									]}
+									initialValue={'shared'}
 									initialValid={true}
 								/>
 								<Input

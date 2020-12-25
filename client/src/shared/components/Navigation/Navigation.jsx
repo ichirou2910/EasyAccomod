@@ -48,7 +48,9 @@ const Navigation = () => {
 									My Profile
 								</DropdownItem>
 								<DropdownItem icon={<PostIcon />} to="/profile/place">
-									My Places
+									{auth.loginInfo.user_type === 'Owner'
+										? 'My Places'
+										: 'Favorites'}
 								</DropdownItem>
 								{/* <DropdownItem icon={<CogIcon />}>Settings</DropdownItem> */}
 								<DropdownItem icon={<LogoutIcon />} action={auth.logout}>
