@@ -1,6 +1,7 @@
 const db = require('../helpers/db');
 const Place = db.Place;
 const User = db.User;
+const Report = db.Report;
 
 const permit_update = async (req, res, next) => {
 	if (req.userData.user_type !== 'Admin') {
@@ -131,7 +132,7 @@ const getUnapprovedUser = async (req, res, next) => {
 	}
 
 	res.status(200).json(users);
-}
+};
 
 const getUnapprovedPlaces = async (req, res, next) => {
 	let places;
@@ -148,7 +149,56 @@ const getUnapprovedPlaces = async (req, res, next) => {
 	}
 
 	res.status(200).json(places);
-}
+};
+
+const getAll = async (req, res, next) => {
+	let reports;
+	try {
+		reports = await reports.find();
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	if (req.userData.user_type !== "Admin") {
+		res
+			.status(401)
+			.json({ message: 'You are not Admin' });
+		return;
+	}
+
+	if (!reports) {
+		res.status(404).json({ message: 'No report yet' });
+		return;
+	}
+
+	res.json(reports);
+};
+
+const _delete = async (req, res, next) => {
+	let place;
+	try {
+		place = await place.findById(req.params.place_id);
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	if (req.userData.user_type !== "Admin") {
+		res
+			.status(401)
+			.json({ message: 'You are not Admin' });
+		return;
+	}
+
+	if (!place) {
+		res.status(404).json({ message: 'Place not found' });
+		return;
+	}
+
+	await place.deleteOne(place);
+	res.status(201).json({});
+};
 
 exports.permit_account = permit_account;
 exports.permit_update = permit_update;
@@ -156,3 +206,5 @@ exports.confirm = confirm;
 exports.confirmExtend = confirmExtend;
 exports.getUnapprovedUser = getUnapprovedUser;
 exports.getUnapprovedPlaces = getUnapprovedPlaces;
+exports._delete = _delete;
+exports.getAll = getAll;
