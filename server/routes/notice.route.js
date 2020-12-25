@@ -5,7 +5,6 @@ const checkAuth = require('../middleware/check-auth');
 
 router.use(checkAuth);
 
-router.get('/user/notices/user_id', noticeController.getByRecvId);
-// router.post('/user/create_notice', noticeController.create);
+router.get('/:user_id', noticeController.getByRecvId);
 
 module.exports = router;

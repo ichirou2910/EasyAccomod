@@ -96,7 +96,7 @@ app.use('/api/user', require('./routes/user.route'));
 app.use('/api/place', require('./routes/place.route'));
 app.use('/api/favorite', require('./routes/favorite.route'));
 app.use('/api/notice', require('./routes/notice.route'));
-// app.use('/api/report', require('./routes/reports.route'));
+app.use('/api/report', require('./routes/reports.route'));
 app.use('/api/chat', require('./routes/chat.route'));
 app.use('/api/admin', require('./routes/admin.route'));
 
