@@ -21,7 +21,9 @@ const PlaceItem = (props) => {
 					<h2>
 						<Link to={`/place/${props.place._id}`}>{props.place.title}</Link>
 					</h2>
-					<p>{props.place.address}</p>
+					<p>
+						{props.place.ward}, {props.place.district}, {props.place.city}
+					</p>
 					<p>
 						{props.place.price}
 						{props.place.priceType}/{props.place.period} - {props.place.area} m2

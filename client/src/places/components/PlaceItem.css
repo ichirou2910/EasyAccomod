@@ -18,6 +18,7 @@
 	display: flex;
 	width: 30%;
 	max-width: 300px;
+	max-height: 150px;
 }
 
 .place-item__image a img {
@@ -38,7 +39,7 @@
 .place-item__info h2 {
 	margin-top: 0;
 	font-weight: 500;
-	color: var(--secondary-text);
+	color: var(--primary-text);
 	/* overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -46,7 +47,7 @@
 }
 
 .place-item__info h2 a {
-	color: var(--secondary-text);
+	color: var(--primary-text);
 }
 
 .place-item__info p {
@@ -57,9 +58,15 @@
 	.place-item__card {
 		flex-direction: column;
 	}
+
 	.place-item__image {
 		width: 100%;
 		max-width: 100%;
+		max-height: 300px;
+	}
+
+	.place-item__image a {
+		width: 100%;
 	}
 
 	.place-item__info {
@@ -80,5 +87,11 @@
 	.place-item__info h2 {
 		font-size: 110%;
 		margin-bottom: 0;
+	}
+}
+
+@media (max-width: 480px) {
+	.place-item__image {
+		max-height: 200px;
 	}
 }

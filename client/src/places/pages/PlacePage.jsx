@@ -108,7 +108,12 @@ const PlacePage = () => {
 		const fetchInfo = async () => {
 			try {
 				const placeData = await sendRequest(
-					`${process.env.REACT_APP_API_URL}/place/${placeId}`
+					`${process.env.REACT_APP_API_URL}/place/${placeId}`,
+					'GET',
+					null,
+					{
+						Authorization: 'Bearer ' + auth.token,
+					}
 				);
 				setPlace(placeData);
 			} catch (err) {
@@ -116,7 +121,7 @@ const PlacePage = () => {
 			}
 		};
 		fetchInfo();
-	}, [sendRequest, placeId]);
+	}, [sendRequest, auth, placeId]);
 
 	return (
 		<>

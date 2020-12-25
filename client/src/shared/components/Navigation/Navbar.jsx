@@ -15,14 +15,6 @@ const Navbar = (props) => {
 						/>
 					</Link>
 				</li>
-				<form action="" className="navbar__search">
-					<input
-						type="search"
-						name="search"
-						placeholder="Search by Location"
-						required
-					/>
-				</form>
 			</ul>
 			<ul className="navbar__nav">{props.children}</ul>
 		</nav>

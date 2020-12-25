@@ -9,8 +9,10 @@ import { ReactComponent as ChatIcon } from '../../../icons/chat.svg';
 import { ReactComponent as BellIcon } from '../../../icons/bell.svg';
 import { ReactComponent as CaretIcon } from '../../../icons/caret.svg';
 import { ReactComponent as UserIcon } from '../../../icons/user.svg';
+import { ReactComponent as PostIcon } from '../../../icons/post.svg';
 import { ReactComponent as CogIcon } from '../../../icons/cog.svg';
 import { ReactComponent as LogoutIcon } from '../../../icons/logout.svg';
+import { ReactComponent as SearchIcon } from '../../../icons/search.svg';
 
 import './Navigation.css';
 
@@ -21,9 +23,16 @@ const Navigation = () => {
 			<Navbar>
 				{auth.isLoggedIn && (
 					<>
-						<NavItem icon={<PlusIcon />} to="/place/create" />
-						<NavItem icon={<ChatIcon />} />
+						{auth.loginInfo.user_type === 'Owner' && (
+							<>
+								<NavItem icon={<PlusIcon />} to="/place/create" />
+								<NavItem icon={<ChatIcon />} />
+							</>
+						)}
 						<NavItem icon={<BellIcon />} />
+						{auth.loginInfo.user_type === 'Renter' && (
+							<NavItem icon={<SearchIcon />} to="/search" />
+						)}
 					</>
 				)}
 				<NavItem icon={<CaretIcon />}>
@@ -35,13 +44,13 @@ const Navigation = () => {
 						)}
 						{auth.isLoggedIn && (
 							<>
-								<DropdownItem
-									icon={<UserIcon />}
-									to={`/user/${auth.loginInfo.userId}`}
-								>
+								<DropdownItem icon={<UserIcon />} to="/profile">
 									My Profile
 								</DropdownItem>
-								<DropdownItem icon={<CogIcon />}>Settings</DropdownItem>
+								<DropdownItem icon={<PostIcon />} to="/profile/place">
+									My Places
+								</DropdownItem>
+								{/* <DropdownItem icon={<CogIcon />}>Settings</DropdownItem> */}
 								<DropdownItem icon={<LogoutIcon />} action={auth.logout}>
 									Logout
 								</DropdownItem>

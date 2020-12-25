@@ -35,7 +35,7 @@ const PlaceList = (props) => {
 	return (
 		<div className="place-list">
 			{!props.places || props.places.length === 0 ? (
-				<p className="place-list__empty">No place written yet</p>
+				<p className="place-list__empty">Empty</p>
 			) : (
 				<>
 					<div className="place-list__navi">

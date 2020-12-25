@@ -121,54 +121,48 @@ const NewPlace = () => {
 
 		console.log(formState.inputs);
 
-		// let now = new Date();
-		// let _date = now.toISOString();
-		// let _display = now.toLocaleString('en-us', {
-		// 	timeZone: 'Asia/Ho_Chi_Minh',
-		// });
-
 		// Create new Blog
-		// try {
-		// 	const formData = new FormData();
-		// 	formData.append('user_id', auth.loginInfo.userId);
-		// 	formData.append('title', formState.inputs.title.value);
-		// 	formData.append('time', formState.inputs.time.value);
-		// 	formData.append('timeType', formState.inputs.timetype.value);
-		// 	formData.append('address', formState.inputs.address.value);
-		// 	formData.append('ward', formState.inputs.ward.value);
-		// 	formData.append('district', formState.inputs.district.value);
-		// 	formData.append('city', formState.inputs.city.value);
-		// 	formData.append('nearby', formState.inputs.nearby.value);
-		// 	formData.append('roomType', formState.inputs.roomtype.value);
-		// 	formData.append('roomNum', formState.inputs.roomnum.value);
-		// 	formData.append('price', formState.inputs.price.value);
-		// 	formData.append('priceType', formState.inputs.pricetype.value);
-		// 	formData.append('period', formState.inputs.period.value);
-		// 	formData.append('area', formState.inputs.area.value);
-		// 	formData.append('shared', formState.inputs.shared.value);
-		// 	formData.append('bath', formState.inputs.bathroom.value);
-		// 	formData.append('kitchen', formState.inputs.kitchen.value);
-		// 	formData.append('ac', formState.inputs.ac.value);
-		// 	formData.append('balcony', formState.inputs.balcony.value);
-		// 	formData.append('elec_water', formState.inputs.ew.value);
-		// 	formData.append('extras', formState.inputs.extras.value);
-		// 	formData.append('owner', auth.loginInfo.realname);
-		// 	formData.append('avatar', auth.loginInfo.avatar);
-		// 	formData.append('phone', auth.loginInfo.phone);
-		// 	formData.append('email', auth.loginInfo.email);
-		// 	formData.append('image', formState.inputs.image.value);
+		try {
+			const formData = new FormData();
+			formData.append('user_id', auth.loginInfo.user_id);
+			formData.append('title', formState.inputs.title.value);
+			formData.append('time', formState.inputs.time.value);
+			formData.append('timeType', formState.inputs.timetype.value);
+			formData.append('address', formState.inputs.address.value);
+			formData.append('ward', formState.inputs.ward.value);
+			formData.append('district', formState.inputs.district.value);
+			formData.append('city', formState.inputs.city.value);
+			formData.append('nearby', formState.inputs.nearby.value);
+			formData.append('roomType', formState.inputs.roomtype.value);
+			formData.append('roomNum', formState.inputs.roomnum.value);
+			formData.append('price', formState.inputs.price.value);
+			formData.append('priceType', formState.inputs.pricetype.value);
+			formData.append('period', formState.inputs.period.value);
+			formData.append('area', formState.inputs.area.value);
+			formData.append('shared', formState.inputs.shared.value);
+			formData.append('bath', formState.inputs.bathroom.value);
+			formData.append('kitchen', formState.inputs.kitchen.value);
+			formData.append('ac', formState.inputs.ac.value);
+			formData.append('balcony', formState.inputs.balcony.value);
+			formData.append('elec_water', formState.inputs.ew.value);
+			formData.append('extras', formState.inputs.extras.value);
+			formData.append('owner', auth.loginInfo.realname);
+			formData.append('avatar', auth.loginInfo.avatar);
+			formData.append('phone', auth.loginInfo.phone);
+			formData.append('email', auth.loginInfo.email);
+			formData.append('image', formState.inputs.image.value);
 
-		// 	sendRequest(
-		// 		`${process.env.REACT_APP_API_URL}/place/create`,
-		// 		'POST',
-		// 		formData,
-		// 		{
-		// 			Authorization: 'Bearer ' + auth.token,
-		// 		}
-		// 	).then(() => setEdited(true));
-		// } catch (err) {
-		// 	console.log(err);
-		// }
+			sendRequest(
+				`${process.env.REACT_APP_API_URL}/place/create`,
+				'POST',
+				formData,
+				{
+					Authorization: 'Bearer ' + auth.token,
+				}
+			).then(() => setEdited(true));
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	if (edited) {
@@ -262,22 +256,28 @@ const NewPlace = () => {
 						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
 						onInput={inputHandler}
 					/>
-					<Input
-						id="roomtype"
-						element="input"
-						type="text"
-						label="Room Type"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<Input
-						id="roomnum"
-						element="input"
-						type="number"
-						label="Number of Room"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
+					<div className="place-form__pair">
+						<Input
+							id="roomnum"
+							element="input"
+							type="number"
+							label="Number of Room"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<Input
+							id="roomtype"
+							element="select"
+							options={[
+								{ opt: 'Lodging', label: 'Lodging' },
+								{ opt: 'Mini Apartment', label: 'Mini Apartment' },
+								{ opt: 'House', label: 'House' },
+								{ opt: 'Apartment', label: 'Apartment' },
+							]}
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+					</div>
 					<div className="place-form__pair">
 						<Input
 							id="price"
@@ -296,7 +296,7 @@ const NewPlace = () => {
 								{ opt: 'B', label: '.000.000.000' },
 							]}
 							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-							initialValue="month"
+							initialValue="K"
 							initialValid={true}
 							onInput={inputHandler}
 						/>
@@ -311,7 +311,7 @@ const NewPlace = () => {
 							{ opt: 'yr', label: 'Yearly' },
 						]}
 						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						initialValue="month"
+						initialValue="mo"
 						initialValid={true}
 						onInput={inputHandler}
 					/>

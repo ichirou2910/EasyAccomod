@@ -1,5 +1,6 @@
 .place-list {
-	width: 65%;
+	width: 80%;
+	margin: 0 auto;
 	color: var(--primary-text);
 }
 
@@ -10,7 +11,6 @@
 
 .place-list__navi {
 	background-color: var(--lighter-primary-color);
-	margin: 1rem 0;
 	display: flex;
 }
 

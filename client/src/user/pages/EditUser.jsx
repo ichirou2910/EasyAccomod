@@ -21,7 +21,6 @@ const EditUser = () => {
 	const { isLoading, error, sendRequest } = useHttpClient();
 
 	const auth = useContext(AuthContext);
-	const userName = useParams().userName;
 
 	const [formState, inputHandler, setFormData] = useForm(
 		{
@@ -57,7 +56,12 @@ const EditUser = () => {
 		const fetchInfo = async () => {
 			try {
 				const infoData = await sendRequest(
-					`${process.env.REACT_APP_API_URL}/user/search/${userName}`
+					`${process.env.REACT_APP_API_URL}/user/${auth.loginInfo.user_id}`,
+					'GET',
+					null,
+					{
+						Authorization: 'Bearer ' + auth.token,
+					}
 				);
 
 				setUserInfo(infoData);
@@ -66,7 +70,7 @@ const EditUser = () => {
 			}
 		};
 		fetchInfo();
-	}, [sendRequest, userName]);
+	}, [sendRequest, auth]);
 
 	const submitHandler = async (event) => {
 		event.preventDefault();
@@ -91,7 +95,7 @@ const EditUser = () => {
 			if (!empty) {
 				// Only send edit request if any field changed
 				sendRequest(
-					`${process.env.REACT_APP_API_URL}/user/${userName}`,
+					`${process.env.REACT_APP_API_URL}/user/${auth.loginInfo.user_id}`,
 					'POST',
 					formData,
 					{
@@ -112,34 +116,40 @@ const EditUser = () => {
 
 	if (!userInfo) {
 		return (
-			<div style={{ marginTop: '4rem' }}>
+			<div style={{ marginTop: '4rem', color: 'white' }}>
 				<h2>User not found</h2>
 			</div>
 		);
 	}
 
+	if (userInfo && !userInfo.update_permit) {
+		console.log('Edit not allowed');
+		return <Redirect to="/profile" />;
+	}
+
 	if (edited) {
-		return <Redirect to={`/user/${userName}`} />;
+		console.log('Edit finished');
+		return <Redirect to="/profile" />;
 	}
 
 	return (
 		<>
 			<Helmet>
-				<title>{`Bloggit - ${userName}`}</title>
+				<title>{`EasyAccomod - Edit Profile`}</title>
 			</Helmet>
-			<form className="blog-form base-view" onSubmit={submitHandler}>
+			{/* {!isLoading && userInfo && !userInfo.update_permit} */}
+			<form className="place-form base-view" onSubmit={submitHandler}>
 				{isLoading && <LoadingSpinner asOverlay />}
 				{error && <p>{error}</p>}
 				{!isLoading && userInfo && (
 					<>
-						<div className="user-form__name">
-							<strong>{userName}</strong>&#39;s Profile
-						</div>
+						<div className="user-form__name">My Profile</div>
 						<div className="user-form__description">
 							<Input
-								id="description"
-								element="textarea"
-								label="Description (max 120 chars)"
+								id="realname"
+								element="input"
+								type="text"
+								label="Real Name"
 								validators={[VALIDATOR_MAXLENGTH(120)]}
 								errorText="Description too long or empty."
 								onInput={inputHandler}
@@ -163,7 +173,7 @@ const EditUser = () => {
 							initialValue={`${process.env.REACT_APP_HOST_URL}/${userInfo.cover}`}
 							initialValid={true}
 						/>
-						<div className="blog-form__submit">
+						<div className="place-form__submit">
 							<Button type="submit" disabled={!formState.isValid}>
 								EDIT
 							</Button>
