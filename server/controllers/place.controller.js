@@ -3,9 +3,20 @@ const db = require('../helpers/db');
 const Place = db.Place;
 
 const getAll = async (req, res, next) => {
+	if (req.userData.user_type === 'Owner') {
+		res.status(401).json({ message: 'Authorization failed' });
+		return;
+	}
+
 	let places;
 	try {
-		places = await Place.find({ status: true }).sort({ date: -1 });
+		if (req.userData.user_type === 'Renter') {
+			places = await Place.find({ status: true }).sort({ date: -1 });
+		} else if (req.userData.user_type === 'Admin') {
+			places = await Place.find().sort({ date: -1 });
+		} else {
+			console.log('none of the above types');
+		}
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -15,6 +26,11 @@ const getAll = async (req, res, next) => {
 };
 
 const getByUser = async (req, res, next) => {
+	if (req.params.user_id !== req.userData.user_id) {
+		res.status(401).json({ message: 'Authorization failed' });
+		return;
+	}
+
 	let places;
 	try {
 		places = await Place.find({ user_id: req.params.user_id }).sort({
@@ -41,12 +57,29 @@ const getById = async (req, res, next) => {
 		return next(err);
 	}
 
-	if (!place || !place.status) {
+	if (!place) {
 		res.status(404).json({ message: 'Place not found' });
 		return;
 	}
 
-	place.views += 1;
+	// If Owner not viewing their own place
+	if (
+		req.userData.user_type === 'Owner' &&
+		place.user_id !== req.userData.user_id
+	) {
+		res.status(404).json({ message: 'Authorization failed' });
+		return;
+	}
+	// If Renter not viewing available place
+	if (req.userData.user_type === 'Renter' && !place.status) {
+		res.status(404).json({ message: 'Place not found' });
+		return;
+	}
+
+	// Increase view if viewed by Renter
+	if (req.userData.user_type === 'Renter') {
+		place.views++;
+	}
 
 	try {
 		await place.save();
@@ -60,10 +93,12 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
 	if (req.body.user_id !== req.userData.user_id) {
-		res.status(401).json({ message: 'Authorization failed (ID)' });
+		res.status(401).json({ message: 'Authorization failed' });
 		return;
 	} else if (req.userData.user_type !== 'Owner') {
-		res.status(401).json({ message: 'Authorization failed (Type)' });
+		res
+			.status(401)
+			.json({ message: 'You are not allowed to create new place' });
 		return;
 	}
 

@@ -1,14 +1,15 @@
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
+
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+require('dotenv').config();
 const db = require('./helpers/db');
 const Chat = db.Chat;
 const Notice = db.Notice;
-
-const express = require('express');
-const socket = require('socket.io');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-require('dotenv').config()
+const socketIo = require('socket.io');
 
 const app = express();
 
@@ -18,40 +19,17 @@ app.use(cors());
 // Bodyparser
 app.use(bodyParser.json());
 
-app.use('/uploads/images', express.static(path.join('uploads', 'images')));
-app.use(express.static(path.join('public')));
+const server = http.createServer(app);
 
-// Routes
-app.use('/api/user', require('./routes/user.route'));
-app.use('/api/place', require('./routes/place.route'));
-// app.use('/api/favorite', require('./routes/favorites.route'));
-// app.use('/api/notice', require('./routes/notice.route'));
-// app.use('/api/report', require('./routes/reports.route'));
-// app.use('/api/chat', require('./routes/chat.route'));
-
-app.use((req, res, next) => {
-	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+const io = socketIo(server, {
+	cors: {
+		origin: 'http://localhost:3000',
+		methods: ['GET', 'POST'],
+	},
 });
-
-app.use((error, req, res, next) => {
-	if (req.file) {
-		fs.unlink(req.file.path, (err) => {
-			console.log(err);
-		});
-	}
-	res.status(error.code || 500);
-	res.json({ message: error.message || 'An error occured!' });
-});
-
-const PORT = process.env.PORT || 5000;
-
-var server = app.listen(PORT, console.log(`Server starts on port ${PORT}`));
-
-var io = socket(server);
 
 io.on('connection', (socket) => {
-
-	console.log("connect to a socket");
+	// console.log('connect to a socket');
 	// Object data in details
 	/*
 		data : {
@@ -61,7 +39,6 @@ io.on('connection', (socket) => {
 			message: String,
 		}
 	*/
-
 	// How it works
 	/*
 		Getting data
@@ -76,35 +53,55 @@ io.on('connection', (socket) => {
 	*/
 	// Send back data
 	socket.on('fromClient', (data) => {
-
 		let owner;
-
-		if(data.user_type !== "Admin") {
+		if (data.user_type !== 'Admin') {
 			owner = data.sender_id;
 		} else owner = data.recv_id;
-
 		let chat = new Chat({
 			user_type: data.user_type,
 			owner_id: owner,
-			content: data.message
+			content: data.message,
 		});
-
 		chat.save();
-
 		io.sockets.emit('toClient', data);
 	});
-
 	socket.on('notification', (data) => {
 		let noti = new Notice({
 			user_id_sender: data.admin_id,
 			user_id_receiver: data.owner_id,
 			description: data.content,
-			date: Date.now()
+			date: Date.now(),
 		});
-
 		noti.save();
-
 		io.sockets.emit('notiClient', data);
 	});
-
 });
+
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
+app.use(express.static(path.join('public')));
+
+// Routes
+app.use('/api/user', require('./routes/user.route'));
+app.use('/api/place', require('./routes/place.route'));
+app.use('/api/favorite', require('./routes/favorite.route'));
+// app.use('/api/notice', require('./routes/notice.route'));
+// app.use('/api/report', require('./routes/reports.route'));
+// app.use('/api/chat', require('./routes/chat.route'));
+
+// app.use((req, res, next) => {
+// 	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+// });
+
+app.use((error, req, res, next) => {
+	if (req.file) {
+		fs.unlink(req.file.path, (err) => {
+			console.log(err);
+		});
+	}
+	res.status(error.code || 500);
+	res.json({ message: error.message || 'An error occured!' });
+});
+
+const PORT = process.env.PORT || 5000;
+
+server.listen(PORT, console.log(`Server starts on port ${PORT}`));
