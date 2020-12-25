@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const favoriteController = require('../controllers/favorite.controller');
 
-router.get('/favorite/:user', favoriteController.getByUser);
+router.get('/:user_id', favoriteController.getByUser);
 
-router.delete('/favorite/user/:place_id', favoriteController.delete);
+router.delete('/user/:place_id', favoriteController.delete);
 
 module.exports = router;

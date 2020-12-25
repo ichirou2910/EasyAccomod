@@ -5,16 +5,18 @@ const fileUpload = require('../middleware/file-upload');
 const checkAuth = require('../middleware/check-auth');
 
 // Routes
-router.get('/', userController.getAll);
-router.get('/:user_id', userController.getById);
-router.post('/search/', userController.getByName);
+// router.get('/', userController.getAll);
+// router.get('/:user_id', userController.getById);
+// router.post('/search/', userController.getByName);
 // router.get('/avatar/:name', userController.avatarByName);
 router.post('/register', userController.register);
 router.post('/authenticate', userController.login);
 
 router.use(checkAuth);
+router.get('/', userController.getAll);
+router.get('/:user_id', userController.getById);
 router.post(
-	'/:email',
+	'/:user_id',
 	fileUpload.fields([
 		{
 			name: 'avatar',
