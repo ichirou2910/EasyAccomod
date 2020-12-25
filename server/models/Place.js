@@ -153,6 +153,10 @@ const PlaceSchema = new mongoose.Schema({
 		type: Date,
 		required: false,
 	},
+	timeFrame: {
+		type: Array,
+		required: true,
+	}
 });
 
 const Place = mongoose.model('Place', PlaceSchema);

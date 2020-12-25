@@ -106,7 +106,8 @@ const getByUser = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-	let place;
+	let place,
+		time = new Date();
 	try {
 		place = await Place.findById(req.params.place_id);
 	} catch (err) {
@@ -129,13 +130,18 @@ const getById = async (req, res, next) => {
 	}
 	// If Renter not viewing available place
 	if (req.userData.user_type === 'Renter' && !place.status) {
-		res.status(404).json({ message: 'Place not found' });
+		res.status(404).json({ message: 'Place not found again' });
 		return;
 	}
 
 	// Increase view if viewed by Renter
 	if (req.userData.user_type === 'Renter') {
 		place.views++;
+
+		// var hour = time.getHours();
+		var hour = 1;
+
+		place.timeFrame.set(hour, place.timeFrame[hour] + 1);
 	}
 
 	try {
@@ -168,6 +174,12 @@ const create = async (req, res, next) => {
 	if (req.body.priceType === 'B') priceType = 1000000000;
 
 	totalPrice = req.body.price * priceType;
+
+	let frame = new Array(24);
+
+	for (i = 0; i < frame.length; ++i) {
+        frame[i] = 0;
+    }
 
 	const place = new Place({
 		user_id: req.body.user_id,
@@ -208,11 +220,12 @@ const create = async (req, res, next) => {
 		pay_to_extend: 0,
 		views: 0,
 		likes: 0,
+		timeFrame: frame
 	});
 
-	req.files.map((item) => {
-		place.images = [...place.images, item.path];
-	});
+	// req.files.map((item) => {
+	// 	place.images = [...place.images, item.path];
+	// });
 
 	console.log(place);
 
@@ -331,7 +344,7 @@ const _delete = async (req, res, next) => {
 		return;
 	}
 
-	await place.deleteOne(place);
+	await Place.deleteOne(place);
 	res.status(201).json({});
 };
 
@@ -424,6 +437,51 @@ const rate = async (req, res, next) => {
 	place.rateCount++;
 };
 
+const getStatistics = async (req, res, next) => {
+	// Get the current place
+	let place;
+	try {
+		place = await Place.findById(req.params.place_id);
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	if (req.userData.user_id !== place.user_id) {
+		res.status(401).json({ message: 'You are not allowed to get statistics of this post' });
+		return;
+	}
+
+	let stat = {};
+
+	var max = -1;
+	var maxIndex = 0;
+	var maxArray = [];
+	var frame = place.timeFrame;
+
+	for(var i = 0; i < frame.length; i++) {
+		if(max <= frame[i]) {
+			max = frame[i];
+			maxIndex = i;
+		}
+	}
+
+	for(var i = 0; i < frame.length; i++) {
+		if(frame[i] == max) {
+			maxArray.push(i);
+		}
+	}
+
+	stat['views'] = place.views;
+	stat['likes'] = place.likes;
+	stat['max'] = max;
+	stat['timeMax'] = maxArray;
+
+	console.log(stat);
+
+	res.status(200).json(stat);
+}
+
 exports.getAll = getAll;
 exports.getByUser = getByUser;
 exports.getById = getById;
@@ -433,3 +491,4 @@ exports.delete = _delete;
 exports.extend = extend;
 exports.like = like;
 exports.rate = rate;
+exports.getStatistics = getStatistics;
