@@ -1,14 +1,15 @@
 const fs = require('fs');
 const path = require('path');
-const db = require('./helpers/db');
-const Chat = db.Chat;
-const Notice = db.Notice;
 
 const express = require('express');
 const socket = require('socket.io');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config()
+
+const db = require('./helpers/db');
+const Chat = db.Chat;
+const Notice = db.Notice;
 
 const app = express();
 
@@ -24,24 +25,25 @@ app.use(express.static(path.join('public')));
 // Routes
 app.use('/api/user', require('./routes/user.route'));
 app.use('/api/place', require('./routes/place.route'));
+app.use('/api/admin', require('./routes/admin.route'));
 // app.use('/api/favorite', require('./routes/favorites.route'));
 // app.use('/api/notice', require('./routes/notice.route'));
 // app.use('/api/report', require('./routes/reports.route'));
 // app.use('/api/chat', require('./routes/chat.route'));
 
-app.use((req, res, next) => {
-	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-});
+// app.use((req, res, next) => {
+// 	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+// });
 
-app.use((error, req, res, next) => {
-	if (req.file) {
-		fs.unlink(req.file.path, (err) => {
-			console.log(err);
-		});
-	}
-	res.status(error.code || 500);
-	res.json({ message: error.message || 'An error occured!' });
-});
+// app.use((error, req, res, next) => {
+// 	if (req.file) {
+// 		fs.unlink(req.file.path, (err) => {
+// 			console.log(err);
+// 		});
+// 	}
+// 	res.status(error.code || 500);
+// 	res.json({ message: error.message || 'An error occured!' });
+// });
 
 const PORT = process.env.PORT || 5000;
 
