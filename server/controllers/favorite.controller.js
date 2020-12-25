@@ -11,6 +11,11 @@ const getById = async (req, res, next) => {
 		return next(err);
 	}
 
+	if (req.params.user_id !== req.userData.user_id) {
+		res.status(401).json({ message: 'You are not authorized to see this page' });
+		return;
+	}
+
 	if (!favorites) {
 		res.status(404).json({ message: 'Favorites not found' });
 		return;
@@ -20,6 +25,12 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
+
+	if (req.params.user_id !== req.userData.user_id) {
+		res.status(401).json({ message: 'You are not allowed to use this function' });
+		return;
+	}
+
 	const favorite = new Favorite({
 			user_id: req.params.user_id,
 			post_id: req.params.post_id,
@@ -45,10 +56,15 @@ const _delete = async (req, res, next) => {
 		return next(err);
 	}
 
-	/*if (!favorite) {
-        res.status(404).json({ message: 'Place do not exsit in your favorite' });
+	if (req.params.user_id !== req.userData.user_id) {
+		res.status(401).json({ message: 'You are not allowed to use this function' });
 		return;
-    }*/
+	}
+
+	if (!favorite) {
+        res.status(404).json({ message: 'This place does not exsit in your favorite' });
+		return;
+    }
 
 	await favorite.deleteOne(favorite);
 	res.status(201).json({});

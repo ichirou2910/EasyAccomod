@@ -119,16 +119,40 @@ const confirm = async (req, res, next) => {
 
 const getUnapprovedUser = async (req, res, next) => {
 	let users;
-	try {
-		users = await User.find({ status: false });
-	} catch (err) {
-		res.status(500).json({ message: 'Fetch failed' });
-		return next(err);
-	}
+	
+	let filter = {
+		status: false
+	};
 
 	if(req.userData.user_type !== "Admin") {
 		res.status(401).json({ message: 'You are not authorized to use this' });
 		return;
+	}
+
+	if (req.query.username) {
+		filter['username'] = req.query.username;
+	}
+	if (req.query.email) {
+		filter['email'] = req.query.email;
+	}
+	if (req.query.realname) {
+		filter['realname'] = req.query.realname;
+	}
+	if (req.query.address) {
+		filter['address'] = req.query.address;
+	}
+	if (req.query.phone) {
+		filter['phone'] = req.query.phone;
+	}
+	if (req.query.user_type) {
+		filter['user_type'] = req.query.user_type;
+	}
+
+	try {
+		users = await User.find(filter);
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
 	}
 
 	res.status(200).json(users);
