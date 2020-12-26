@@ -7,7 +7,7 @@ router.use(checkAuth);
 
 router.get('/:user', reportController.getByUser);
 router.get('/:report_id', reportController.getById);
-router.post('/create/:user_id', reportController.create);
+router.post('/create', reportController.create);
 router.delete('/:place_id', reportController.delete);
 
 module.exports = router;
