@@ -36,13 +36,10 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-	var extendDate = new Date();
-	extendDate.setDate(extendDate.getDate() + 7);
-
 	const report = new Report({
-		user_id: req.params.user_id,
-		place_id: req.params.place_id,
-		description: req.params.description,
+		user_id: req.body.user_id,
+		place_id: req.body.place_id,
+		description: req.body.content,
 		date: Date.now(),
 	});
 
