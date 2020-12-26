@@ -150,9 +150,17 @@ const Auth = () => {
 			<Helmet>
 				<title>{'Bloggit - Authenticate'}</title>
 			</Helmet>
-			<Card className="authentication card--lighter">
+			<Card
+				className="authentication card--lighter"
+				style={{
+					backgroundColor: 'transparent',
+					margin: '2rem',
+					boxShadow: 'none',
+					overflow: 'overlay',
+				}}
+			>
 				{isLoading && <LoadingSpinner asOverlay />}
-				<h2>Authenticate</h2>
+				<h2>JOIN US</h2>
 				<hr />
 				<form onSubmit={authSubmitHandler}>
 					{(isLoginMode || userMode !== '') && (

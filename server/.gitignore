@@ -16,13 +16,11 @@
 # folders
 /uploads/images/*
 !/uploads/images/edit-profile.png
-!/uploads/images/edit-blog.png
+!/uploads/images/edit-place.png
 !/uploads/images/create-blog.png
 !/uploads/images/default-avatar.png
-!/uploads/images/default-cover.png
-!/uploads/images/landing-wallpaper.png
-!/uploads/images/blog-no-image.png
 !/uploads/images/logo.png
+!/uploads/images/main-background.png
 
 # misc
 .DS_Store
