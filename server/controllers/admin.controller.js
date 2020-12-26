@@ -75,6 +75,7 @@ const confirmExtend = async (req, res, next) => {
 	}
 
 	place.timeRemain = place.backupTimeRemain;
+	place.payToExtend = 0;
 	place.backupTimeRemain = 0;
 
 	try {

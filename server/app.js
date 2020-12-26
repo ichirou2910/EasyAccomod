@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 // Crontab
 cron.schedule('0 7 * * *', async function() {
 	// * * * * *
+	// 0 7 * * *
 	let places;
 	try {
 		places = await Place.find();
@@ -35,13 +36,13 @@ cron.schedule('0 7 * * *', async function() {
 	places.forEach(async place => {
 		if(place.timeRemain > 0) {
 			place.timeRemain--;
-			await place.save();
 		} else {
-			await Place.deleteOne(place);
-			console.log("Just delete a post:");
-			console.log(place);
+			place.status = false;
 		}
+
+		await place.save();
 	});
+	
 
 	console.log("Refresh Remaining days done!");
 });
