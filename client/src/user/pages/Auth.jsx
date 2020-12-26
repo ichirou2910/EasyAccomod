@@ -106,7 +106,7 @@ const Auth = () => {
 					address: undefined,
 					phone: undefined,
 				},
-				formState.inputs.username.isValid && formState.inputs.password.isValid
+				formState.inputs.email.isValid && formState.inputs.password.isValid
 			);
 			setUserMode('');
 		} else {
