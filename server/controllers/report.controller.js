@@ -39,7 +39,7 @@ const create = async (req, res, next) => {
 	const report = new Report({
 		user_id: req.body.user_id,
 		place_id: req.body.place_id,
-		description: req.body.content,
+		content: req.body.content,
 		date: Date.now(),
 	});
 
