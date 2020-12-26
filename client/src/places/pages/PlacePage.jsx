@@ -15,9 +15,10 @@ import {
 	FaChartBar,
 } from 'react-icons/fa';
 
-import PlaceMenu from '../components/PlaceMenu';
 import PlaceReport from '../windows/PlaceReport';
 import PlaceStats from '../windows/PlaceStats';
+import PlaceExtend from '../windows/PlaceExtend';
+import PlaceMenu from '../components/PlaceMenu';
 import Button from '../../shared/components/FormElements/Button';
 import Avatar from '../../shared/components/UIElements/Avatar';
 import Carousel from '../../shared/components/UIElements/Carousel';
@@ -32,11 +33,15 @@ const reportModal = {
 	bottom: 'calc(var(--nav-height) * 0.8 + 15px)',
 };
 
+const extendModal = {
+	height: 'auto',
+};
+
 const PlacePage = () => {
 	const [place, setPlace] = useState({});
 	const [showReport, setShowReport] = useState(false);
 	const [showStats, setShowStats] = useState(false);
-	const [showRenew, setShowRenew] = useState(false);
+	const [showExtend, setShowExtend] = useState(false);
 
 	const [favorited, setFavorited] = useState(place.favorited);
 	const [favorites, setFavorites] = useState(0);
@@ -128,25 +133,41 @@ const PlacePage = () => {
 					)}
 				{!isLoading && place && (
 					<>
-						<Modal
-							show={showReport}
-							onCancel={() => setShowReport(false)}
-							contentClass="place-page__modal-content"
-							footerClass="place-page__modal-actions"
-						>
-							<PlaceReport placeId={place._id} />
-						</Modal>
+						{auth.loginInfo.user_type === 'Renter' && (
+							<Modal
+								show={showReport}
+								header="Report Place"
+								onCancel={() => setShowReport(false)}
+								contentClass="place-page__modal-content"
+								footerClass="place-page__modal-actions"
+							>
+								<PlaceReport placeId={place._id} />
+							</Modal>
+						)}
 						{auth.loginInfo.user_type === 'Owner' &&
 							auth.loginInfo.user_id === place.user_id && (
-								<Modal
-									style={reportModal}
-									show={showStats}
-									onCancel={() => setShowStats(false)}
-									contentClass="place-page__modal-content"
-									footerClass="place-page__modal-actions"
-								>
-									<PlaceStats views={place.views} frame={place.timeFrame} />
-								</Modal>
+								<>
+									<Modal
+										style={reportModal}
+										show={showStats}
+										header="View Statistics"
+										onCancel={() => setShowStats(false)}
+										contentClass="place-page__modal-content"
+										// footerClass="place-page__modal-actions"
+									>
+										<PlaceStats views={place.views} frame={place.timeFrame} />
+									</Modal>
+									<Modal
+										style={extendModal}
+										show={showExtend}
+										header="Extend Availability"
+										onCancel={() => setShowExtend(false)}
+										contentClass="place-page__modal-content"
+										footerClass="place-page__modal-actions"
+									>
+										<PlaceExtend placeId={place._id} />
+									</Modal>
+								</>
 							)}
 						{auth.loginInfo.user_type === 'Renter' && (
 							<PlaceMenu
@@ -165,7 +186,7 @@ const PlacePage = () => {
 											color: '#28a745',
 											cursor: 'pointer',
 										}}
-										onClick={() => setShowRenew(true)}
+										onClick={() => setShowExtend(true)}
 									>
 										<FaCheck />{' '}
 										<em>

@@ -12,7 +12,10 @@ const ModalOverlay = (props) => {
 				<span className="modal__close" onClick={props.onCancel}></span>
 				<h2>{props.header}</h2>
 			</header>
-			<div className={`modal__content ${props.contentClass}`}>
+			<div
+				className={`modal__content ${props.contentClass}`}
+				style={props.contentStyle}
+			>
 				{props.children}
 			</div>
 			<footer className={`modal__footer ${props.footerClass}`}>

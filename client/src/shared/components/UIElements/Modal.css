@@ -28,7 +28,7 @@
 .modal__content {
 	padding: 1rem 0.5rem;
 	flex-grow: 1;
-	overflow-y: scroll;
+	overflow-y: overlay;
 }
 
 .modal__footer {
