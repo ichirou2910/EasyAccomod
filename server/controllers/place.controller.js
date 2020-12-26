@@ -138,10 +138,14 @@ const getById = async (req, res, next) => {
 	if (req.userData.user_type === 'Renter') {
 		place.views++;
 
-		// var hour = time.getHours();
-		var hour = 1;
+		var hour = time.getHours();
+		// var hour = 9;
 
-		place.timeFrame.set(hour, place.timeFrame[hour] + 1);
+		var index = Math.floor(hour/3);
+
+		console.log(index);
+
+		place.timeFrame.set(index, place.timeFrame[index] + 1);
 	}
 
 	try {
@@ -165,8 +169,6 @@ const create = async (req, res, next) => {
 		return;
 	}
 
-	let extendDate = new Date();
-
 	let priceType = 0;
 	if (req.body.priceType === 'K') priceType = 1000;
 	if (req.body.priceType === 'M') priceType = 1000000;
@@ -174,7 +176,7 @@ const create = async (req, res, next) => {
 
 	totalPrice = req.body.price * priceType;
 
-	let frame = new Array(24);
+	let frame = new Array(8);
 
 	for (i = 0; i < frame.length; ++i) {
 		frame[i] = 0;
@@ -219,6 +221,7 @@ const create = async (req, res, next) => {
 		views: 0,
 		likes: 0,
 		timeFrame: frame,
+		payToExtend: 0
 	});
 
 	req.files.map((item) => {
@@ -393,15 +396,26 @@ const extend = async (req, res, next) => {
 		return;
 	}
 
-	var date = place.extend_date;
-	var extendTo = Date.parse(req.body.extend_date);
+	var type = 1;
+	var time = parseInt(req.body.time);
 
-	var diff = Math.round((date - extendTo) / (1000 * 3600 * 24));
+	if (req.body.timeType === "week") {
+		type = 7;
+	} else if (req.body.timeType === "month") {
+		type = 30;
+	} else if (req.body.timeType === "quarter") {
+		type = 90;
+	} else if (req.body.timeType === "year") {
+		type = 360;
+	}
 
-	console.log(diff);
+	var timeAdd = time * type;
+
+	console.log(timeAdd);
 
 	// Update payment and extended date
-	place.backupTimeRemain = diff;
+	place.payToExtend = timeAdd * 20000; // 20000VND per day
+	place.backupTimeRemain = timeAdd;
 
 	try {
 		await place.save();
@@ -409,7 +423,7 @@ const extend = async (req, res, next) => {
 		res.status(500).json({ message: 'Extend failed' });
 		return next(err);
 	}
-	res.status(200).json(place);
+	res.status(200).json(timeAdd);
 };
 
 const rate = async (req, res, next) => {
@@ -451,14 +465,12 @@ const getStatistics = async (req, res, next) => {
 	let stat = {};
 
 	var max = -1;
-	var maxIndex = 0;
 	var maxArray = [];
 	var frame = place.timeFrame;
 
 	for (var i = 0; i < frame.length; i++) {
 		if (max <= frame[i]) {
 			max = frame[i];
-			maxIndex = i;
 		}
 	}
 

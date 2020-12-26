@@ -3,12 +3,14 @@ const path = require('path');
 const http = require('http');
 
 const express = require('express');
+const cron = require('node-cron');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const db = require('./helpers/db');
 const Chat = db.Chat;
 const Notice = db.Notice;
+const Place = db.Place;
 const socketIo = require('socket.io');
 
 const app = express();
@@ -18,6 +20,32 @@ app.use(cors());
 
 // Bodyparser
 app.use(bodyParser.json());
+
+// Crontab
+cron.schedule('0 7 * * *', async function() {
+	// * * * * *
+	// 0 7 * * *
+	let places;
+	try {
+		places = await Place.find();
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	places.forEach(async place => {
+		if(place.timeRemain > 0) {
+			place.timeRemain--;
+		} else {
+			place.status = false;
+		}
+
+		await place.save();
+	});
+	
+
+	console.log("Refresh Remaining days done!");
+});
 
 const server = http.createServer(app);
 

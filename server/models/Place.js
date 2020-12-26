@@ -153,6 +153,10 @@ const PlaceSchema = new mongoose.Schema({
 		type: Array,
 		required: true,
 	},
+	payToExtend: {
+		type: Number,
+		required: false,
+	}
 });
 
 const Place = mongoose.model('Place', PlaceSchema);
