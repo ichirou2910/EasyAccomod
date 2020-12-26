@@ -16,8 +16,8 @@ import {
 } from 'react-icons/fa';
 
 import PlaceMenu from '../components/PlaceMenu';
-import PlaceReport from '../components/PlaceReport';
-import PlaceStats from '../components/PlaceStats';
+import PlaceReport from '../windows/PlaceReport';
+import PlaceStats from '../windows/PlaceStats';
 import Button from '../../shared/components/FormElements/Button';
 import Avatar from '../../shared/components/UIElements/Avatar';
 import Carousel from '../../shared/components/UIElements/Carousel';
