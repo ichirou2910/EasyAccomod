@@ -138,10 +138,14 @@ const getById = async (req, res, next) => {
 	if (req.userData.user_type === 'Renter') {
 		place.views++;
 
-		// var hour = time.getHours();
-		var hour = 1;
+		var hour = time.getHours();
+		// var hour = 9;
 
-		place.timeFrame.set(hour, place.timeFrame[hour] + 1);
+		var index = Math.floor(hour/3);
+
+		console.log(index);
+
+		place.timeFrame.set(index, place.timeFrame[index] + 1);
 	}
 
 	try {
@@ -165,8 +169,6 @@ const create = async (req, res, next) => {
 		return;
 	}
 
-	let extendDate = new Date();
-
 	let priceType = 0;
 	if (req.body.priceType === 'K') priceType = 1000;
 	if (req.body.priceType === 'M') priceType = 1000000;
@@ -174,7 +176,7 @@ const create = async (req, res, next) => {
 
 	totalPrice = req.body.price * priceType;
 
-	let frame = new Array(24);
+	let frame = new Array(8);
 
 	for (i = 0; i < frame.length; ++i) {
 		frame[i] = 0;
@@ -219,6 +221,7 @@ const create = async (req, res, next) => {
 		views: 0,
 		likes: 0,
 		timeFrame: frame,
+		payToExtend: 0
 	});
 
 	req.files.map((item) => {
@@ -401,6 +404,7 @@ const extend = async (req, res, next) => {
 	console.log(diff);
 
 	// Update payment and extended date
+	place.payToExtend = diff * 20000; // 20000VND per day
 	place.backupTimeRemain = diff;
 
 	try {
@@ -451,14 +455,12 @@ const getStatistics = async (req, res, next) => {
 	let stat = {};
 
 	var max = -1;
-	var maxIndex = 0;
 	var maxArray = [];
 	var frame = place.timeFrame;
 
 	for (var i = 0; i < frame.length; i++) {
 		if (max <= frame[i]) {
 			max = frame[i];
-			maxIndex = i;
 		}
 	}
 
