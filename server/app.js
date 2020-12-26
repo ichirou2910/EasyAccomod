@@ -5,7 +5,6 @@ const http = require('http');
 const express = require('express');
 const cron = require('node-cron');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 require('dotenv').config();
 const db = require('./helpers/db');
 const Chat = db.Chat;
@@ -19,10 +18,10 @@ const app = express();
 app.use(cors());
 
 // Bodyparser
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Crontab
-cron.schedule('0 7 * * *', async function() {
+cron.schedule('0 7 * * *', async function () {
 	// * * * * *
 	// 0 7 * * *
 	let places;
@@ -33,8 +32,8 @@ cron.schedule('0 7 * * *', async function() {
 		return next(err);
 	}
 
-	places.forEach(async place => {
-		if(place.timeRemain > 0) {
+	places.forEach(async (place) => {
+		if (place.status && place.timeRemain > 0) {
 			place.timeRemain--;
 		} else {
 			place.status = false;
@@ -42,9 +41,8 @@ cron.schedule('0 7 * * *', async function() {
 
 		await place.save();
 	});
-	
 
-	console.log("Refresh Remaining days done!");
+	console.log('Refresh Remaining days done!');
 });
 
 const server = http.createServer(app);

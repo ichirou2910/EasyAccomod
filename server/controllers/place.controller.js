@@ -141,9 +141,9 @@ const getById = async (req, res, next) => {
 		var hour = time.getHours();
 		// var hour = 9;
 
-		var index = Math.floor(hour/3);
+		var index = Math.floor(hour / 3);
 
-		console.log(index);
+		// console.log(index);
 
 		place.timeFrame.set(index, place.timeFrame[index] + 1);
 	}
@@ -216,19 +216,31 @@ const create = async (req, res, next) => {
 		date: Date.now(),
 		status: false,
 		rented: false,
-		timeRemain: 7,
-		backupTimeRemain: Date.now(),
+		backupTimeRemain: 0,
 		views: 0,
 		likes: 0,
 		timeFrame: frame,
-		payToExtend: 0
+		payToExtend: 0,
 	});
+
+	let timeType = 1;
+	if (req.body.timeType === 'week') {
+		timeType = 7;
+	} else if (req.body.timeType === 'month') {
+		timeType = 30;
+	} else if (req.body.timeType === 'quarter') {
+		timeType = 90;
+	} else if (req.body.timeType === 'year') {
+		timeType = 360;
+	}
+
+	place.timeRemain = place.time * timeType;
 
 	req.files.map((item) => {
 		place.images = [...place.images, item.path];
 	});
 
-	console.log(place);
+	// console.log(place);
 
 	try {
 		await place.save();
@@ -380,6 +392,8 @@ const like = async (req, res, next) => {
 };
 
 const extend = async (req, res, next) => {
+	console.log(req.body);
+
 	// Get the current place
 	let place;
 	try {
@@ -396,26 +410,26 @@ const extend = async (req, res, next) => {
 		return;
 	}
 
-	var type = 1;
-	var time = parseInt(req.body.time);
+	let type = 1;
+	let time = parseInt(req.body.time);
+	// console.log(time);
 
-	if (req.body.timeType === "week") {
+	if (req.body.timeType === 'week') {
 		type = 7;
-	} else if (req.body.timeType === "month") {
+	} else if (req.body.timeType === 'month') {
 		type = 30;
-	} else if (req.body.timeType === "quarter") {
+	} else if (req.body.timeType === 'quarter') {
 		type = 90;
-	} else if (req.body.timeType === "year") {
+	} else if (req.body.timeType === 'year') {
 		type = 360;
 	}
 
-	var timeAdd = time * type;
+	let timeAdd = time * type;
 
-	console.log(timeAdd);
+	// console.log(timeAdd);
 
-	// Update payment and extended date
-	place.payToExtend = timeAdd * 20000; // 20000VND per day
-	place.backupTimeRemain = timeAdd;
+	// Update extended date
+	// place.backupTimeRemain = timeAdd;
 
 	try {
 		await place.save();

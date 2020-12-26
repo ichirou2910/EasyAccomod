@@ -36,21 +36,23 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-	const report = new Report({
-		user_id: req.body.user_id,
-		place_id: req.body.place_id,
-		content: req.body.content,
-		date: Date.now(),
-	});
+	console.log(req.body);
 
-	try {
-		await report.save();
-	} catch (err) {
-		res.status(500).json({ message: 'Report failed' });
-		return next(err);
-	}
+	// const report = new Report({
+	// 	user_id: req.body.user_id,
+	// 	place_id: req.body.place_id,
+	// 	content: req.body.content,
+	// 	date: Date.now(),
+	// });
 
-	res.status(201).json(report);
+	// try {
+	// 	await report.save();
+	// } catch (err) {
+	// 	res.status(500).json({ message: 'Report failed' });
+	// 	return next(err);
+	// }
+
+	// res.status(201).json(report);
 };
 
 const _delete = async (req, res, next) => {
@@ -62,7 +64,10 @@ const _delete = async (req, res, next) => {
 		return next(err);
 	}
 
-	if ( (report.user_id !== req.userData.user_id) || (req.userData.user_type !== "Admin") ) {
+	if (
+		report.user_id !== req.userData.user_id ||
+		req.userData.user_type !== 'Admin'
+	) {
 		res.status(401).json({ message: 'You are not allowed to delete this' });
 		return;
 	}
