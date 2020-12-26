@@ -1,7 +1,33 @@
 .main-page {
 	margin-top: calc(var(--nav-height) + 1rem);
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
+	align-items: center;
+}
+
+.main-page h2 {
+	border-bottom: var(--border);
+}
+
+.main-page__actions {
+	display: flex;
+	flex-direction: column;
+	padding: 2rem;
+}
+
+.main-page__actions a {
+	font-size: 1.5rem;
+	padding: 3rem;
+	border: 2px solid var(--bg-accent);
+	margin-bottom: 2rem;
+	text-align: center;
+}
+
+.main-page__actions a:hover {
+	border: 2px solid var(--accent-color);
+	border-radius: var(--border-radius);
+	color: var(--accent-color);
 }
 
 @media (max-width: 768px) {
