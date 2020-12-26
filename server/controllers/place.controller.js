@@ -396,16 +396,26 @@ const extend = async (req, res, next) => {
 		return;
 	}
 
-	var date = place.extend_date;
-	var extendTo = Date.parse(req.body.extend_date);
+	var type = 1;
+	var time = parseInt(req.body.time);
 
-	var diff = Math.round((date - extendTo) / (1000 * 3600 * 24));
+	if (req.body.timeType === "week") {
+		type = 7;
+	} else if (req.body.timeType === "month") {
+		type = 30;
+	} else if (req.body.timeType === "quarter") {
+		type = 90;
+	} else if (req.body.timeType === "year") {
+		type = 360;
+	}
 
-	console.log(diff);
+	var timeAdd = time * type;
+
+	console.log(timeAdd);
 
 	// Update payment and extended date
-	place.payToExtend = diff * 20000; // 20000VND per day
-	place.backupTimeRemain = diff;
+	place.payToExtend = timeAdd * 20000; // 20000VND per day
+	place.backupTimeRemain = timeAdd;
 
 	try {
 		await place.save();
@@ -413,7 +423,7 @@ const extend = async (req, res, next) => {
 		res.status(500).json({ message: 'Extend failed' });
 		return next(err);
 	}
-	res.status(200).json(place);
+	res.status(200).json(timeAdd);
 };
 
 const rate = async (req, res, next) => {
