@@ -24,7 +24,7 @@ const PlaceStats = ({ views, frame }) => {
 									}%, #00FFFF00 ${1 - item * 100}%)`,
 								}}
 							>
-								{`${index}h - ${index + 3}h`}
+								{`${index * 3}h - ${(index + 1) * 3}h`}
 								<span> </span>
 							</li>
 						);

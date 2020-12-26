@@ -12,8 +12,8 @@ import Button from '../../shared/components/FormElements/Button';
 
 import './PlaceReport.css';
 
-const PlaceReport = () => {
-	const { isLoading, error, sendRequest } = useHttpClient();
+const PlaceReport = (props) => {
+	const { sendRequest } = useHttpClient();
 
 	const auth = useContext(AuthContext);
 
@@ -30,7 +30,27 @@ const PlaceReport = () => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 
-		console.log(formState.inputs);
+		try {
+			const formData = new FormData();
+			formData.append('user_id', auth.loginInfo.user_id);
+			formData.append('place_id', props.placeId);
+			formData.append('content', formState.inputs.content.value);
+
+			for (let key of formData.entries()) {
+				console.log(key[0] + ', ' + key[1]);
+			}
+
+			sendRequest(
+				`${process.env.REACT_APP_API_URL}/report/create`,
+				'POST',
+				formData,
+				{
+					Authorization: 'Bearer ' + auth.token,
+				}
+			);
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	return (

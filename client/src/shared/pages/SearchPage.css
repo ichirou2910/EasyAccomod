@@ -5,6 +5,7 @@
 .search__filter {
 	position: fixed;
 	top: var(--nav-height);
+	border-right: var(--border);
 	background-color: var(--primary-bg-color);
 	height: calc(100vh - var(--nav-height));
 	width: 360px;
@@ -65,7 +66,7 @@
 	width: 100%;
 }
 
-@media (max-width: 1160px) {
+@media (max-width: 1162px) {
 	.search {
 		display: block;
 	}

@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Helmet } from 'react-helmet';
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useHttpClient } from '../../shared/hooks/http-hook';
-import { VALIDATOR_MAXLENGTH } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 
@@ -24,17 +23,21 @@ const EditUser = () => {
 
 	const [formState, inputHandler, setFormData] = useForm(
 		{
-			description: {
+			realname: {
 				value: '',
 				isValid: false,
 			},
-			avatar: {
+			identifier: {
 				value: null,
-				isValid: true,
+				isValid: false,
 			},
-			cover: {
+			address: {
 				value: null,
-				isValid: true,
+				isValid: false,
+			},
+			phone: {
+				value: null,
+				isValid: false,
 			},
 		},
 		false
@@ -43,8 +46,20 @@ const EditUser = () => {
 	useEffect(() => {
 		setFormData(
 			{
-				description: {
-					value: userInfo ? userInfo.description : '',
+				realname: {
+					value: userInfo ? userInfo.realname : '',
+					isValid: userInfo ? true : false,
+				},
+				identifier: {
+					value: userInfo ? userInfo.identifier : '',
+					isValid: userInfo ? true : false,
+				},
+				address: {
+					value: userInfo ? userInfo.address : '',
+					isValid: userInfo ? true : false,
+				},
+				phone: {
+					value: userInfo ? userInfo.phone : '',
 					isValid: userInfo ? true : false,
 				},
 			},
@@ -79,17 +94,21 @@ const EditUser = () => {
 			let empty = true; // Whether there is change in form value
 
 			const formData = new FormData();
-			if (formState.inputs.description.value !== userInfo.description) {
-				formData.append('description', formState.inputs.description.value);
+			if (formState.inputs.realname.value !== userInfo.realname) {
+				formData.append('realname', formState.inputs.realname.value);
 				empty = false;
 			}
-			if (formState.inputs.avatar) {
-				formData.append('avatar', formState.inputs.avatar.value);
+			if (formState.inputs.identifier.value !== userInfo.identifier) {
+				formData.append('identifier', formState.inputs.identifier.value);
 				empty = false;
 			}
-			if (formState.inputs.cover) {
+			if (formState.inputs.address.value !== userInfo.address) {
+				formData.append('address', formState.inputs.address.value);
 				empty = false;
-				formData.append('cover', formState.inputs.cover.value);
+			}
+			if (formState.inputs.phone.value !== userInfo.phone) {
+				formData.append('phone', formState.inputs.phone.value);
+				empty = false;
 			}
 
 			if (!empty) {
@@ -123,12 +142,12 @@ const EditUser = () => {
 	}
 
 	if (userInfo && !userInfo.update_permit) {
-		console.log('Edit not allowed');
+		// console.log('Edit not allowed');
 		return <Redirect to="/profile" />;
 	}
 
 	if (edited) {
-		console.log('Edit finished');
+		// console.log('Edit finished');
 		return <Redirect to="/profile" />;
 	}
 
@@ -137,50 +156,59 @@ const EditUser = () => {
 			<Helmet>
 				<title>{`EasyAccomod - Edit Profile`}</title>
 			</Helmet>
-			{/* {!isLoading && userInfo && !userInfo.update_permit} */}
-			<form className="place-form base-view" onSubmit={submitHandler}>
-				{isLoading && <LoadingSpinner asOverlay />}
-				{error && <p>{error}</p>}
-				{!isLoading && userInfo && (
-					<>
-						<div className="user-form__name">My Profile</div>
-						<div className="user-form__description">
+			{!isLoading && userInfo && userInfo.update_permit && (
+				<form className="place-form base-view" onSubmit={submitHandler}>
+					{isLoading && <LoadingSpinner asOverlay />}
+					{error && <p>{error}</p>}
+					{!isLoading && userInfo && (
+						<>
+							<div className="user-form__name">My Profile</div>
 							<Input
-								id="realname"
 								element="input"
+								id="realname"
 								type="text"
 								label="Real Name"
-								validators={[VALIDATOR_MAXLENGTH(120)]}
-								errorText="Description too long or empty."
+								validators={[]}
 								onInput={inputHandler}
-								initialValue={userInfo.description}
-								initialValid={true}
-								style={{ height: 'auto' }}
+								initialValue={userInfo.realname}
+								initialValid={false}
 							/>
-						</div>
-						<ImageUpload
-							square
-							id="avatar"
-							onInput={inputHandler}
-							description="CHANGE AVATAR"
-							initialValue={`${process.env.REACT_APP_HOST_URL}/${userInfo.avatar}`}
-							initialValid={true}
-						/>
-						<ImageUpload
-							id="cover"
-							onInput={inputHandler}
-							description="CHANGE COVER"
-							initialValue={`${process.env.REACT_APP_HOST_URL}/${userInfo.cover}`}
-							initialValid={true}
-						/>
-						<div className="place-form__submit">
-							<Button type="submit" disabled={!formState.isValid}>
-								EDIT
-							</Button>
-						</div>
-					</>
-				)}
-			</form>
+							<Input
+								element="input"
+								id="identifier"
+								type="text"
+								label="Citizen Identifier"
+								validators={[]}
+								onInput={inputHandler}
+								initialValue={userInfo.identifier}
+							/>
+							<Input
+								element="input"
+								id="address"
+								type="text"
+								label="Address"
+								validators={[]}
+								onInput={inputHandler}
+								initialValue={userInfo.address}
+							/>
+							<Input
+								element="input"
+								id="phone"
+								type="text"
+								label="Phone No."
+								validators={[]}
+								onInput={inputHandler}
+								initialValue={userInfo.phone}
+							/>
+							<div className="place-form__submit">
+								<Button type="submit" disabled={!formState.isValid}>
+									EDIT
+								</Button>
+							</div>
+						</>
+					)}
+				</form>
+			)}
 		</>
 	);
 };

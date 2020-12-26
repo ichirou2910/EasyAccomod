@@ -165,7 +165,10 @@ const PlacePage = () => {
 										contentClass="place-page__modal-content"
 										footerClass="place-page__modal-actions"
 									>
-										<PlaceExtend placeId={place._id} />
+										<PlaceExtend
+											placeId={place._id}
+											exit={() => setShowExtend(false)}
+										/>
 									</Modal>
 								</>
 							)}

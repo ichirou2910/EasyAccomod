@@ -34,24 +34,28 @@ const PlaceExtend = (props) => {
 
 		try {
 			const formData = new FormData();
-			formData.append('time', auth.loginInfo.time.value);
+			formData.append('time', formState.inputs.time.value);
 			formData.append('timeType', formState.inputs.timeType.value);
 
+			for (let key of formData.entries()) {
+				console.log(key[0] + ', ' + key[1]);
+			}
+
 			sendRequest(
-				`${process.env.REACT_APP_API_URL}/place/extend/${props.place_id}`,
+				`${process.env.REACT_APP_API_URL}/place/extend/${props.placeId}`,
 				'POST',
 				formData,
 				{
 					Authorization: 'Bearer ' + auth.token,
 				}
-			).then(() => setEdited(true));
+			);
 		} catch (err) {
 			console.log(err);
 		}
 	};
 
 	if (edited) {
-		return <Redirect to={`/place/${props.place_id}`} />;
+		props.exit();
 	}
 
 	return (
