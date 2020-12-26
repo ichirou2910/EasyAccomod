@@ -10,12 +10,8 @@ const PlaceStats = ({ views, frame }) => {
 		perc = [...perc, frame[i] / views];
 	}
 
-	console.log(perc);
-
 	return (
 		<div className="place-stats">
-			<h2>View Statistics</h2>
-			<hr />
 			<div className="place-stats__list">
 				<ul>
 					{perc.map((item, index) => {
@@ -35,7 +31,6 @@ const PlaceStats = ({ views, frame }) => {
 					})}
 				</ul>
 			</div>
-			<hr />
 		</div>
 	);
 };

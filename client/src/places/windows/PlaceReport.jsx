@@ -36,8 +36,6 @@ const PlaceReport = () => {
 	return (
 		<div className="place-report">
 			<form onSubmit={submitHandler}>
-				<h2>Report Place</h2>
-				<hr />
 				<Input
 					id="content"
 					element="textarea"
