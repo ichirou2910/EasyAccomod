@@ -169,7 +169,7 @@ const NewPlace = () => {
 	};
 
 	if (edited) {
-		return <Redirect to={`/`} />;
+		return <Redirect to={`/profile/place`} />;
 	}
 
 	return (
