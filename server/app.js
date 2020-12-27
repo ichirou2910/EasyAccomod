@@ -52,7 +52,7 @@ const server = http.createServer(app);
 
 const io = socketIo(server, {
 	cors: {
-		origin: 'http://localhost:3000',
+		origin: '*',
 		methods: ['GET', 'POST'],
 	},
 });
@@ -89,7 +89,7 @@ io.on('connection', (socket) => {
 			date: Date.now(),
 		});
 		await recv.save();
-		socket.emit('toClient', recv);
+		io.sockets.emit('toClient', recv);
 	});
 	// How notification works
 	/*
