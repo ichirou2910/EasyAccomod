@@ -1,8 +1,5 @@
-import React, { useState, useContext } from 'react';
-import {
-	VALIDATOR_MAXLENGTH,
-	VALIDATOR_REQUIRE,
-} from '../../shared/util/validators';
+import React, { useContext } from 'react';
+import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
@@ -27,7 +24,7 @@ const PlaceReport = (props) => {
 		false
 	);
 
-	const submitHandler = (e) => {
+	const submitHandler = async (e) => {
 		e.preventDefault();
 
 		try {
@@ -40,14 +37,19 @@ const PlaceReport = (props) => {
 				console.log(key[0] + ', ' + key[1]);
 			}
 
-			sendRequest(
+			await sendRequest(
 				`${process.env.REACT_APP_API_URL}/report/create`,
 				'POST',
-				formData,
+				JSON.stringify({
+					user_id: auth.loginInfo.user_id,
+					place_id: props.placeId,
+					content: formState.inputs.content.value,
+				}),
 				{
 					Authorization: 'Bearer ' + auth.token,
+					'Content-Type': 'application/json',
 				}
-			);
+			).then(() => console.log('Report sent'));
 		} catch (err) {
 			console.log(err);
 		}
@@ -60,11 +62,11 @@ const PlaceReport = (props) => {
 					id="content"
 					element="textarea"
 					label="Tell us why"
-					validators={[VALIDATOR_MAXLENGTH(64)]}
+					validators={[VALIDATOR_REQUIRE()]}
 					onInput={inputHandler}
 				/>
 				<div className="place-report__submit">
-					<Button danger onClick={submitHandler}>
+					<Button type="submit" disabled={!formState.isValid}>
 						SEND
 					</Button>
 				</div>
