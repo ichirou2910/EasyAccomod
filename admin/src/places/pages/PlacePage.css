@@ -1,0 +1,144 @@
+.place-page {
+	margin-top: calc(var(--nav-height) + 1rem);
+	margin-bottom: 4rem;
+	background-color: var(--primary-bg-color);
+}
+
+.place-page h2,
+.place-page h3 {
+	/* font-weight: 300; */
+	font-size: 1.5rem;
+}
+
+.place-page__modal-content {
+	padding: 0.25rem;
+}
+
+.place-page__modal-actions {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.place-page__modal-actions button {
+	margin-left: 0.5rem;
+}
+
+.place-page__header {
+	width: 100%;
+	margin: 1rem auto;
+	color: var(--primary-text);
+}
+
+.place-page__header h2 {
+	font-size: 2.25rem;
+	margin: 0;
+	font-weight: 300;
+	line-height: 1.2;
+}
+
+.place-page__header p {
+	font-size: 1.25rem;
+	font-weight: 300;
+	margin: 0.25rem 0;
+}
+
+.place-page__header span {
+	font-size: 0.9rem;
+	vertical-align: middle;
+}
+
+.place-page__header p:last-child span {
+	font-size: 1.25rem;
+}
+.place-page__header p:last-child span:not(:first-child) {
+	margin-left: 2rem;
+}
+
+.place-page__content-section {
+	font-weight: 300;
+	line-height: 1.5;
+	color: var(--primary-text);
+}
+
+.place-page__content-section h2 {
+	margin: 0.8rem 0;
+}
+
+.place-page__stats {
+	display: flex;
+}
+
+.place-page__stats p {
+	font-size: 1.25rem;
+	line-height: 1.2;
+	font-weight: 300;
+}
+
+.place-page__stats div {
+	margin-right: 1.5rem;
+}
+
+.place-page__contact {
+	display: flex;
+	font-weight: bold;
+	font-size: 1.1rem;
+	justify-content: flex-start;
+}
+
+.place-page__info {
+	margin-left: 15px;
+}
+
+.place-page__info p {
+	margin-top: 0;
+}
+
+.place-page__info button {
+	margin-right: 15px;
+}
+
+@media (max-width: 768px) {
+	.place-page__header h2 {
+		font-size: 2rem;
+		margin: 1.25rem 0;
+	}
+
+	.place-page__header p {
+		font-size: 1.1rem;
+	}
+
+	.place-page__basic-info p {
+		font-size: 1.1rem;
+	}
+
+	.place-page__content-section {
+		font-size: 1.1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.place-page__header {
+		border-radius: 0;
+	}
+
+	.place-page__header h2 {
+		font-size: 1.5rem;
+		margin: 1rem 0;
+	}
+
+	.place-page__header p {
+		font-size: 1rem;
+	}
+
+	.place-page__content-section {
+		font-size: 1rem;
+	}
+
+	.place-page__basic-info div {
+		margin-right: 20px;
+	}
+
+	/* .place-page p {
+		font-size: 1rem;
+	} */
+}

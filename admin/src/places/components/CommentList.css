@@ -1,0 +1,28 @@
+.comment-list {
+	margin-bottom: 4rem;
+}
+
+.comment-list__empty {
+	text-align: center;
+	font-size: 120%;
+	color: var(--primary-text);
+}
+
+.comment-list__header {
+	background-color: var(--dark-primary-color);
+	text-align: center;
+	font-size: 130%;
+	color: #ecf0f1;
+	border-radius: 6px;
+	height: 3.5rem;
+	line-height: 3.5rem;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+.comment-list__header h2 {
+	margin: 1rem 0;
+}
+
+.comment-list__content {
+	list-style: none;
+	padding: 0;
+}

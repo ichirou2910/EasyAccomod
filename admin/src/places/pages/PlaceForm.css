@@ -1,0 +1,41 @@
+.place-form {
+	margin-top: calc(var(--nav-height) + 1rem);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	font-family: inherit;
+}
+
+.place-form__pair {
+	display: flex;
+	align-items: flex-end;
+	width: 100%;
+}
+
+.place-form__pair div:first-child {
+	flex-grow: 1;
+	margin-right: 4px;
+}
+
+.place-form__group {
+	margin-top: 1rem;
+}
+
+.place-form__group h3 {
+	color: var(--primary-text);
+	margin-bottom: 0;
+}
+
+.place-form__group hr {
+	border-color: var(--dark-primary-color);
+}
+
+.place-form__submit {
+	width: 100%;
+	margin-top: 0.5rem;
+}
+
+.place-form__submit button {
+	width: 100%;
+	margin-bottom: 0.5rem;
+}

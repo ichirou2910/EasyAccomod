@@ -1,0 +1,116 @@
+.form-control input,
+.form-control textarea,
+.form-control select {
+	color: var(--primary-text);
+	display: block;
+	/* box-shadow: 0 2.5px 6px rgba(0, 0, 0, 0.5); */
+	padding: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.form-control label {
+	display: block;
+	/* padding-bottom: 0.5rem; */
+	color: var(--primary-text);
+	padding: 8px 0;
+}
+
+.form-control label span {
+	background-color: var(--dark-primary-color);
+	padding: 8px 16px 8px 16px;
+}
+
+.form-control input {
+	width: 100%;
+	height: 3rem;
+	font: inherit;
+	border: 2px solid var(--dark-primary-color);
+	border-top-left-radius: 0;
+	background: var(--lighter-primary-color);
+	padding: 0.15rem 0.25rem;
+}
+
+.form-control__checkbox {
+	display: flex;
+	justify-content: flex-start;
+	flex-flow: row;
+	margin-bottom: 1rem;
+}
+
+.form-control input[type='checkbox'] {
+	height: 34px;
+	margin: 0 1rem;
+	width: 34px;
+	flex-shrink: 1;
+}
+
+.form-control select {
+	outline: none;
+	height: 3rem;
+	font: inherit;
+	border: 2px solid var(--dark-primary-color);
+	border-top-left-radius: 0;
+	background: var(--lighter-primary-color);
+	padding: 0.15rem 0.25rem;
+}
+
+.form-control > select {
+	width: 100%;
+}
+
+.form-control__select {
+	display: flex;
+}
+
+.form-control__select input {
+	margin-right: 4px;
+}
+
+.form-control textarea {
+	width: 100%;
+	/* height: 70vh; */
+	resize: none;
+	outline: none;
+	border: none;
+	border: 2px solid var(--dark-primary-color);
+	border-top-left-radius: 0;
+	font-family: inherit;
+	font-size: 110%;
+	background: var(--lighter-primary-color);
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
+	color: black;
+	outline: none;
+	background: var(--light-primary-color);
+	border-color: var(--dark-primary-color);
+}
+
+.form-control--invalid p {
+	color: red;
+}
+
+.form-control--invalid input,
+.form-control--invalid textarea {
+	border-color: red;
+	background: #ffd1d1;
+}
+
+@media (max-width: 768px) {
+	.form-control textarea {
+		font-size: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.form-control textarea {
+		font-size: 80%;
+	}
+}
+
+@media (max-width: 320px) {
+	.form-control textarea {
+		font-size: 60%;
+	}
+}

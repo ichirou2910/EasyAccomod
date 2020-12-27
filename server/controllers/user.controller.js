@@ -161,41 +161,6 @@ const getById = async (req, res, next) => {
 	res.json(user);
 };
 
-const getByName = async (req, res, next) => {
-	let users;
-	try {
-		users = await User.find({ realname: req.body.realname }, '-password');
-	} catch (err) {
-		res.status(500).json({ message: 'Fetch failed' });
-		return next(err);
-	}
-
-	if (!users) {
-		res.status(404).json({ message: 'User not found' });
-		return;
-	}
-
-	res.json(users[0]);
-};
-
-const avatarByName = async (req, res, next) => {
-	let users;
-	try {
-		users = await User.find({ realname: req.params.realname });
-	} catch (err) {
-		res.status(500).json({ message: 'Fetch failed' });
-		return next(err);
-	}
-
-	if (!users) {
-		res.status(404).json({ message: 'User not found' });
-		return;
-	}
-
-	const { avatar } = users[0];
-	res.json(avatar);
-};
-
 const update = async (req, res, next) => {
 	// Prevent other people update your profile
 	if (req.params.user_id !== req.userData.user_id) {
@@ -228,7 +193,7 @@ const update = async (req, res, next) => {
 		}
 	}
 
-	console.log(req.body);
+	// console.log(req.body);
 
 	if (req.body.realname) {
 		user.realname = req.body.realname;
@@ -279,7 +244,5 @@ exports.register = register;
 exports.login = login;
 exports.getAll = getAll;
 exports.getById = getById;
-exports.getByName = getByName;
-exports.avatarByName = avatarByName;
 exports.update = update;
 exports.delete = _delete;

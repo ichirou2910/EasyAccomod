@@ -147,9 +147,6 @@ const Auth = () => {
 
 	return (
 		<>
-			<Helmet>
-				<title>{'Bloggit - Authenticate'}</title>
-			</Helmet>
 			<Card
 				className="authentication card--lighter"
 				style={{

@@ -1,0 +1,11 @@
+.user-form__name {
+	color: var(--light-secondary-color);
+	font-size: 200%;
+	margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+	.user-form__name {
+		font-size: 150%;
+	}
+}

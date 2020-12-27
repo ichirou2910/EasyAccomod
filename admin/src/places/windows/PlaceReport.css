@@ -1,0 +1,8 @@
+.place-report h2 {
+	margin: 0.5rem 0;
+}
+
+.place-report__submit {
+	display: flex;
+	justify-content: flex-end;
+}
