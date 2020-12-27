@@ -13,6 +13,10 @@ const ChatSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	date: {
+		type: Date,
+		required: true,
+	},
 });
 
 const Chat = mongoose.model('Chat', ChatSchema);
