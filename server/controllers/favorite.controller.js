@@ -44,6 +44,14 @@ const add = async (req, res, next) => {
 	const favorite = new Favorite({
 		user_id: req.body.user_id,
 		place_id: req.body.place_id,
+		title: req.body.title,
+		ward: req.body.ward,
+		district: req.body.district,
+		city: req.body.city,
+		price: req.body.price,
+		priceType: req.body.priceType,
+		area: req.body.area,
+		roomNum: req.body.roomNum,
 	});
 
 	try {

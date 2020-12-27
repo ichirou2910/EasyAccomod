@@ -8,6 +8,38 @@ const FavoriteSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	title: {
+		type: String, 
+		required: true,
+	},
+	ward: {
+		type: String, 
+		required: true,
+	},
+	district: {
+		type: String, 
+		required: true,
+	},
+	city: {
+		type: String, 
+		required: true,
+	},
+	price: {
+		type: Number,
+		required: true,
+	},
+	priceType: {
+		type: String,
+		required: true,
+	},
+	area: {
+		type: Number,
+		required: true,
+	},
+	roomNum: {
+		type: Number,
+		required: true,
+	},
 });
 
 const Favorite = mongoose.model('Favorite', FavoriteSchema);
