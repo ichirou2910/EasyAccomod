@@ -117,18 +117,15 @@ const confirm = async (req, res, next) => {
 	res.status(200).json(place);
 };
 
-const getUnapprovedUser = async (req, res, next) => {
+const getUser = async (req, res, next) => {
 	let users;
 
-	let filter = {
-		status: false,
-	};
+	let filter = { user_type: 'Owner' };
 
 	if (req.userData.user_type !== 'Admin') {
 		res.status(401).json({ message: 'You are not authorized to use this' });
 		return;
 	}
-
 	if (req.query.username) {
 		filter['username'] = req.query.username;
 	}
@@ -144,9 +141,14 @@ const getUnapprovedUser = async (req, res, next) => {
 	if (req.query.phone) {
 		filter['phone'] = req.query.phone;
 	}
-	if (req.query.user_type) {
-		filter['user_type'] = req.query.user_type;
+	if (req.query.status === 0 || req.query.status) {
+		filter['status'] = req.query.status == 1 ? true : false;
 	}
+	if (req.query.update_permit === 0 || req.query.update_permit) {
+		filter['update_permit'] = req.query.update_permit == 1 ? true : false;
+	}
+
+	console.log(filter);
 
 	try {
 		users = await User.find(filter);
@@ -245,7 +247,7 @@ exports.permit_account = permit_account;
 exports.permit_update = permit_update;
 exports.confirm = confirm;
 exports.confirmExtend = confirmExtend;
-exports.getUnapprovedUser = getUnapprovedUser;
+exports.getUnapprovedUser = getUser;
 exports.getUnapprovedPlaces = getUnapprovedPlaces;
 exports._deletePlace = _deletePlace;
 exports._deleteReport = _deleteReport;
