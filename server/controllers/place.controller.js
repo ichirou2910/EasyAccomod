@@ -165,7 +165,7 @@ const create = async (req, res, next) => {
 	if (req.body.user_id !== req.userData.user_id) {
 		res.status(401).json({ message: 'Authorization failed' });
 		return;
-	} else if (req.userData.user_type !== 'Owner') {
+	} else if (req.userData.user_type === 'Renter') {
 		res
 			.status(401)
 			.json({ message: 'You are not allowed to create new place' });

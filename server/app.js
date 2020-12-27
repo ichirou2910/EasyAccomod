@@ -104,9 +104,12 @@ io.on('connection', (socket) => {
 	*/
 	socket.on('notification', (data) => {
 		let noti = new Notice({
-			user_id: data.user_id,
+			user_id: data.context_id,
 			description: data.description,
 			date: Date.now(),
+			context: data.context,
+			mark: false,
+			value: data.value
 		});
 		noti.save();
 		socket.emit('notiClient', data);

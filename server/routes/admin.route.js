@@ -12,7 +12,8 @@ router.post('/grant_update', adminController.permit_update);
 router.post('/grant_account', adminController.permit_account);
 router.post('/confirm_extend', adminController.confirmExtend);
 router.post('/confirm_place', adminController.confirm);
-router.delete('/place/:place_id', adminController._deletePlace);
-router.delete('/user/:report_id', adminController._deleteReport);
+router.post('/comments/confirm/:comment_id');
+router.delete('/delete/:place_id', adminController._deletePlace);
+router.delete('/delete/:report_id', adminController._deleteReport);
 
 module.exports = router;
