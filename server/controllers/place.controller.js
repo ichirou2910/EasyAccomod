@@ -239,6 +239,10 @@ const create = async (req, res, next) => {
 
 	place.timeRemain = place.time * timeType;
 
+	if (req.userData.user_type === "Admin") {
+		place.status = true;
+	}
+
 	req.files.map((item) => {
 		place.images = [...place.images, item.path];
 	});
