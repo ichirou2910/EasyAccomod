@@ -128,19 +128,19 @@ app.use('/api/chat', require('./routes/chat.route'));
 app.use('/api/admin', require('./routes/admin.route'));
 // app.use('/api/comment', require('./routes/comment.route'));
 
-// app.use((req, res, next) => {
-// 	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-// });
+app.use((req, res, next) => {
+	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
 
-// app.use((error, req, res, next) => {
-// 	if (req.file) {
-// 		fs.unlink(req.file.path, (err) => {
-// 			console.log(err);
-// 		});
-// 	}
-// 	res.status(error.code || 500);
-// 	res.json({ message: error.message || 'An error occured!' });
-// });
+app.use((error, req, res, next) => {
+	if (req.file) {
+		fs.unlink(req.file.path, (err) => {
+			console.log(err);
+		});
+	}
+	res.status(error.code || 500);
+	res.json({ message: error.message || 'An error occured!' });
+});
 
 const PORT = process.env.PORT || 5000;
 
