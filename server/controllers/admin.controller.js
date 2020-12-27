@@ -2,6 +2,7 @@ const db = require('../helpers/db');
 const Place = db.Place;
 const User = db.User;
 const Report = db.Report;
+const Comment = db.Comment;
 
 const permit_update = async (req, res, next) => {
 	if (req.userData.user_type !== 'Admin') {
@@ -240,6 +241,18 @@ const _deleteReport = async (req, res, next) => {
 	await report.deleteOne(report);
 	res.status(201).json({});
 };
+
+const approveComment = async (req, res, next) => {
+	let cmt;
+	try {
+		cmt = await Comment.findById(req.params.comment_id);
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	
+}
 
 exports.permit_account = permit_account;
 exports.permit_update = permit_update;
