@@ -251,7 +251,20 @@ const approveComment = async (req, res, next) => {
 		return next(err);
 	}
 
-	
+	if (req.userData.user_type !== "Admin") {
+		res.status(401).json({ message: 'You are not an Admin!' });
+		return;
+	}
+
+	cmt.status = true;
+
+	try {
+		await cmt.save();
+	} catch (err) {
+		res.status(500).json({ message: 'Confirm comment status failed' });
+		return next(err);
+	}
+	res.status(200).json(cmt);
 }
 
 exports.permit_account = permit_account;
@@ -263,3 +276,4 @@ exports.getUnapprovedPlaces = getUnapprovedPlaces;
 exports._deletePlace = _deletePlace;
 exports._deleteReport = _deleteReport;
 exports.getAll = getAll;
+exports.approveComment = approveComment;
