@@ -10,15 +10,15 @@ import {
 	FaHeart,
 	FaPhone,
 	FaEnvelope,
-	FaCheck,
 	FaTimes,
-	FaChartBar,
+	FaCheck,
 } from 'react-icons/fa';
 
 import PlaceReport from '../windows/PlaceReport';
 import PlaceStats from '../windows/PlaceStats';
 import PlaceExtend from '../windows/PlaceExtend';
 import PlaceMenu from '../components/PlaceMenu';
+import CommentList from '../components/CommentList';
 import Button from '../../shared/components/FormElements/Button';
 import Avatar from '../../shared/components/UIElements/Avatar';
 import Carousel from '../../shared/components/UIElements/Carousel';
@@ -39,6 +39,9 @@ const extendModal = {
 
 const PlacePage = () => {
 	const [place, setPlace] = useState({});
+	const [comments, setComments] = useState([]);
+
+	const [rented, setRented] = useState(true);
 	const [showReport, setShowReport] = useState(false);
 	const [showStats, setShowStats] = useState(false);
 	const [showExtend, setShowExtend] = useState(false);
@@ -75,7 +78,20 @@ const PlacePage = () => {
 		alert('Phone number copied!');
 	};
 
-	const sendReportHandler = () => {};
+	const rentedHandler = () => {
+		try {
+			sendRequest(
+				`${process.env.REACT_APP_API_URL}/place/rented/${placeId}`,
+				'POST',
+				null,
+				{
+					Authorization: 'Bearer ' + auth.token,
+				}
+			).then(setRented(true));
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	useEffect(() => {
 		const fetchInfo = async () => {
@@ -89,6 +105,7 @@ const PlacePage = () => {
 					}
 				);
 				setPlace(placeData);
+				setRented(placeData.rented);
 			} catch (err) {
 				console.log(err);
 			}
@@ -118,7 +135,7 @@ const PlacePage = () => {
 							text="Edit Place"
 						/>
 					)}
-				{!isLoading && place && (
+				{!isLoading && place && comments && (
 					<>
 						{auth.loginInfo.user_type === 'Renter' && (
 							<Modal
@@ -128,7 +145,10 @@ const PlacePage = () => {
 								contentClass="place-page__modal-content"
 								footerClass="place-page__modal-actions"
 							>
-								<PlaceReport placeId={placeId} />
+								<PlaceReport
+									placeId={placeId}
+									exit={() => setShowReport(false)}
+								/>
 							</Modal>
 						)}
 						{auth.loginInfo.user_type === 'Owner' &&
@@ -160,33 +180,58 @@ const PlacePage = () => {
 								</>
 							)}
 						{auth.loginInfo.user_type === 'Renter' && (
-							<PlaceMenu placeId={placeId} report={() => setShowReport(true)} />
+							<PlaceMenu place={place} report={() => setShowReport(true)} />
 						)}
 						<Carousel carouselItems={place.images} />
 						<div className="place-page__content-section base-view">
 							<div className="place-page__header">
-								{place.status ? (
-									<span
-										style={{
-											color: '#28a745',
-											cursor: 'pointer',
-										}}
-										onClick={() => setShowExtend(true)}
-									>
-										<FaCheck />{' '}
-										<em>
-											<strong>Verified</strong>, available for{' '}
-											<strong>{place.timeRemain} day(s)</strong> left
-										</em>
-									</span>
-								) : (
-									<span
-										style={{
-											color: '#dc3545',
-										}}
-									>
-										<FaTimes /> <em>Not verified</em>
-									</span>
+								{auth.loginInfo.user_type === 'Owner' && (
+									<>
+										{place.status ? (
+											<span
+												style={{
+													color: '#28a745',
+													cursor: 'pointer',
+												}}
+												onClick={() => setShowExtend(true)}
+											>
+												<FaCheck />{' '}
+												<em>
+													<strong>Verified</strong>, available for{' '}
+													<strong>{place.timeRemain} day(s)</strong> left
+												</em>
+											</span>
+										) : (
+											<span
+												style={{
+													color: '#dc3545',
+												}}
+											>
+												<FaTimes /> <em>Not verified</em>
+											</span>
+										)}
+										{rented ? (
+											<>
+												<br />
+												<span
+													style={{
+														color: '#17a2b8',
+													}}
+												>
+													<FaCheck />{' '}
+													<em>
+														<strong>Rented</strong>
+													</em>
+												</span>
+											</>
+										) : (
+											<>
+												<br />
+												<br />
+												<Button onClick={rentedHandler}>Mark as Rented</Button>
+											</>
+										)}
+									</>
 								)}
 								<h2>{place.title}</h2>
 								{/* <p>{place.address}</p> */}
@@ -197,13 +242,24 @@ const PlacePage = () => {
 									<em>{place.roomType}</em>
 								</span>
 								<p>
-									<span
-										style={{ color: '#2d6a64', cursor: 'pointer' }}
-										onClick={() => setShowStats(true)}
-									>
-										<FaEye />{' '}
-									</span>
-									{place.views}
+									{auth.loginInfo.user_type === 'Owner' ? (
+										<>
+											<span
+												style={{ color: '#2d6a64', cursor: 'pointer' }}
+												onClick={() => setShowStats(true)}
+											>
+												<FaEye />{' '}
+											</span>
+											{place.views}
+										</>
+									) : (
+										<>
+											<span style={{ color: '#2d6a64' }}>
+												<FaEye />{' '}
+											</span>
+											{place.views}
+										</>
+									)}
 									<span style={{ color: '#dc3545' }}>
 										<FaHeart />{' '}
 									</span>
@@ -313,41 +369,46 @@ const PlacePage = () => {
 								</ul>
 							</div>
 							<hr />
-							<h2>
-								<strong>Contact</strong>
-							</h2>
-							<div className="place-page__contact">
-								<Avatar
-									medium
-									image={`${process.env.REACT_APP_HOST_URL}/${place.avatar}`}
-									alt={`${place.owner}'s avatar`}
-								/>
-								<div className="place-page__info">
-									<p>{place.owner}</p>
-									<div>
-										<Button
-											onClick={callHandler}
-											style={{
-												backgroundColor: '#28a745',
-												borderColor: '#28a745',
-											}}
-										>
-											<FaPhone />
-										</Button>
-										<Button
-											newtab
-											href={`mailto:${place.email}?subject=${place.title}`}
-											style={{
-												backgroundColor: '#dc3545',
-												borderColor: '#dc3545',
-											}}
-										>
-											<FaEnvelope />
-										</Button>
+							{auth.loginInfo.user_type === 'Renter' && (
+								<>
+									<h2>
+										<strong>Contact</strong>
+									</h2>
+									<div className="place-page__contact">
+										<Avatar
+											medium
+											image={`${process.env.REACT_APP_HOST_URL}/${place.avatar}`}
+											alt={`${place.owner}'s avatar`}
+										/>
+										<div className="place-page__info">
+											<p>{place.owner}</p>
+											<div>
+												<Button
+													onClick={callHandler}
+													style={{
+														backgroundColor: '#28a745',
+														borderColor: '#28a745',
+													}}
+												>
+													<FaPhone />
+												</Button>
+												<Button
+													newtab
+													href={`mailto:${place.email}?subject=${place.title}`}
+													style={{
+														backgroundColor: '#dc3545',
+														borderColor: '#dc3545',
+													}}
+												>
+													<FaEnvelope />
+												</Button>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
+								</>
+							)}
 						</div>
+						<CommentList disabled placeId={placeId} />
 					</>
 				)}
 			</div>

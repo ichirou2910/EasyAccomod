@@ -44,9 +44,13 @@ const PlaceExtend = (props) => {
 			sendRequest(
 				`${process.env.REACT_APP_API_URL}/place/extend/${props.placeId}`,
 				'POST',
-				formData,
+				JSON.stringify({
+					time: formState.inputs.time.value,
+					timeType: formState.inputs.timeType.value,
+				}),
 				{
 					Authorization: 'Bearer ' + auth.token,
+					'Content-Type': 'application/json',
 				}
 			);
 		} catch (err) {
@@ -85,6 +89,21 @@ const PlaceExtend = (props) => {
 						onInput={inputHandler}
 					/>
 				</div>
+				<em style={{ color: '#fff' }}>
+					Fee:{' '}
+					{20000 *
+						formState.inputs.time.value *
+						(formState.inputs.timeType.value === 'week'
+							? 7
+							: formState.inputs.timeType.value === 'month'
+							? 30
+							: formState.inputs.timeType.value === 'quarter'
+							? 90
+							: 360)}{' '}
+					VND
+				</em>
+				<br />
+				<br />
 				<Button type="submit" disabled={!formState.isValid}>
 					Request
 				</Button>

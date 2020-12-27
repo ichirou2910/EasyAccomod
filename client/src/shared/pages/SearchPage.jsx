@@ -10,7 +10,7 @@ import Button from '../components/FormElements/Button';
 import './SearchPage.css';
 import { FaFilter } from 'react-icons/fa';
 
-const SearchPage = () => {
+const SearchPage = (props) => {
 	const [placeList, setPlaceList] = useState([]);
 	const [filterOpen, setFilterOpen] = useState(true);
 
@@ -110,7 +110,7 @@ const SearchPage = () => {
 
 	useEffect(() => {
 		const fetchInfo = async () => {
-			if (auth.loginInfo.user_type === 'Renter') {
+			if (auth.loginInfo.user_type === 'Renter' && !props.all) {
 				try {
 					const placeData = await sendRequest(
 						`${process.env.REACT_APP_API_URL}/favorite/${auth.loginInfo.user_id}`,
@@ -120,11 +120,14 @@ const SearchPage = () => {
 							Authorization: 'Bearer ' + auth.token,
 						}
 					);
+					placeData.map((item) => {
+						item._id = item.place_id;
+					});
 					setPlaceList(placeData);
 				} catch (err) {
 					console.log(err);
 				}
-			} else if (auth.loginInfo.user_type === 'Owner') {
+			} else if (auth.loginInfo.user_type === 'Owner' || props.all) {
 				try {
 					const placeData = await sendRequest(
 						`${process.env.REACT_APP_API_URL}/place`,

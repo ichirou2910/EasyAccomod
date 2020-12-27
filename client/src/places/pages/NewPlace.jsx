@@ -215,6 +215,19 @@ const NewPlace = () => {
 							onInput={inputHandler}
 						/>
 					</div>
+					<em style={{ color: '#fff' }}>
+						Fee:{' '}
+						{20000 *
+							formState.inputs.time.value *
+							(formState.inputs.timeType.value === 'week'
+								? 7
+								: formState.inputs.timeType.value === 'month'
+								? 30
+								: formState.inputs.timeType.value === 'quarter'
+								? 90
+								: 360)}{' '}
+						VND
+					</em>
 				</div>
 				<div className="place-form__group">
 					<h3>Room Info</h3>
@@ -356,8 +369,8 @@ const NewPlace = () => {
 						validators={[]}
 						onInput={inputHandler}
 						options={[
-							{ opt: 'shared', label: 'Shared' },
-							{ opt: 'closed', label: 'Closed' },
+							{ opt: 'Shared', label: 'Shared' },
+							{ opt: 'Closed', label: 'Closed' },
 						]}
 						initialValue={'shared'}
 						initialValid={true}
@@ -369,9 +382,9 @@ const NewPlace = () => {
 						validators={[]}
 						onInput={inputHandler}
 						options={[
-							{ opt: 'shared', label: 'Shared' },
-							{ opt: 'person', label: 'Personal' },
-							{ opt: 'None', label: 'No cooking' },
+							{ opt: 'Shared', label: 'Shared' },
+							{ opt: 'Personal', label: 'Personal' },
+							{ opt: 'No cooking', label: 'No cooking' },
 						]}
 						initialValue={'shared'}
 						initialValid={true}

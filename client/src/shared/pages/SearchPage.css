@@ -85,3 +85,11 @@
 		margin-top: calc(var(--nav-height) + 1rem);
 	}
 }
+
+@media (max-width: 768px) {
+	.search__result .place-list {
+		width: 90%;
+		margin: 0 auto;
+		margin-top: calc(var(--nav-height) + 1rem);
+	}
+}

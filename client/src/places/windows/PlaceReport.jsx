@@ -49,7 +49,7 @@ const PlaceReport = (props) => {
 					Authorization: 'Bearer ' + auth.token,
 					'Content-Type': 'application/json',
 				}
-			).then(() => console.log('Report sent'));
+			).then(props.exit);
 		} catch (err) {
 			console.log(err);
 		}

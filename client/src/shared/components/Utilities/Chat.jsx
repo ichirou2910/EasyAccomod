@@ -34,7 +34,7 @@ const Chat = () => {
 		false
 	);
 
-	const { isLoading, error, sendRequest } = useHttpClient();
+	const { isLoading, sendRequest } = useHttpClient();
 
 	const auth = useContext(AuthContext);
 
@@ -56,7 +56,7 @@ const Chat = () => {
 
 	useEffect(() => {
 		socket.on('toClient', (data) => {
-			setMessages(messages.concat(data));
+			setMessages([data, ...messages]);
 		});
 		return () => {
 			socket.off('toClient');
@@ -85,15 +85,6 @@ const Chat = () => {
 	return (
 		<div className="chat">
 			<h2>Messages</h2>
-			<div className="chat__messages">
-				{!isLoading && messages && (
-					<ul>
-						{messages.map((item, index) => {
-							return <Message key={index} msg={item} />;
-						})}
-					</ul>
-				)}
-			</div>
 			<div className="chat__input">
 				<form onSubmit={submitHandler}>
 					<Input
@@ -105,6 +96,15 @@ const Chat = () => {
 					/>
 					<Button type="submit">SEND</Button>
 				</form>
+			</div>
+			<div className="chat__messages">
+				{!isLoading && messages && (
+					<ul>
+						{messages.map((item, index) => {
+							return <Message key={index} msg={item} />;
+						})}
+					</ul>
+				)}
 			</div>
 		</div>
 	);
