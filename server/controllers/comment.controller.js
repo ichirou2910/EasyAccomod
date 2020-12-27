@@ -2,37 +2,38 @@ const db = require('../helpers/db');
 const Comment = db.Comment;
 
 const getById = async (req, res, next) => {
-	let comment;
+	let comments;
 	try {
-		comment = await Comment.findById(req.params.place_id);
+		comments = await Comment.find({ place_id: req.params.place_id });
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
 	}
 
-	if (!comment) {
-		res.status(404).json({ message: 'Comment not found' });
+	if (!comments) {
+		res.status(404).json({ message: 'Comments not found' });
 		return;
 	}
 
-	res.json(place);
+	res.status(201).json(comments);
 };
 
 const addComment = async (req, res, next) => {
-    if (!req.userData.user_id && req.userData.user_type === "Admin") {
-		res.status(404).json({ message: 'You are not allowed to do this' });
+	console.log(req.body);
+	if (!req.userData.user_id && req.userData.user_type !== 'Renter') {
+		res.status(401).json({ message: 'You are not allowed to do this' });
 		return;
-    }
-    
-    const cmt = new Comment({
-        user_id: req.userData.user_id,
-        user_type: req.userData.user_type,
-        place_id: req.body.place_id,
-        content: req.body.content,
-        date: Date.now()
-    })
+	}
 
-    try {
+	const cmt = new Comment({
+		username: req.body.username,
+		place_id: req.params.place_id,
+		content: req.body.content,
+		rating: parseInt(req.body.rating),
+		date: Date.now(),
+	});
+
+	try {
 		await cmt.save();
 	} catch (err) {
 		res.status(500).json({ message: 'Comment creating failed' });
@@ -41,7 +42,7 @@ const addComment = async (req, res, next) => {
 	}
 
 	res.status(200).json(cmt);
-}
+};
 
 const _delete = async (req, res, next) => {
 	let cmt;

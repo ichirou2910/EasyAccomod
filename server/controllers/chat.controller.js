@@ -9,7 +9,9 @@ const getByOwnerID = async (req, res, next) => {
 
 	let chats;
 	try {
-		chats = await Chat.find({ owner_id: req.params.user_id });
+		chats = await Chat.find({ owner_id: req.params.user_id }).sort({
+			date: -1,
+		});
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);

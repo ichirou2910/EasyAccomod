@@ -1,26 +1,26 @@
 const mongoose = require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
-    user_id: {
-        type: String,
-        required: true,
-    },
-    user_type: {
-        type: String,
-        required: true,
-    },
-    place_id: {
-        type: String,
-        required: true,
-    },
-    content: {
-        type: String,
-        required: true,
-    },
-    date: {
-        type: Date,
-        required: true,
-    }
+	username: {
+		type: String,
+		required: true,
+	},
+	place_id: {
+		type: String,
+		required: true,
+	},
+	content: {
+		type: String,
+		required: true,
+	},
+	rating: {
+		type: Number,
+		required: true,
+	},
+	date: {
+		type: Date,
+		required: true,
+	},
 });
 
 const Comment = mongoose.model('Comment', CommentSchema);

@@ -86,15 +86,17 @@ io.on('connection', (socket) => {
 			user_type: data.user_type,
 			owner_id: data.owner_id,
 			content: data.content,
+			date: Date.now(),
 		});
 		let send = new Chat({
 			user_type: 'Admin',
 			owner_id: data.owner_id,
 			content: data.content,
+			date: Date.now(),
 		});
 		await recv.save();
 		await send.save();
-		socket.emit('toClient', [recv, send]);
+		socket.emit('toClient', [send, recv]);
 	});
 	// How notification works
 	/*
@@ -129,7 +131,7 @@ app.use('/api/place', require('./routes/place.route'));
 app.use('/api/notice', require('./routes/notice.route'));
 app.use('/api/chat', require('./routes/chat.route'));
 app.use('/api/admin', require('./routes/admin.route'));
-// app.use('/api/comment', require('./routes/comment.route'));
+app.use('/api/comment', require('./routes/comment.route'));
 
 app.use((req, res, next) => {
 	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
