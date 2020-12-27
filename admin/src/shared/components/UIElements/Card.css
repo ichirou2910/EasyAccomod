@@ -18,3 +18,9 @@
 .card--active {
 	background-color: var(--accent-color);
 }
+
+@media (max-width: 625px) {
+	.card {
+		padding: 0.5rem;
+	}
+}

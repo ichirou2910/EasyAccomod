@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useForm } from '../../shared/hooks/form-hook';
+import { socket } from '../../App';
 
 import './PlaceExtend.css';
 import Input from '../../shared/components/FormElements/Input';
@@ -32,6 +33,16 @@ const PlaceExtend = (props) => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 
+		const newTime =
+			formState.inputs.time.value *
+			(formState.inputs.timeType.value === 'week'
+				? 7
+				: formState.inputs.timeType.value === 'month'
+				? 30
+				: formState.inputs.timeType.value === 'quarter'
+				? 90
+				: 360);
+
 		try {
 			const formData = new FormData();
 			formData.append('time', formState.inputs.time.value);
@@ -53,6 +64,16 @@ const PlaceExtend = (props) => {
 					'Content-Type': 'application/json',
 				}
 			);
+
+			const noti = {
+				user_id: auth.loginInfo.user_id,
+				context_id: props.placeId,
+				value: newTime,
+				description: 'Available Time extension request',
+				context: 'Time Extension',
+			};
+
+			socket.emit('notifyAdmin', noti);
 		} catch (err) {
 			console.log(err);
 		}

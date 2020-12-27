@@ -106,7 +106,7 @@ const CommentList = (props) => {
 			{!isLoading && comments && (
 				<>
 					{comments.length === 0 ? (
-						<p className="comment-list__empty">Be the first one to comment</p>
+						<p className="comment-list__empty">No comment</p>
 					) : (
 						<ul className="comment-list__content">
 							{comments.map((item, index) => {

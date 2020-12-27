@@ -23,12 +23,12 @@ const Notification = () => {
 	const auth = useContext(AuthContext);
 
 	useEffect(() => {
-		socket.on('notiClient', (data) => {
+		socket.on('sendtoClient', (data) => {
 			setNotices([...notices, data]);
 		});
 
 		return () => {
-			socket.off('notification');
+			socket.off('sendtoClient');
 		};
 	});
 
@@ -36,7 +36,7 @@ const Notification = () => {
 		const fetchInfo = async () => {
 			try {
 				const data = await sendRequest(
-					`${process.env.REACT_APP_API_URL}/notice/${auth.loginInfo.user_id}`,
+					`${process.env.REACT_APP_API_URL}/notice/user/${auth.loginInfo.user_id}`,
 					'GET',
 					null,
 					{

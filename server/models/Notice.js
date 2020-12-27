@@ -1,6 +1,18 @@
 const mongoose = require('mongoose');
 
 const NoticeSchema = new mongoose.Schema({
+	count: {
+		type: Number,
+		required: false,
+	},
+	user_id: {
+		type: String,
+		required: false,
+	},
+	user_type: {
+		type: String,
+		required: false,
+	},
 	context_id: {
 		type: String,
 		required: true,
@@ -23,8 +35,8 @@ const NoticeSchema = new mongoose.Schema({
 	},
 	value: {
 		type: Number,
-		required: false
-	}
+		required: false,
+	},
 });
 
 const Notice = mongoose.model('Notice', NoticeSchema);

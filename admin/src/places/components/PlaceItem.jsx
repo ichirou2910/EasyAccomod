@@ -19,7 +19,9 @@ const PlaceItem = (props) => {
 				</div>
 				<div className="place-item__info">
 					<h2>
-						<Link to={`/place/${props.place._id}`}>{props.place.title}</Link>
+						<Link to={`/admin/place/${props.place._id}`}>
+							{props.place.title}
+						</Link>
 					</h2>
 					<p>
 						{props.place.ward}, {props.place.district}, {props.place.city}
@@ -29,6 +31,7 @@ const PlaceItem = (props) => {
 						{props.place.priceType}/{props.place.period} - {props.place.area} m2
 						- {props.place.roomNum} RMs
 					</p>
+					<em>{props.place.date}</em>
 				</div>
 			</Card>
 		</li>

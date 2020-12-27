@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Helmet } from 'react-helmet';
+import { useParams } from 'react-router-dom';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 
@@ -16,12 +17,13 @@ const UserPage = () => {
 	const { isLoading, error, sendRequest } = useHttpClient();
 
 	const auth = useContext(AuthContext);
+	const userId = useParams().userId;
 
 	useEffect(() => {
 		const fetchInfo = async () => {
 			try {
 				const infoData = await sendRequest(
-					`${process.env.REACT_APP_API_URL}/user/${auth.loginInfo.user_id}`,
+					`${process.env.REACT_APP_API_URL}/user/${userId}`,
 					'GET',
 					null,
 					{

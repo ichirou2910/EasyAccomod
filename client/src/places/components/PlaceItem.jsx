@@ -29,6 +29,7 @@ const PlaceItem = (props) => {
 						{props.place.priceType}/{props.place.period} - {props.place.area} m2
 						- {props.place.roomNum} RMs
 					</p>
+					<em>{props.place.date}</em>
 				</div>
 			</Card>
 		</li>

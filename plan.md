@@ -64,9 +64,5 @@
 
 - Account verification (Admin side)
 - Place edit, extend permission (Admin side)
-- Place status update function (Client side)
+- Place comments (admin's verification)
 - Notification (admin)
-- Add to favorite (renter)
-- Review, comment (frontend)
-- Report (frontend)
-

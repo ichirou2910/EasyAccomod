@@ -11,6 +11,18 @@ const ImageUpload = (props) => {
 
 	const filePickerRef = useRef();
 
+	// useEffect(() => {
+	// 	setPreviewUrls([]);
+	// 	if (props.initialValue) {
+	// 		props.initialValue.map((item, index) => {
+	// 			setPreviewUrls([
+	// 				...previewUrls,
+	// 				`${process.env.REACT_APP_HOST_URL}/${item}`,
+	// 			]);
+	// 		});
+	// 	}
+	// }, [props.initialValue]);
+
 	useEffect(() => {
 		if (!files) {
 			return;

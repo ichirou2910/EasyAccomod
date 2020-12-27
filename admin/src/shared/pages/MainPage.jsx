@@ -25,7 +25,7 @@ const MainPage = () => {
 						<Auth />
 					) : (
 						<div className="main-page__actions">
-							<a href="/admin">Get Started</a>
+							<a href="/admin/user">Get Started</a>
 						</div>
 					)}
 				</div>

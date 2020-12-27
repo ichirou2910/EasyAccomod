@@ -1,0 +1,13 @@
+.admin-noti {
+	width: 100%;
+	color: var(--primary-text);
+}
+
+.admin-noti ul {
+	list-style-type: none;
+	padding: 0 0.25rem;
+}
+
+.admin-noti li {
+	margin: 0.25rem 0;
+}

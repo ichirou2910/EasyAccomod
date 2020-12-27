@@ -57,6 +57,8 @@ const io = socketIo(server, {
 	},
 });
 
+let notiCount = 1;
+
 io.on('connection', (socket) => {
 	// console.log('connect to a socket');
 	// Object data in details
@@ -102,17 +104,35 @@ io.on('connection', (socket) => {
 		- Server will catch that, save notification data and emit 'notiClient'
 		- The Admin will listen to 'notiClient', fetch api getByRecvId to display all notifications according to that Admin's id
 	*/
-	socket.on('notification', (data) => {
+	socket.on('notifyAdmin', async (data) => {
 		let noti = new Notice({
-			user_id: data.context_id,
+			count: notiCount,
+			user_id: data.user_id,
+			context_id: data.context_id,
 			description: data.description,
 			date: Date.now(),
 			context: data.context,
 			mark: false,
-			value: data.value
+			value: data.value,
 		});
-		noti.save();
-		socket.emit('notiClient', data);
+		notiCount++;
+		await noti.save();
+		io.sockets.emit('sendtoAdmin', noti);
+	});
+
+	socket.on('notifyClient', async (data) => {
+		let noti = new Notice({
+			count: 0,
+			user_type: 'Admin',
+			user_id: data.user_id,
+			context_id: data.context_id,
+			description: data.description,
+			date: Date.now(),
+			context: data.context,
+			value: data.value,
+		});
+		await noti.save();
+		io.sockets.emit('sendtoClient', noti);
 	});
 });
 

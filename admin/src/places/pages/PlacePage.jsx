@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
-// import { socket } from '../../App';
 
 import {
 	FaEye,
@@ -50,23 +49,6 @@ const PlacePage = () => {
 
 	const auth = useContext(AuthContext);
 	const placeId = useParams().placeId;
-
-	// useEffect(() => {
-	// 	socket.emit('init_data');
-	// 	socket.on('get_data', (data) => {
-	// 		setViews(data.views);
-	// 		setFavorites(data.likes);
-	// 	});
-	// 	socket.on('change_data', () => {
-	// 		socket.emit('init_data');
-	// 	});
-	// 	socket.emit('inc_view');
-
-	// 	return () => {
-	// 		socket.off('get_data');
-	// 		socket.off('change_data');
-	// 	};
-	// }, []);
 
 	const callHandler = () => {
 		let dummyNumber = document.createElement('input');
@@ -185,7 +167,7 @@ const PlacePage = () => {
 						<Carousel carouselItems={place.images} />
 						<div className="place-page__content-section base-view">
 							<div className="place-page__header">
-								{auth.loginInfo.user_type === 'Owner' && (
+								{auth.loginInfo.user_type !== 'Renter' && (
 									<>
 										{place.status ? (
 											<span
@@ -210,27 +192,30 @@ const PlacePage = () => {
 												<FaTimes /> <em>Not verified</em>
 											</span>
 										)}
-										{rented ? (
-											<>
-												<br />
-												<span
-													style={{
-														color: '#17a2b8',
-													}}
-												>
-													<FaCheck />{' '}
-													<em>
-														<strong>Rented</strong>
-													</em>
-												</span>
-											</>
-										) : (
-											<>
-												<br />
-												<br />
-												<Button onClick={rentedHandler}>Mark as Rented</Button>
-											</>
-										)}
+										{auth.loginInfo.user_type === 'Owner' &&
+											(rented ? (
+												<>
+													<br />
+													<span
+														style={{
+															color: '#17a2b8',
+														}}
+													>
+														<FaCheck />{' '}
+														<em>
+															<strong>Rented</strong>
+														</em>
+													</span>
+												</>
+											) : (
+												<>
+													<br />
+													<br />
+													<Button onClick={rentedHandler}>
+														Mark as Rented
+													</Button>
+												</>
+											))}
 									</>
 								)}
 								<h2>{place.title}</h2>
@@ -369,7 +354,7 @@ const PlacePage = () => {
 								</ul>
 							</div>
 							<hr />
-							{auth.loginInfo.user_type === 'Renter' && (
+							{auth.loginInfo.user_type !== 'Owner' && (
 								<>
 									<h2>
 										<strong>Contact</strong>
@@ -408,7 +393,7 @@ const PlacePage = () => {
 								</>
 							)}
 						</div>
-						<CommentList disabled placeId={placeId} />
+						<CommentList placeId={placeId} />
 					</>
 				)}
 			</div>

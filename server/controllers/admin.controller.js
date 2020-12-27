@@ -13,7 +13,7 @@ const permit_update = async (req, res, next) => {
 
 	let target;
 	try {
-		target = await User.findOne({ email: req.body.email }, '-password');
+		target = await User.findById(req.params.user_id, '-password');
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -39,7 +39,7 @@ const permit_account = async (req, res, next) => {
 
 	let target;
 	try {
-		target = await User.findOne({ email: req.body.email }, '-password');
+		target = await User.findById(req.params.user_id, '-password');
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -75,7 +75,7 @@ const confirmExtend = async (req, res, next) => {
 		return;
 	}
 
-	place.timeRemain = place.backupTimeRemain;
+	place.timeRemain += place.backupTimeRemain;
 	place.payToExtend = 0;
 	place.backupTimeRemain = 0;
 
@@ -253,7 +253,7 @@ const approveComment = async (req, res, next) => {
 		return next(err);
 	}
 
-	if (req.userData.user_type !== "Admin") {
+	if (req.userData.user_type !== 'Admin') {
 		res.status(401).json({ message: 'You are not an Admin!' });
 		return;
 	}
@@ -267,7 +267,7 @@ const approveComment = async (req, res, next) => {
 		return next(err);
 	}
 	res.status(200).json(cmt);
-}
+};
 
 exports.permit_account = permit_account;
 exports.permit_update = permit_update;

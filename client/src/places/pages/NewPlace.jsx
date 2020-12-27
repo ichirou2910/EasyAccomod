@@ -8,6 +8,7 @@ import {
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
+import { socket } from '../../App';
 
 import Button from '../../shared/components/FormElements/Button';
 import Input from '../../shared/components/FormElements/Input';
@@ -162,7 +163,16 @@ const NewPlace = () => {
 				{
 					Authorization: 'Bearer ' + auth.token,
 				}
-			).then(() => setEdited(true));
+			).then((res) => {
+				const newNoti = {
+					context_id: res._id,
+					user_id: auth.loginInfo.user_id,
+					description: 'Place Info edited. Verification request.',
+					context: 'Place Verification',
+				};
+				socket.emit('notifyAdmin', newNoti);
+				setEdited(true);
+			});
 		} catch (err) {
 			console.log(err);
 		}
@@ -177,264 +187,276 @@ const NewPlace = () => {
 			<Helmet>
 				<title>{'EasyAccomod - New Place'}</title>
 			</Helmet>
-			<form className="place-form base-view" onSubmit={submitHandler}>
-				{isLoading && <LoadingSpinner asOverlay />}
-				{error && <p>{error}</p>}
-				<div className="place-form__group">
-					<h3>General</h3>
-					<hr />
-					<Input
-						id="title"
-						element="input"
-						type="text"
-						label="Title"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<div className="place-form__pair">
+			{auth.loginInfo.status ? (
+				<form className="place-form base-view" onSubmit={submitHandler}>
+					{isLoading && <LoadingSpinner asOverlay />}
+					{error && <p>{error}</p>}
+					<div className="place-form__group">
+						<h3>General</h3>
+						<hr />
 						<Input
-							id="time"
+							id="title"
+							element="input"
+							type="text"
+							label="Title"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<div className="place-form__pair">
+							<Input
+								id="time"
+								element="input"
+								type="number"
+								label="Available Time"
+								validators={[VALIDATOR_MAXLENGTH(64)]}
+								onInput={inputHandler}
+							/>
+							<Input
+								id="timeType"
+								element="select"
+								options={[
+									{ opt: 'week', label: 'Week(s)' },
+									{ opt: 'month', label: 'Month(s)' },
+									{ opt: 'quarter', label: 'Quarter(s)' },
+									{ opt: 'year', label: 'Year(s)' },
+								]}
+								validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+								initialValue="week"
+								initialValid={true}
+								onInput={inputHandler}
+							/>
+						</div>
+						<em style={{ color: '#fff' }}>
+							Fee:{' '}
+							{20000 *
+								formState.inputs.time.value *
+								(formState.inputs.timeType.value === 'week'
+									? 7
+									: formState.inputs.timeType.value === 'month'
+									? 30
+									: formState.inputs.timeType.value === 'quarter'
+									? 90
+									: 360)}{' '}
+							VND
+						</em>
+					</div>
+					<div className="place-form__group">
+						<h3>Room Info</h3>
+						<hr />
+						<Input
+							id="address"
+							element="input"
+							type="text"
+							label="Address"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<Input
+							id="ward"
+							element="input"
+							type="text"
+							label="Ward/Commune"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<Input
+							id="district"
+							element="input"
+							type="text"
+							label="District/Urban"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<Input
+							id="city"
+							element="input"
+							type="text"
+							label="Province/City"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<Input
+							id="nearby"
+							element="input"
+							type="text"
+							label="Nearby Places"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<div className="place-form__pair">
+							<Input
+								id="roomNum"
+								element="input"
+								type="number"
+								label="Number of Room"
+								validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+								onInput={inputHandler}
+							/>
+							<Input
+								id="roomType"
+								element="select"
+								options={[
+									{ opt: 'Lodging', label: 'Lodging' },
+									{ opt: 'Mini Apartment', label: 'Mini Apartment' },
+									{ opt: 'House', label: 'House' },
+									{ opt: 'Apartment', label: 'Apartment' },
+								]}
+								validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+								onInput={inputHandler}
+								initialValue={'Lodging'}
+								initialValid={true}
+							/>
+						</div>
+						<div className="place-form__pair">
+							<Input
+								id="price"
+								element="input"
+								type="number"
+								label="Pricing (VND)"
+								validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+								onInput={inputHandler}
+								initialValid={true}
+							/>
+							<Input
+								id="priceType"
+								element="select"
+								options={[
+									{ opt: 'K', label: '.000' },
+									{ opt: 'M', label: '.000.000' },
+									{ opt: 'B', label: '.000.000.000' },
+								]}
+								validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+								initialValue="K"
+								initialValid={true}
+								onInput={inputHandler}
+							/>
+						</div>
+						<Input
+							id="period"
+							element="select"
+							label="Pay Period"
+							options={[
+								{ opt: 'mo', label: 'Monthly' },
+								{ opt: 'qt', label: 'Quarterly' },
+								{ opt: 'yr', label: 'Yearly' },
+							]}
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							initialValue="mo"
+							initialValid={true}
+							onInput={inputHandler}
+						/>
+						<Input
+							id="area"
 							element="input"
 							type="number"
-							label="Available Time"
+							label="Area (m2)"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<Input
+							id="shared"
+							element="select"
+							label="Shared with"
+							options={[
+								{ opt: '0', label: 'None' },
+								{ opt: '1', label: '1 other person' },
+								{ opt: '2', label: '2 other people' },
+								{ opt: '3', label: '3 other people' },
+								{ opt: '-1', label: 'More than 3 other people' },
+							]}
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							initialValue="0"
+							initialValid={true}
+							onInput={inputHandler}
+						/>
+					</div>
+					<div className="place-form__group">
+						<h3>Room Facilities</h3>
+						<hr />
+						<Input
+							id="bath"
+							element="select"
+							label="Bathroom"
+							validators={[]}
+							onInput={inputHandler}
+							options={[
+								{ opt: 'Shared', label: 'Shared' },
+								{ opt: 'Closed', label: 'Closed' },
+							]}
+							initialValue={'shared'}
+							initialValid={true}
+						/>
+						<Input
+							id="kitchen"
+							element="select"
+							label="Kitchen"
+							validators={[]}
+							onInput={inputHandler}
+							options={[
+								{ opt: 'Shared', label: 'Shared' },
+								{ opt: 'Personal', label: 'Personal' },
+								{ opt: 'No cooking', label: 'No cooking' },
+							]}
+							initialValue={'shared'}
+							initialValid={true}
+						/>
+						<Input
+							id="ac"
+							element="checkbox"
+							label="Air-conditioner"
+							validators={[]}
+							onInput={inputHandler}
+							initialValue={0}
+							initialValid={true}
+						/>
+						<Input
+							id="balcony"
+							element="checkbox"
+							label="Balcony"
+							validators={[]}
+							onInput={inputHandler}
+							initialValue={0}
+							initialValid={true}
+						/>
+						<Input
+							id="ew" // Elec + Water
+							element="input"
+							type="text"
+							label="Elec/Water"
+							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
+							onInput={inputHandler}
+						/>
+						<Input
+							id="extras"
+							element="textarea"
+							label="Extras"
 							validators={[VALIDATOR_MAXLENGTH(64)]}
 							onInput={inputHandler}
-						/>
-						<Input
-							id="timeType"
-							element="select"
-							options={[
-								{ opt: 'week', label: 'Week(s)' },
-								{ opt: 'month', label: 'Month(s)' },
-								{ opt: 'quarter', label: 'Quarter(s)' },
-								{ opt: 'year', label: 'Year(s)' },
-							]}
-							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-							initialValue="week"
-							initialValid={true}
-							onInput={inputHandler}
-						/>
-					</div>
-					<em style={{ color: '#fff' }}>
-						Fee:{' '}
-						{20000 *
-							formState.inputs.time.value *
-							(formState.inputs.timeType.value === 'week'
-								? 7
-								: formState.inputs.timeType.value === 'month'
-								? 30
-								: formState.inputs.timeType.value === 'quarter'
-								? 90
-								: 360)}{' '}
-						VND
-					</em>
-				</div>
-				<div className="place-form__group">
-					<h3>Room Info</h3>
-					<hr />
-					<Input
-						id="address"
-						element="input"
-						type="text"
-						label="Address"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<Input
-						id="ward"
-						element="input"
-						type="text"
-						label="Ward/Commune"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<Input
-						id="district"
-						element="input"
-						type="text"
-						label="District/Urban"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<Input
-						id="city"
-						element="input"
-						type="text"
-						label="Province/City"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<Input
-						id="nearby"
-						element="input"
-						type="text"
-						label="Nearby Places"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<div className="place-form__pair">
-						<Input
-							id="roomNum"
-							element="input"
-							type="number"
-							label="Number of Room"
-							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-							onInput={inputHandler}
-						/>
-						<Input
-							id="roomType"
-							element="select"
-							options={[
-								{ opt: 'Lodging', label: 'Lodging' },
-								{ opt: 'Mini Apartment', label: 'Mini Apartment' },
-								{ opt: 'House', label: 'House' },
-								{ opt: 'Apartment', label: 'Apartment' },
-							]}
-							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-							onInput={inputHandler}
-							initialValue={'Lodging'}
 							initialValid={true}
 						/>
 					</div>
-					<div className="place-form__pair">
-						<Input
-							id="price"
-							element="input"
-							type="number"
-							label="Pricing (VND)"
-							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-							onInput={inputHandler}
-							initialValid={true}
-						/>
-						<Input
-							id="priceType"
-							element="select"
-							options={[
-								{ opt: 'K', label: '.000' },
-								{ opt: 'M', label: '.000.000' },
-								{ opt: 'B', label: '.000.000.000' },
-							]}
-							validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-							initialValue="K"
-							initialValid={true}
-							onInput={inputHandler}
-						/>
+					<ImageUpload
+						id="images"
+						description="SELECT IMAGES"
+						onInput={inputHandler}
+					/>
+					<div className="place-form__submit">
+						<Button type="submit" disabled={!formState.isValid}>
+							CREATE
+						</Button>
 					</div>
-					<Input
-						id="period"
-						element="select"
-						label="Pay Period"
-						options={[
-							{ opt: 'mo', label: 'Monthly' },
-							{ opt: 'qt', label: 'Quarterly' },
-							{ opt: 'yr', label: 'Yearly' },
-						]}
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						initialValue="mo"
-						initialValid={true}
-						onInput={inputHandler}
-					/>
-					<Input
-						id="area"
-						element="input"
-						type="number"
-						label="Area (m2)"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<Input
-						id="shared"
-						element="select"
-						label="Shared with"
-						options={[
-							{ opt: '0', label: 'None' },
-							{ opt: '1', label: '1 other person' },
-							{ opt: '2', label: '2 other people' },
-							{ opt: '3', label: '3 other people' },
-							{ opt: '-1', label: 'More than 3 other people' },
-						]}
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						initialValue="0"
-						initialValid={true}
-						onInput={inputHandler}
-					/>
-				</div>
-				<div className="place-form__group">
-					<h3>Room Facilities</h3>
-					<hr />
-					<Input
-						id="bath"
-						element="select"
-						label="Bathroom"
-						validators={[]}
-						onInput={inputHandler}
-						options={[
-							{ opt: 'Shared', label: 'Shared' },
-							{ opt: 'Closed', label: 'Closed' },
-						]}
-						initialValue={'shared'}
-						initialValid={true}
-					/>
-					<Input
-						id="kitchen"
-						element="select"
-						label="Kitchen"
-						validators={[]}
-						onInput={inputHandler}
-						options={[
-							{ opt: 'Shared', label: 'Shared' },
-							{ opt: 'Personal', label: 'Personal' },
-							{ opt: 'No cooking', label: 'No cooking' },
-						]}
-						initialValue={'shared'}
-						initialValid={true}
-					/>
-					<Input
-						id="ac"
-						element="checkbox"
-						label="Air-conditioner"
-						validators={[]}
-						onInput={inputHandler}
-						initialValue={0}
-						initialValid={true}
-					/>
-					<Input
-						id="balcony"
-						element="checkbox"
-						label="Balcony"
-						validators={[]}
-						onInput={inputHandler}
-						initialValue={0}
-						initialValid={true}
-					/>
-					<Input
-						id="ew" // Elec + Water
-						element="input"
-						type="text"
-						label="Elec/Water"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-					/>
-					<Input
-						id="extras"
-						element="textarea"
-						label="Extras"
-						validators={[VALIDATOR_MAXLENGTH(64)]}
-						onInput={inputHandler}
-						initialValid={true}
-					/>
-				</div>
-				<ImageUpload
-					id="images"
-					description="SELECT IMAGES"
-					onInput={inputHandler}
-				/>
-				<div className="place-form__submit">
-					<Button type="submit" disabled={!formState.isValid}>
-						CREATE
-					</Button>
-				</div>
-			</form>
+				</form>
+			) : (
+				<h2
+					style={{
+						color: 'white',
+						textAlign: 'center',
+						marginTop: '5rem',
+					}}
+				>
+					Unverified accounts cannot create post. Please wait for verification.
+				</h2>
+			)}
 		</>
 	);
 };

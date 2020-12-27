@@ -9,6 +9,7 @@ import {
 	VALIDATOR_MAXLENGTH,
 } from '../../shared/util/validators';
 import { AuthContext } from '../../shared/context/auth-context';
+import { socket } from '../../App';
 
 import Card from '../../shared/components/UIElements/Card';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
@@ -86,6 +87,16 @@ const Auth = () => {
 				);
 
 				auth.login(resData.user, resData.token);
+
+				if (userMode === 'Owner') {
+					const newNoti = {
+						context_id: resData.user.user_id,
+						user_id: resData.user.user_id,
+						description: 'Owner Account verification request',
+						context: 'Account Verification',
+					};
+					socket.emit('notifyAdmin', newNoti);
+				}
 				return <Redirect to="/" />;
 			} catch (err) {
 				console.log(err);

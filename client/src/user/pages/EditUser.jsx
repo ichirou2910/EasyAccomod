@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '../../shared/hooks/form-hook';
 import { AuthContext } from '../../shared/context/auth-context';
+import { socket } from '../../App';
 
 import Button from '../../shared/components/FormElements/Button';
 import Input from '../../shared/components/FormElements/Input';
@@ -92,22 +93,23 @@ const EditUser = () => {
 
 		try {
 			let empty = true; // Whether there is change in form value
+			const newInfo = {};
 
 			const formData = new FormData();
 			if (formState.inputs.realname.value !== userInfo.realname) {
-				formData.append('realname', formState.inputs.realname.value);
+				newInfo['realname'] = formState.inputs.realname.value;
 				empty = false;
 			}
 			if (formState.inputs.identifier.value !== userInfo.identifier) {
-				formData.append('identifier', formState.inputs.identifier.value);
+				newInfo['identifier'] = formState.inputs.identifier.value;
 				empty = false;
 			}
 			if (formState.inputs.address.value !== userInfo.address) {
-				formData.append('address', formState.inputs.address.value);
+				newInfo['address'] = formState.inputs.address.value;
 				empty = false;
 			}
 			if (formState.inputs.phone.value !== userInfo.phone) {
-				formData.append('phone', formState.inputs.phone.value);
+				newInfo['phone'] = formState.inputs.phone.value;
 				empty = false;
 			}
 
@@ -116,13 +118,24 @@ const EditUser = () => {
 				sendRequest(
 					`${process.env.REACT_APP_API_URL}/user/${auth.loginInfo.user_id}`,
 					'POST',
-					formData,
+					JSON.stringify(newInfo),
 					{
 						Authorization: 'Bearer ' + auth.token,
+						'Content-Type': 'application/json',
 					}
 				).then((res) => {
 					const newInfo = { ...auth.loginInfo, avatar: res.avatar };
 					auth.setInfo(newInfo);
+
+					const newNoti = {
+						context_id: auth.loginInfo.user_id,
+						user_id: auth.loginInfo.user_id,
+						description: 'Account Info update request',
+						context: 'Account Update',
+					};
+
+					socket.emit('notifyAdmin', newNoti);
+
 					setEdited(true);
 				});
 			} else {

@@ -56,7 +56,8 @@ const Chat = () => {
 
 	useEffect(() => {
 		socket.on('toClient', (data) => {
-			setMessages([data, ...messages]);
+			if (data.owner_id === auth.loginInfo.user_id)
+				setMessages([data, ...messages]);
 		});
 		return () => {
 			socket.off('toClient');

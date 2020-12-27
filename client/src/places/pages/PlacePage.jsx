@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
-// import { socket } from '../../App';
+import { socket } from '../../App';
 
 import {
 	FaEye,
@@ -87,7 +87,16 @@ const PlacePage = () => {
 				{
 					Authorization: 'Bearer ' + auth.token,
 				}
-			).then(setRented(true));
+			).then(() => {
+				const newNoti = {
+					context_id: placeId,
+					user_id: auth.loginInfo.user_id,
+					description: 'Place Status updated',
+					context: 'Place Status Update',
+				};
+				socket.emit('notifyAdmin', newNoti);
+				setRented(true);
+			});
 		} catch (err) {
 			console.log(err);
 		}
@@ -226,9 +235,15 @@ const PlacePage = () => {
 											</>
 										) : (
 											<>
-												<br />
-												<br />
-												<Button onClick={rentedHandler}>Mark as Rented</Button>
+												{place.status && (
+													<>
+														<br />
+														<br />
+														<Button onClick={rentedHandler}>
+															Mark as Rented
+														</Button>
+													</>
+												)}
 											</>
 										)}
 									</>

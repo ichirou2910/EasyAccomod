@@ -5,19 +5,18 @@ import { useAuth } from './shared/hooks/auth-hook';
 import socketIOClient from 'socket.io-client';
 
 import Navigation from './shared/components/Navigation/Navigation';
-import NewPlace from './places/pages/NewPlace';
-import EditPlace from './places/pages/EditPlace';
 import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
 import './App.css';
 
-// const Auth = React.lazy(() => import('./user/pages/Auth'));
 const MainPage = React.lazy(() => import('./shared/pages/MainPage'));
-const SearchPage = React.lazy(() => import('./shared/pages/SearchPage'));
-const UserPage = React.lazy(() => import('./user/pages/UserPage'));
-const AdminPage = React.lazy(() => import('./admin/pages/AdminPage'));
-const EditUser = React.lazy(() => import('./user/pages/EditUser'));
+const NewPlace = React.lazy(() => import('./places/pages/NewPlace'));
 const PlacePage = React.lazy(() => import('./places/pages/PlacePage'));
+const UserPage = React.lazy(() => import('./user/pages/UserPage'));
+const AdminPost = React.lazy(() => import('./admin/pages/AdminPost'));
+const AdminChat = React.lazy(() => import('./admin/pages/AdminChat'));
+const AdminUser = React.lazy(() => import('./admin/pages/AdminUser'));
+const AdminNoti = React.lazy(() => import('./admin/pages/AdminNoti'));
 
 const NoMatch = () => (
 	<div style={{ textAlign: 'center', padding: '.5rem', color: 'white' }}>
@@ -45,16 +44,30 @@ const App = () => {
 				<Route path="/" exact>
 					<MainPage />
 				</Route>
-				<Route path="/admin">
-					<AdminPage />
+				<Route path="/admin/place/create">
+					<NewPlace />
 				</Route>
-				<Route path="/place/:placeId">
+				<Route path="/admin/place/:placeId">
 					<PlacePage />
+				</Route>
+				<Route path="/admin/place">
+					<AdminPost />
+				</Route>
+				<Route path="/admin/user/:userId">
+					<UserPage />
+				</Route>
+				<Route path="/admin/user">
+					<AdminUser />
+				</Route>
+				<Route path="/admin/chat">
+					<AdminChat />
+				</Route>
+				<Route path="/admin/notification">
+					<AdminNoti />
 				</Route>
 				<Route path="*">
 					<NoMatch />
 				</Route>
-				{/* <Redirect to="/" /> */}
 			</Switch>
 		);
 	} else {
@@ -63,13 +76,9 @@ const App = () => {
 				<Route path="/" exact>
 					<MainPage />
 				</Route>
-				{/* <Route path="/auth">
-					<Auth />
-				</Route> */}
 				<Route path="*">
 					<NoMatch />
 				</Route>
-				{/* <Redirect to="/" /> */}
 			</Switch>
 		);
 	}
