@@ -5,9 +5,8 @@ const checkAuth = require('../middleware/check-auth');
 
 router.use(checkAuth);
 
-router.get('/:user', reportController.getByUser);
+router.get('/user/:user_id', reportController.getByUser);
 router.get('/:report_id', reportController.getById);
 router.post('/create', reportController.create);
-router.delete('/:place_id', reportController.delete);
 
 module.exports = router;

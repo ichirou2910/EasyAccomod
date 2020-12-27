@@ -178,7 +178,7 @@ const getUnapprovedPlaces = async (req, res, next) => {
 const getAll = async (req, res, next) => {
 	let reports;
 	try {
-		reports = await reports.find();
+		reports = await Report.find();
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -197,10 +197,10 @@ const getAll = async (req, res, next) => {
 	res.json(reports);
 };
 
-const _delete = async (req, res, next) => {
+const _deletePlace = async (req, res, next) => {
 	let place;
 	try {
-		place = await place.findById(req.params.place_id);
+		place = await Place.findById(req.params.place_id);
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -220,11 +220,33 @@ const _delete = async (req, res, next) => {
 	res.status(201).json({});
 };
 
+const _deleteReport = async (req, res, next) => {
+	let report;
+	try {
+		report = await Report.findById(req.params.report_id);
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	if (
+		report.user_id !== req.userData.user_id &&
+		req.userData.user_type !== 'Admin'
+	) {
+		res.status(401).json({ message: 'You are not allowed to delete this' });
+		return;
+	}
+
+	await report.deleteOne(report);
+	res.status(201).json({});
+};
+
 exports.permit_account = permit_account;
 exports.permit_update = permit_update;
 exports.confirm = confirm;
 exports.confirmExtend = confirmExtend;
 exports.getUnapprovedUser = getUnapprovedUser;
 exports.getUnapprovedPlaces = getUnapprovedPlaces;
-exports._delete = _delete;
+exports._deletePlace = _deletePlace;
+exports._deleteReport = _deleteReport;
 exports.getAll = getAll;
