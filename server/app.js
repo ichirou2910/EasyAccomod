@@ -129,7 +129,7 @@ app.use('/api/place', require('./routes/place.route'));
 app.use('/api/notice', require('./routes/notice.route'));
 app.use('/api/chat', require('./routes/chat.route'));
 app.use('/api/admin', require('./routes/admin.route'));
-// app.use('/api/comment', require('./routes/comment.route'));
+app.use('/api/comment', require('./routes/comment.route'));
 
 app.use((req, res, next) => {
 	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
