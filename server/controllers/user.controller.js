@@ -116,7 +116,7 @@ const login = async (req, res, next) => {
 	}
 };
 
-const getAll = async (_req, res, next) => {
+const getAll = async (req, res, next) => {
 	// This route is admin-only
 	if (req.userData.user_type !== 'Admin') {
 		res.status(401).json({ message: 'Authorization failed' });
@@ -125,7 +125,7 @@ const getAll = async (_req, res, next) => {
 
 	let users;
 	try {
-		users = await User.find({}, '-password');
+		users = await User.find({ user_type: 'Owner' }, '-password');
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);

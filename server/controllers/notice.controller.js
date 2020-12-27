@@ -37,17 +37,17 @@ const getByContext = async (req, res, next) => {
 	res.json(notices);
 };
 
-const getAll = (req, res, next) => {
+const getAll = async (req, res, next) => {
 	let cmts;
 	try {
-		cmts = await Comment.find()
+		cmts = await Notice.find()
 			.sort({ date: -1 });
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
 	}
 
-	res.json(cmts);
+	res.status(200).json(cmts);
 };
 
 exports.getByContext = getByContext;
