@@ -31,6 +31,7 @@ const addComment = async (req, res, next) => {
 		content: req.body.content,
 		rating: parseInt(req.body.rating),
 		date: Date.now(),
+		status: false
 	});
 
 	try {

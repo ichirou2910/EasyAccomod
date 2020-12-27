@@ -21,6 +21,10 @@ const CommentSchema = new mongoose.Schema({
 		type: Date,
 		required: true,
 	},
+	status: {
+		type: Boolean,
+		required: true,
+	}
 });
 
 const Comment = mongoose.model('Comment', CommentSchema);
