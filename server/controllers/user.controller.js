@@ -62,7 +62,7 @@ const register = async (req, res, next) => {
 	);
 	res.status(201).json({
 		user: {
-			userId: user.id,
+			user_id: user.id,
 			email: user.email,
 			realname: user.realname,
 			avatar: user.avatar,
@@ -199,9 +199,7 @@ const avatarByName = async (req, res, next) => {
 const update = async (req, res, next) => {
 	// Prevent other people update your profile
 	if (req.params.user_id !== req.userData.user_id) {
-		res
-			.status(401)
-			.json({ message: 'You are not allowed to modify this user' });
+		res.status(401).json({ message: 'Authentication failed' });
 		return;
 	}
 
@@ -218,14 +216,6 @@ const update = async (req, res, next) => {
 		return;
 	}
 
-	// Prevent other people update your profile
-	if (user.user_id !== req.userData.user_id) {
-		res
-			.status(401)
-			.json({ message: 'You are not allowed to modify this user' });
-		return;
-	}
-
 	// Check if it's the Owner and has the permit
 	if (user.user_type === 'Owner') {
 		if (!user.update_permit) {
@@ -237,6 +227,8 @@ const update = async (req, res, next) => {
 			user.update_permit = false;
 		}
 	}
+
+	console.log(req.body);
 
 	if (req.body.realname) {
 		user.realname = req.body.realname;

@@ -1,8 +1,8 @@
-const fs = require('fs');
 const path = require('path');
 const http = require('http');
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const cron = require('node-cron');
 const cors = require('cors');
 require('dotenv').config();
@@ -18,7 +18,8 @@ const app = express();
 app.use(cors());
 
 // Bodyparser
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Crontab
 cron.schedule('0 7 * * *', async function () {
@@ -120,10 +121,10 @@ app.use(express.static(path.join('public')));
 
 // Routes
 app.use('/api/user', require('./routes/user.route'));
-app.use('/api/place', require('./routes/place.route'));
 app.use('/api/favorite', require('./routes/favorite.route'));
-app.use('/api/notice', require('./routes/notice.route'));
 app.use('/api/report', require('./routes/report.route'));
+app.use('/api/place', require('./routes/place.route'));
+app.use('/api/notice', require('./routes/notice.route'));
 app.use('/api/chat', require('./routes/chat.route'));
 app.use('/api/admin', require('./routes/admin.route'));
 // app.use('/api/comment', require('./routes/comment.route'));
