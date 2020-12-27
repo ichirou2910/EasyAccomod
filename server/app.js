@@ -88,15 +88,8 @@ io.on('connection', (socket) => {
 			content: data.content,
 			date: Date.now(),
 		});
-		let send = new Chat({
-			user_type: 'Admin',
-			owner_id: data.owner_id,
-			content: data.content,
-			date: Date.now(),
-		});
 		await recv.save();
-		await send.save();
-		socket.emit('toClient', [send, recv]);
+		socket.emit('toClient', recv);
 	});
 	// How notification works
 	/*
