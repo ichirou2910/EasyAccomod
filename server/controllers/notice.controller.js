@@ -1,15 +1,27 @@
 const db = require('../helpers/db');
 const Notice = db.Notice;
 
-const getByRecvId = async (req, res, next) => {
-	if (req.params.user_id !== req.userData.user_id) {
-		res.status(401).json({ message: 'You are not authorized to use this' });
+const getByContext = async (req, res, next) => {
+	// if (req.params.user_id !== req.userData.user_id) {
+	// 	res.status(401).json({ message: 'You are not authorized to use this' });
+	// }
+
+	let filter = {
+		context_id : req.params.context_id
+	};
+
+	if (req.query.context) {
+		filter["context"] = req.query.context;
 	}
+
+	if (req.query.mark) {
+		filter["mark"] = req.query.mark;
+	} 
 
 	// Display notices to the user with the same ID
 	let notices;
 	try {
-		notices = await Notice.find({ user_id: req.params.user_id }).sort({
+		notices = await Notice.find(filter).sort({
 			date: -1,
 		});
 	} catch (err) {
@@ -25,4 +37,4 @@ const getByRecvId = async (req, res, next) => {
 	res.json(notices);
 };
 
-exports.getByRecvId = getByRecvId;
+exports.getByContext = getByContext;
