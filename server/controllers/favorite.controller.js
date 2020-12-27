@@ -3,16 +3,25 @@ const db = require('../helpers/db');
 const Favorite = db.Favorite;
 
 const getById = async (req, res, next) => {
+	let filter = {
+		user_id: req.params.user_id,
+	};
+	if (req.query.place_id) {
+		filter['place_id'] = req.query.place_id;
+	}
+
 	let favorites;
 	try {
-		favorites = await Favorite.find({ user_id: req.params.user_id });
+		favorites = await Favorite.find(filter);
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
 	}
 
 	if (req.params.user_id !== req.userData.user_id) {
-		res.status(401).json({ message: 'You are not authorized to see this page' });
+		res
+			.status(401)
+			.json({ message: 'You are not authorized to see this page' });
 		return;
 	}
 
@@ -25,26 +34,26 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
-
-	if (req.params.user_id !== req.userData.user_id) {
-		res.status(401).json({ message: 'You are not allowed to use this function' });
+	if (req.body.user_id !== req.userData.user_id) {
+		res
+			.status(401)
+			.json({ message: 'You are not allowed to use this function' });
 		return;
 	}
 
 	const favorite = new Favorite({
-			user_id: req.params.user_id,
-			post_id: req.params.post_id,
-			likes: req.params.likes,
+		user_id: req.body.user_id,
+		place_id: req.body.place_id,
 	});
 
 	try {
-			await favorite.save();
+		await favorite.save();
 	} catch (err) {
-			res.status(500).json({ message: 'Add to favorite failed'});
-			return next(err);
+		res.status(500).json({ message: 'Add to favorite failed' });
+		return next(err);
 	}
 
-	res.status(201).json(favorite);
+	res.status(201).json({});
 };
 
 const _delete = async (req, res, next) => {
@@ -57,14 +66,18 @@ const _delete = async (req, res, next) => {
 	}
 
 	if (req.params.user_id !== req.userData.user_id) {
-		res.status(401).json({ message: 'You are not allowed to use this function' });
+		res
+			.status(401)
+			.json({ message: 'You are not allowed to use this function' });
 		return;
 	}
 
 	if (!favorite) {
-        res.status(404).json({ message: 'This place does not exsit in your favorite' });
+		res
+			.status(404)
+			.json({ message: 'This place does not exsit in your favorite' });
 		return;
-    }
+	}
 
 	await favorite.deleteOne(favorite);
 	res.status(201).json({});

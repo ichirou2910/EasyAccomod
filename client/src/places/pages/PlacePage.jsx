@@ -43,9 +43,6 @@ const PlacePage = () => {
 	const [showStats, setShowStats] = useState(false);
 	const [showExtend, setShowExtend] = useState(false);
 
-	const [favorited, setFavorited] = useState(place.favorited);
-	const [favorites, setFavorites] = useState(0);
-
 	const { isLoading, error, sendRequest } = useHttpClient();
 
 	const auth = useContext(AuthContext);
@@ -67,16 +64,6 @@ const PlacePage = () => {
 	// 		socket.off('change_data');
 	// 	};
 	// }, []);
-
-	const incFavorites = () => {
-		// socket.emit('inc_like');
-		setFavorited(!favorited);
-	};
-
-	const decFavorites = () => {
-		// socket.emit('dec_like');
-		setFavorited(!favorited);
-	};
 
 	const callHandler = () => {
 		let dummyNumber = document.createElement('input');
@@ -141,7 +128,7 @@ const PlacePage = () => {
 								contentClass="place-page__modal-content"
 								footerClass="place-page__modal-actions"
 							>
-								<PlaceReport placeId={place._id} />
+								<PlaceReport placeId={placeId} />
 							</Modal>
 						)}
 						{auth.loginInfo.user_type === 'Owner' &&
@@ -173,12 +160,7 @@ const PlacePage = () => {
 								</>
 							)}
 						{auth.loginInfo.user_type === 'Renter' && (
-							<PlaceMenu
-								favorited={favorited}
-								incFav={incFavorites}
-								decFav={decFavorites}
-								report={() => setShowReport(true)}
-							/>
+							<PlaceMenu placeId={placeId} report={() => setShowReport(true)} />
 						)}
 						<Carousel carouselItems={place.images} />
 						<div className="place-page__content-section base-view">

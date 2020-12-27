@@ -8,10 +8,6 @@ const FavoriteSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	likes: {
-		type: Number,
-		required: true,
-	},
 });
 
 const Favorite = mongoose.model('Favorite', FavoriteSchema);

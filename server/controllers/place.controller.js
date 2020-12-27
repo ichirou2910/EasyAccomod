@@ -66,6 +66,8 @@ const getAll = async (req, res, next) => {
 		filter['period'] = req.query.period;
 	}
 
+	console.log(filter);
+
 	let places;
 	try {
 		places = await Place.find(filter)

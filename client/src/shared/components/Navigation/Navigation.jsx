@@ -44,7 +44,7 @@ const Navigation = () => {
 				<NavItem icon={<CaretIcon />}>
 					<DropdownMenu>
 						{!auth.isLoggedIn && (
-							<DropdownItem icon={<UserIcon />} to="/auth">
+							<DropdownItem icon={<UserIcon />} to="/">
 								Login
 							</DropdownItem>
 						)}

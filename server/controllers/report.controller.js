@@ -36,23 +36,21 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-	console.log(req.body);
+	const report = new Report({
+		user_id: req.body.user_id,
+		place_id: req.body.place_id,
+		content: req.body.content,
+		date: Date.now(),
+	});
 
-	// const report = new Report({
-	// 	user_id: req.body.user_id,
-	// 	place_id: req.body.place_id,
-	// 	content: req.body.content,
-	// 	date: Date.now(),
-	// });
+	try {
+		await report.save();
+	} catch (err) {
+		res.status(500).json({ message: 'Report failed' });
+		return next(err);
+	}
 
-	// try {
-	// 	await report.save();
-	// } catch (err) {
-	// 	res.status(500).json({ message: 'Report failed' });
-	// 	return next(err);
-	// }
-
-	// res.status(201).json(report);
+	res.status(201).json(req.body);
 };
 
 const _delete = async (req, res, next) => {
