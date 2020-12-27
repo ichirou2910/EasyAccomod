@@ -25,26 +25,4 @@ const getByRecvId = async (req, res, next) => {
 	res.json(notices);
 };
 
-// const create = async (req, res, next) => {
-//     var extendDate = new Date();
-//     extendDate.setDate(extendDate.getDate() + 7);
-
-//     const notice = new Notice ({
-//         user_id_sender: req.params.user_id_sender,
-//         user_id_receiver: req.params.user_id_receiver,
-//         description: req.params.description,
-//         date: Date.now(),
-//     })
-
-//     try {
-//         await notice.save();
-//     } catch (err) {
-//         res.status(500).json({ message: 'Notice failed'});
-//         return next(err);
-//     }
-
-//     res.status(201).json(notice);
-// }
-
 exports.getByRecvId = getByRecvId;
-// exports.create = create;

@@ -141,10 +141,10 @@ const getById = async (req, res, next) => {
 	if (req.userData.user_type === 'Renter') {
 		place.views++;
 
-		var hour = time.getHours();
-		// var hour = 9;
+		let hour = time.getHours();
+		// let hour = 9;
 
-		var index = Math.floor(hour / 3);
+		let index = Math.floor(hour / 3);
 
 		// console.log(index);
 
@@ -475,6 +475,7 @@ const extend = async (req, res, next) => {
 
 	// Update extended date
 	place.backupTimeRemain = timeAdd;
+	place.payToExtend = timeAdd * 20000; // 20000 VND per day
 
 	try {
 		await place.save();
@@ -523,9 +524,9 @@ const getStatistics = async (req, res, next) => {
 
 	let stat = {};
 
-	var max = -1;
-	var maxArray = [];
-	var frame = place.timeFrame;
+	let max = -1;
+	let maxArray = [];
+	let frame = place.timeFrame;
 
 	for (var i = 0; i < frame.length; i++) {
 		if (max <= frame[i]) {
