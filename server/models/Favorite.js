@@ -9,19 +9,19 @@ const FavoriteSchema = new mongoose.Schema({
 		required: true,
 	},
 	title: {
-		type: String, 
+		type: String,
 		required: true,
 	},
 	ward: {
-		type: String, 
+		type: String,
 		required: true,
 	},
 	district: {
-		type: String, 
+		type: String,
 		required: true,
 	},
 	city: {
-		type: String, 
+		type: String,
 		required: true,
 	},
 	price: {
@@ -38,6 +38,10 @@ const FavoriteSchema = new mongoose.Schema({
 	},
 	roomNum: {
 		type: Number,
+		required: true,
+	},
+	images: {
+		type: Array,
 		required: true,
 	},
 });

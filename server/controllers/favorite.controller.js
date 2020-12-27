@@ -52,6 +52,7 @@ const add = async (req, res, next) => {
 		priceType: req.body.priceType,
 		area: req.body.area,
 		roomNum: req.body.roomNum,
+		images: req.body.images,
 	});
 
 	try {
@@ -67,13 +68,13 @@ const add = async (req, res, next) => {
 const _delete = async (req, res, next) => {
 	let favorite;
 	try {
-		favorite = await favorite.findById(req.params.place_id);
+		favorite = await Favorite.find({ place_id: req.params.place_id });
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
 	}
 
-	if (req.params.user_id !== req.userData.user_id) {
+	if (favorite[0].user_id !== req.userData.user_id) {
 		res
 			.status(401)
 			.json({ message: 'You are not allowed to use this function' });
@@ -87,7 +88,7 @@ const _delete = async (req, res, next) => {
 		return;
 	}
 
-	await favorite.deleteOne(favorite);
+	await Favorite.deleteOne(favorite[0]);
 	res.status(201).json({});
 };
 

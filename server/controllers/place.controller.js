@@ -11,6 +11,7 @@ const getAll = async (req, res, next) => {
 
 	if (req.userData.user_type === 'Renter') {
 		filter['status'] = true;
+		filter['rented'] = false;
 	}
 
 	let areaFilter = 99999999;
@@ -372,11 +373,6 @@ const like = async (req, res, next) => {
 		return next(err);
 	}
 
-	if (req.userData.user_id) {
-		res.status(401).json({ message: 'You are not logged in!' });
-		return;
-	}
-
 	if (!place) {
 		res.status(404).json({ message: 'Place not found' });
 		return;
@@ -393,9 +389,57 @@ const like = async (req, res, next) => {
 	res.status(200).json(place);
 };
 
-const extend = async (req, res, next) => {
-	console.log(req.body);
+const unlike = async (req, res, next) => {
+	let place;
+	try {
+		place = await Place.findById(req.params.place_id);
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
 
+	if (!place) {
+		res.status(404).json({ message: 'Place not found' });
+		return;
+	}
+
+	place.likes -= 1;
+
+	try {
+		await place.save();
+	} catch (err) {
+		res.status(500).json({ message: 'Like failed' });
+		return next(err);
+	}
+	res.status(200).json(place);
+};
+
+const rented = async (req, res, next) => {
+	let place;
+	try {
+		place = await Place.findById(req.params.place_id);
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	if (!place) {
+		res.status(404).json({ message: 'Place not found' });
+		return;
+	}
+
+	place.rented = true;
+
+	try {
+		await place.save();
+	} catch (err) {
+		res.status(500).json({ message: 'Mark rented failed' });
+		return next(err);
+	}
+	res.status(200).json(place);
+};
+
+const extend = async (req, res, next) => {
 	// Get the current place
 	let place;
 	try {
@@ -414,7 +458,6 @@ const extend = async (req, res, next) => {
 
 	let type = 1;
 	let time = parseInt(req.body.time);
-	// console.log(time);
 
 	if (req.body.timeType === 'week') {
 		type = 7;
@@ -428,10 +471,10 @@ const extend = async (req, res, next) => {
 
 	let timeAdd = time * type;
 
-	// console.log(timeAdd);
+	console.log(timeAdd);
 
 	// Update extended date
-	// place.backupTimeRemain = timeAdd;
+	place.backupTimeRemain = timeAdd;
 
 	try {
 		await place.save();
@@ -514,5 +557,7 @@ exports.update = update;
 exports.delete = _delete;
 exports.extend = extend;
 exports.like = like;
+exports.unlike = unlike;
+exports.rented = rented;
 exports.rate = rate;
 exports.getStatistics = getStatistics;
