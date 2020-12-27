@@ -108,7 +108,8 @@ io.on('connection', (socket) => {
 			description: data.description,
 			date: Date.now(),
 			context: data.context,
-			mark: false
+			mark: false,
+			value: data.value
 		});
 		noti.save();
 		socket.emit('notiClient', data);

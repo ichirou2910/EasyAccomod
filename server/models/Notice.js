@@ -20,6 +20,10 @@ const NoticeSchema = new mongoose.Schema({
 	mark: {
 		type: Boolean,
 		required: false,
+	},
+	value: {
+		type: Number,
+		required: false
 	}
 });
 
