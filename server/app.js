@@ -34,10 +34,12 @@ cron.schedule('0 7 * * *', async function () {
 	}
 
 	places.forEach(async (place) => {
-		if (place.status && place.timeRemain > 0) {
-			place.timeRemain--;
-		} else {
-			place.status = false;
+		if (place.status) {
+			if (place.timeRemain > 0) {
+				place.timeRemain--;
+			} else {
+				place.status = false;
+			}
 		}
 
 		await place.save();

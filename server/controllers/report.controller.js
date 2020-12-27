@@ -50,7 +50,7 @@ const create = async (req, res, next) => {
 		return next(err);
 	}
 
-	res.status(201).json(req.body);
+	res.status(201).json(report);
 };
 
 const _delete = async (req, res, next) => {

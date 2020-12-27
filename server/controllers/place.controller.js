@@ -394,8 +394,6 @@ const like = async (req, res, next) => {
 };
 
 const extend = async (req, res, next) => {
-	console.log(req.body);
-
 	// Get the current place
 	let place;
 	try {
@@ -431,7 +429,8 @@ const extend = async (req, res, next) => {
 	// console.log(timeAdd);
 
 	// Update extended date
-	// place.backupTimeRemain = timeAdd;
+	place.backupTimeRemain = timeAdd;
+	place.payToExtend = timeAdd * 20000; // 20000 VND per day
 
 	try {
 		await place.save();
